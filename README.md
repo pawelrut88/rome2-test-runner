@@ -1,8 +1,8 @@
 # Rome II Test Runner (rome2-bridge)
 
 A tool for testing **Total War: Rome II** mods. It starts the game by itself, begins a new campaign as the faction
-you pick, plays the number of turns you set, and writes down what happened: screenshots, world maps without fog of
-war, faction numbers per turn, saves, and a crash report when the game crashes to desktop.
+you pick, plays the number of turns you set, and writes down what happened: screenshots, a map of who owns what and
+faction numbers every turn, saves, and a crash report when the game crashes to desktop.
 
 Works with **vanilla Rome II** and **Divide et Impera (DeI)**, with or without Consul Scriptum. No Python needed:
 one `.exe`.
@@ -32,11 +32,11 @@ the left, see the map and every faction's numbers (change since the last map tur
   released, intro skipped).
 - **Pause / Continue / Stop** a run; the game stays open while paused.
 - **Save every N turns** (copied from the autosave to its own file, never Quick Save).
-- **World map screenshot without fog of war every N turns** (the fog comes back right after).
 - **Progress window:** each turn's map of who owns what next to a table of every faction (regions, armies, navies,
   units, treasury, food), with the change since the previous turn. Updates live during a run. The map is drawn from
   the region owners on the game's own strategic map (read from your game files, faction colours from the game), so
-  it shows the whole map for every faction and campaign; the world map screenshots are there too.
+  it shows the whole map for every faction and campaign. You can check the map of every turn: pick a turn on the
+  left (or Prev / Next, arrow keys), during the run or after it.
 - **Game over:** if your faction is wiped out (it only ends turns, so in DeI it can be), the run notices it at once,
   notes "destroyed on turn N" and goes on with the next game.
 - **Legio Invicta:** an option that makes your faction's soldiers and ships 1000 times stronger, so it survives

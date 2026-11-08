@@ -49,7 +49,7 @@ class App:
         tr = ttk.LabelFrame(root, text="Test run", padding=10); tr.pack(fill="x", padx=10, pady=8)
         self.v_mods = tk.StringVar(value="Vanilla")
         self.v_camp = tk.StringVar(); self.v_fac = tk.StringVar(); self.v_turns = tk.IntVar(value=1)
-        self.v_save = tk.IntVar(value=0); self.v_map = tk.IntVar(value=0)
+        self.v_save = tk.IntVar(value=0)
         # Mods: Vanilla, or DeI if installed (data folder and/or Steam workshop; never both in one run)
         self.dei = self.runner.dei_sets()
         self.v_dei = tk.StringVar(value="data folder" if "DeI (data folder)" in self.dei else "Steam")
@@ -90,20 +90,17 @@ class App:
         ttk.Label(rows, text="Save the game every").pack(side="left")
         ttk.Spinbox(rows, from_=0, to=200, textvariable=self.v_save, width=5).pack(side="left", padx=4)
         ttk.Label(rows, text="turn(s)  (0 = no saves; 1 = every turn, 3 = every third turn)").pack(side="left")
-        ttk.Label(tr, text="Map screenshot").grid(row=6, column=0, sticky="w")
-        row3 = ttk.Frame(tr); row3.grid(row=6, column=1, columnspan=3, sticky="w", padx=6, pady=3)
-        ttk.Label(row3, text="World map screenshot without fog of war every").pack(side="left")
-        ttk.Spinbox(row3, from_=0, to=200, textvariable=self.v_map, width=5).pack(side="left", padx=4)
-        ttk.Label(row3, text="turn(s)  (0 = off; the fog comes back after the screenshot)").pack(side="left")
+        # (no "Map screenshot" option since 2026-11-08 late: the Progress window draws the map of every turn from the
+        # region owners; the world map screenshot was cut off for factions far from the middle. CLI: --map-every.)
         # Legio Invicta: the user's super soldiers mod (our pack folder extras), your faction's units 1000x stronger, so
         # a faction that only ends turns is not wiped out early (DeI GC Rome fell on turn 19 without it)
         self.v_legio = tk.BooleanVar(value=False)
-        ttk.Label(tr, text="Legio Invicta").grid(row=7, column=0, sticky="w")
+        ttk.Label(tr, text="Legio Invicta").grid(row=6, column=0, sticky="w")
         ttk.Checkbutton(tr, variable=self.v_legio, text="your faction's soldiers and ships 1000 times stronger, so it "
-                        "isn't wiped out (the test faction only ends turns)").grid(row=7, column=1, columnspan=3, sticky="w", padx=6, pady=3)
+                        "isn't wiped out (the test faction only ends turns)").grid(row=6, column=1, columnspan=3, sticky="w", padx=6, pady=3)
         ttk.Label(tr, text="Made for vanilla Rome II and DeI. Mods that edit the startpos file (startpos.esf) are not "
-                           "supported and may crash. Runs use their own user.script.txt; yours is put back after.", foreground="#b23b3b").grid(row=8, column=0, columnspan=4, sticky="w", pady=(4, 0))
-        row2 = ttk.Frame(tr); row2.grid(row=9, column=0, columnspan=4, sticky="w", pady=(8, 0))
+                           "supported and may crash. Runs use their own user.script.txt; yours is put back after.", foreground="#b23b3b").grid(row=7, column=0, columnspan=4, sticky="w", pady=(4, 0))
+        row2 = ttk.Frame(tr); row2.grid(row=8, column=0, columnspan=4, sticky="w", pady=(8, 0))
         self.bt_start = ttk.Button(row2, text="Start Test Run", command=self.start_run); self.bt_start.pack(side="left")
         # "Pause Test Run" <-> "Continue Test Run": the run waits between turns, the game stays open for the user to look at
         self.bt_pause = ttk.Button(row2, text="Pause Test Run", command=self.pause_or_continue, width=18, state="disabled")
@@ -112,8 +109,8 @@ class App:
         self.bt_stop = ttk.Button(row2, text="Stop Test Run", command=self.stop_run, width=16, state="disabled")
         self.bt_stop.pack(side="left", padx=6)
         self.lb_plan = ttk.Label(row2, text=""); self.lb_plan.pack(side="left", padx=10)
-        # Progress window: map screenshots + faction stats per turn of the current (or latest, or any) run
-        ttk.Button(tr, text="Progress...", command=self.progress, width=14).grid(row=9, column=3, sticky="e", pady=(8, 0))
+        # Progress window: drawn map + faction stats per turn of the current (or latest, or any) run
+        ttk.Button(tr, text="Progress...", command=self.progress, width=14).grid(row=8, column=3, sticky="e", pady=(8, 0))
 
         # tools
         tl = ttk.LabelFrame(root, text="Tools (game already running)", padding=10); tl.pack(fill="x", padx=10)
@@ -290,7 +287,7 @@ class App:
         if not t:
             messagebox.showinfo("Rome II Test Runner", "Nothing to run: pick a campaign and a faction."); return
         mods, turns = self.mod_set(), int(self.v_turns.get())
-        save_every, map_every = max(0, int(self.v_save.get() or 0)), max(0, int(self.v_map.get() or 0))
+        save_every, map_every = max(0, int(self.v_save.get() or 0)), 0  # map: drawn in Progress
         added = list(self.added)
         bad = self.runner.added_problems(added)
         if bad:
@@ -478,7 +475,7 @@ class App:
         run = run or latest_run(self.runner.results_dir)
         if not run:
             messagebox.showinfo("Progress", "No test run yet. Start one: faction numbers and region owners are taken "
-                                "every turn (Map screenshot every N turns adds the game's world map screenshots).")
+                                "every turn, and the window draws the map of who owns what.")
             return
         ProgressWindow(self.root, run, self.runner.results_dir, live=lambda: self.busy == "test run")
 
