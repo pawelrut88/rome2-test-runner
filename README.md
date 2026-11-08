@@ -77,7 +77,18 @@ python -m rome2bridge status
 python -m rome2bridge gui
 python -m rome2bridge testrun --help
 python -m rome2bridge lua "return B.factions()"
+python -m rome2bridge click button_ok --ctx some_panel
+python -m rome2bridge screenshot shot.png --full
 ```
+
+- `lua` (and `lua -f file.lua`) runs in the game's global scope with the helpers in `B` (= `ROME2_BRIDGE`):
+  `B.find(id, ctx)`, `B.info(c)`, `B.U(c)` (turns a UI address into a component), `B.click`, `B.tree`,
+  `B.factions()`, `B.turn()`. The bridge's own local functions (such as `U`) can't be seen from there: use `B.U`.
+- `click`, `info` and `tree` take the parent component only as `--ctx <id>`, not as a second word.
+- `screenshot` saves the game window 968 px wide by default and prints both sizes
+  (`window 1936x1119 saved 968x559`). `--full` keeps the window's own size; `--crop LEFT TOP WIDTH HEIGHT` saves a
+  part of it at full size, in window pixels (the window's top-left corner, title bar included, is 0 0: the same
+  pixels as a `--full` picture).
 
 The game and settings folders are found by themselves (Steam's library list). If not, set `ROME2_GAME_DIR` /
 `ROME2_APP_DIR`, or copy `rome2bridge.example.json` to `rome2bridge.json`.

@@ -53,7 +53,10 @@ def main(argv=None):
     e.add_argument("--stall", type=float, default=90, help="report the screen if one faction's turn takes longer")
     wt = sub.add_parser("wait-turn", help="wait for the next player turn without ending the turn")
     wt.add_argument("--timeout", type=float, default=900); wt.add_argument("--stall", type=float, default=90)
-    sh = sub.add_parser("screenshot", help="PNG of the game window"); sh.add_argument("out")
+    sh = sub.add_parser("screenshot", help="PNG of the game window (968 px wide unless --full or --crop)")
+    sh.add_argument("out"); sh.add_argument("--full", action="store_true", help="the window's own size")
+    sh.add_argument("--crop", type=int, nargs=4, metavar=("LEFT", "TOP", "WIDTH", "HEIGHT"),
+                    help="a part of the window at full size, window pixels (title bar included)")
     k = sub.add_parser("key", help="post a key to the game window"); k.add_argument("vk", nargs="?", default="0x1B",
                                                                                    help="virtual key code, default Esc")
     pc = sub.add_parser("post-click", help="posted click at client pixel x y"); pc.add_argument("x", type=int); pc.add_argument("y", type=int)
@@ -118,7 +121,7 @@ def main(argv=None):
     if cmd == "wait-turn":
         return out(b.wait_turn(args.timeout, args.stall))
     if cmd == "screenshot":
-        return out(b.screenshot(args.out))
+        return out(b.screenshot(args.out, full=args.full, crop=args.crop))
     if cmd == "key":
         return out(b.post_key(int(args.vk, 0)))
     if cmd == "post-click":

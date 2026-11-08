@@ -503,8 +503,17 @@ class Bridge:
     def post_click(self, x, y, wait=1):
         return self._ps("post_click.ps1", "-X", int(x), "-Y", int(y), "-Wait", wait)
 
-    def screenshot(self, out):
-        return self._ps("game_shot.ps1", "-Out", out)
+    def screenshot(self, out, full=False, crop=None):
+        """PNG of the game window: 968 px wide by default, the window's own size if full, or crop=(left, top, width,
+        height) in window pixels (top-left corner of the window, title bar included, is 0,0) at full size.
+        Returns e.g. "printwindow=True window 1936x1119 saved 968x559"."""
+        args = ["-Out", out]
+        if crop:
+            left, top, width, height = map(int, crop)
+            args += ["-Left", left, "-Top", top, "-Width", width, "-Height", height]
+        elif full:
+            args.append("-Full")
+        return self._ps("game_shot.ps1", *args)
 
     def intro_shown(self):
         return bool(self.lua('return ROME2_BRIDGE.find_shown("cinematic_bars") ~= nil'))

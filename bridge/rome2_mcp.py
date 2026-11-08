@@ -76,9 +76,10 @@ def t_wait_turn(a): return as_text(B().wait_turn(float(a.get("timeout", 900)), f
 
 def t_screenshot(a):
     p = os.path.join(tempfile.gettempdir(), "rome2bridge_shot.png")
-    msg = B().screenshot(p)
+    crop = a.get("crop")
+    msg = B().screenshot(p, full=bool(a.get("full")), crop=crop if crop else None)
     return [{"type": "image", "data": base64.b64encode(open(p, "rb").read()).decode(), "mimeType": "image/png"},
-            {"type": "text", "text": msg + " (968 px wide, scaled from the window)"}]
+            {"type": "text", "text": msg}]
 
 
 def t_post_click(a): return B().post_click(a["x"], a["y"], a.get("wait", 1)) or "clicked"
@@ -95,7 +96,7 @@ TOOLS = [
      S(campaign={"type": "string", "description": "campaign key, e.g. main_rome, main_emperor, main_punic"},
        save={"type": "string", "description": "save name as in save_games; loads it instead"}), t_start),
     ("wait_bridge", "Wait until the bridge ticks after start_game (heartbeat fresh); reports crashes.", S(timeout=NUM), t_wait_bridge),
-    ("lua", "Run Lua in the game's campaign state (global scope; helpers in ROME2_BRIDGE / B: B.game(), B.find(id,ctx), B.find_shown, B.click, B.tree, B.factions, B.items(list), B.turn()). 'return x' sends x back as JSON.",
+    ("lua", "Run Lua in the game's campaign state (global scope; helpers in ROME2_BRIDGE / B: B.game(), B.find(id,ctx), B.find_shown, B.info(c), B.U(address) = UI component, B.click, B.tree, B.factions, B.items(list), B.turn()). 'return x' sends x back as JSON.",
      {"type": "object", "properties": {"code": STR, "timeout": NUM}, "required": ["code"]}, t_lua),
     ("ui_tree", "UI component tree (shown ones only unless all): 'id [I] | text' lines. interactive=true lists only clickable ids.",
      S(root=STR, ctx=STR, maxd=NUM, interactive=BOOL, all=BOOL, max=NUM), t_ui_tree),
@@ -111,7 +112,8 @@ TOOLS = [
     ("auto_click", "Set auto-click rules, one per line '<context id> <button id>' ('-' = anywhere), one click per second while shown; or a preset name (%s: autoresolve battles, decline diplomacy offers, accept war declarations, decline an ally's call to war, dilemma option 1, accept objectives). Empty clears." % ", ".join(PRESETS),
      S(rules=STR), t_auto_click),
     ("skip_intro", "While the campaign intro shows, wait `delay` s and press Esc (never on the map).", S(max=NUM, delay=NUM), t_skip_intro),
-    ("screenshot", "Screenshot of the game window.", S(), t_screenshot),
+    ("screenshot", "Screenshot of the game window: 968 px wide by default (the reply gives the window size and the saved size); full=true for the window's own size; crop=[left, top, width, height] for a part at full size, in window pixels (title bar included, same pixels as a full picture).",
+     S(full=BOOL, crop={"type": "array", "items": {"type": "integer"}, "minItems": 4, "maxItems": 4}), t_screenshot),
     ("post_click", "Fallback: posted mouse click at client pixel x,y (window 1920x1080).",
      {"type": "object", "properties": {"x": NUM, "y": NUM}, "required": ["x", "y"]}, t_post_click),
     ("key", "Post a key to the game window (virtual key code, default 0x1B = Esc).", S(vk=STR), t_key),
