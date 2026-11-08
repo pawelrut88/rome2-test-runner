@@ -261,7 +261,7 @@ class ProgressWindow(tk.Toplevel):
             self.cur, "" if st == self.cur else "  (numbers from turn %d)" % st, alive_n,
             ("  -  you: " + ", ".join(human)) if human else ""))
         self.lb_note.configure(text=("(+n / -n) = change since turn %d. " % pt if pt else "First stats of this game. ") +
-                               "Armies = forces that are not a city garrison. Blue = your faction, grey = gone. "
+                               "Armies, Navies = forces led by a general (city garrisons don't count). Blue = your faction, grey = gone. "
                                "Click a column to sort.")
         self.draw_rows()
 

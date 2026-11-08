@@ -9,6 +9,22 @@ one `.exe`.
 
 > **Download:** see [Releases](../../releases). Unzip, start `Rome2TestRunner.exe`, read `README.txt`.
 
+![Main window](docs/images/main_window.png)
+
+## Screenshots
+
+**Progress window:** DeI, Rome in the Grand Campaign with Legio Invicta, world map every 5 turns. Pick a turn on
+the left, see the map and every faction's numbers (change since the last map turn in brackets).
+
+![Progress window](docs/images/progress_window.png)
+
+<details>
+<summary>World map without fog of war (turn 16)</summary>
+
+![World map without fog of war](docs/images/world_map_no_fog.png)
+
+</details>
+
 ## What it does
 
 - **Test runs:** one campaign or all of them, one faction or all playable ones, N end turns each. Dialogs are
