@@ -1,0 +1,531 @@
+"""Talk to a running Rome II through the in-game bridge (lua_scripts/rome2_bridge.lua in the rome2-bridge pack).
+
+File protocol, all in the game folder:
+  rome2_bridge_cmd.lua    we write: first line "--id <n>", then Lua; the game runs it within ~1 s and deletes it
+  rome2_bridge_out.json   game writes: {"id", "ok", "result"|"error"}
+  rome2_bridge_alive.json game writes every tick: turn, human_turn, current faction, tick, ...
+  rome2_bridge_click.txt  we write: auto-click rules "<context id> <button id>", one click per tick while shown
+  rome2_bridge_log.txt    game appends its log
+Windows only for now (process checks, posted keys/clicks and screenshots).
+"""
+import json
+import os
+import shutil
+import subprocess
+import sys
+import threading
+import time
+
+from .config import FROZEN, NO_WINDOW, load_config
+
+# rules for unattended end-turn tests (rome2-bridge project, 2026-11-07): decline AI diplomacy offers and then press
+# the end-diplomacy button, accept war declarations (only an OK button), decline an ally's call to war, take the first
+# dilemma option, accept objective popups. The offer screen itself is button_set2: never accept there.
+PRESETS = {
+    "test": "\n".join([
+        # battles: autoresolve (ids and order from the IA project's autoplay run, 2026-11-06)
+        "battle_results button_dismiss",
+        # captives after a won battle (Release / Enslave / Kill): the first choice, like dilemmas (a 20-turn Grand
+        # Campaign run stalled on it after a sea battle, 2026-11-08)
+        "popup_battle_results button_release",
+        "autoresolve_panel button_balanced",
+        "button_set_attack button_autoresolve",
+        "diplomacy_dropdown button_cancel",
+        "diplomacy_dropdown button_ok_war_declared",
+        "button_set3 button_accept",
+        "events decline_button",
+        "dilemma1_window dilemma_button",
+        "events button_accept",
+    ]),
+}
+
+
+class BridgeError(RuntimeError):
+    pass
+
+
+def lua_str(s):
+    """Lua string literal (or nil)."""
+    return "nil" if s is None else json.dumps(str(s))
+
+
+class Bridge:
+    def __init__(self, cfg=None):
+        self.cfg = cfg or load_config()
+        if not self.cfg.game_dir or not os.path.isdir(self.cfg.game_dir):
+            raise BridgeError("Rome II folder not found (set game_dir in rome2bridge.json or ROME2_GAME_DIR)")
+        g = self.cfg.game
+        self.CMD, self.OUT, self.ALIVE = g("rome2_bridge_cmd.lua"), g("rome2_bridge_out.json"), g("rome2_bridge_alive.json")
+        self.CLICK, self.LOG = g("rome2_bridge_click.txt"), g("rome2_bridge_log.txt")
+        self.launched = 0.0
+        self.launch_line = ""
+        # command ids must differ across processes too (two CLI calls in the same second got the same id and the
+        # second read the first one's answer, seen 2026-11-08): pid + counter
+        self.seq = 0
+        self.lock = threading.Lock()
+        self._restore_thread = None
+
+    # ---- processes ----------------------------------------------------------------------------------------------
+    @staticmethod
+    def _tasklist(image):
+        r = subprocess.run(["tasklist", "/FI", "IMAGENAME eq %s" % image, "/FO", "CSV", "/NH"],
+                           capture_output=True, text=True, creationflags=NO_WINDOW)
+        return image.lower() in r.stdout.lower()
+
+    def running(self):
+        return self._tasklist("Rome2.exe")
+
+    def game_start_time(self):
+        """Start time (epoch s) of the running Rome2.exe, or None (a new process, e.g. the CLI, didn't launch it)."""
+        try:
+            r = subprocess.run(["powershell", "-NoProfile", "-Command",
+                                "(Get-Process Rome2 -ErrorAction Stop | Select-Object -First 1).StartTime.ToUniversalTime()"
+                                ".Subtract([datetime]'1970-01-01').TotalSeconds"], capture_output=True, text=True, timeout=30,
+                               creationflags=NO_WINDOW)
+            return float(r.stdout.strip().replace(",", "."))
+        except (ValueError, subprocess.SubprocessError):
+            return None
+
+    def steam_running(self):
+        return self._tasklist("steam.exe")
+
+    def kill(self):
+        subprocess.run(["taskkill", "/F", "/IM", "Rome2.exe"], capture_output=True, creationflags=NO_WINDOW)
+        for _ in range(20):
+            if not self.running():
+                return
+            time.sleep(0.5)
+
+    def _ps(self, script, *args, timeout=60):
+        r = subprocess.run(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File",
+                            os.path.join(self.cfg.tools_dir, script), *map(str, args)],
+                           capture_output=True, text=True, timeout=timeout, creationflags=NO_WINDOW)
+        out = (r.stdout + r.stderr).strip()
+        if r.returncode != 0:
+            raise BridgeError("%s failed: %s" % (script, out))
+        return out
+
+    # ---- state ----------------------------------------------------------------------------------------------------
+    def heartbeat(self):
+        try:
+            with open(self.ALIVE, encoding="utf-8") as f:
+                hb = json.load(f)
+            hb["age_s"] = round(time.time() - os.path.getmtime(self.ALIVE), 1)
+            return hb
+        except (OSError, ValueError):
+            return None
+
+    def alive(self, max_age=10):
+        hb = self.heartbeat()
+        return bool(hb and hb["age_s"] <= max_age and (hb.get("tick") or 0) > 0)
+
+    def new_crashes(self):
+        d = self.cfg.crash_dir
+        if not os.path.isdir(d):
+            return []
+        # only dumps since this game run: our launch, else the running game's start; unknown -> none (a "last hour"
+        # guess listed old dumps and made game_status run the slow crash analysis, seen 2026-11-08)
+        since = self.launched or self.game_start_time()
+        if not since:
+            return []
+        return sorted(os.path.join(d, n) for n in os.listdir(d)
+                      if n.lower().endswith(".mdmp") and os.path.getmtime(os.path.join(d, n)) > since)
+
+    def crash_sig(self):
+        if FROZEN:  # no python.exe next to the exe: run tools\crashsig.py in this process
+            import contextlib, io, runpy
+            buf, argv = io.StringIO(), sys.argv
+            try:
+                sys.argv = ["crashsig.py", self.cfg.crash_dir, "1"]
+                with contextlib.redirect_stdout(buf):
+                    runpy.run_path(os.path.join(self.cfg.tools_dir, "crashsig.py"), run_name="__main__")
+            except Exception as e:
+                buf.write("crashsig failed: %s" % e)
+            finally:
+                sys.argv = argv
+            return buf.getvalue().strip()
+        try:
+            r = subprocess.run([sys.executable, os.path.join(self.cfg.tools_dir, "crashsig.py"), self.cfg.crash_dir, "1"],
+                               capture_output=True, text=True, timeout=120, creationflags=NO_WINDOW)
+            return (r.stdout + r.stderr).strip()
+        except Exception as e:
+            return "crashsig failed: %s" % e
+
+    def status(self):
+        c = self.new_crashes()
+        return {"running": self.running(), "steam": self.steam_running(), "heartbeat": self.heartbeat(),
+                "launched": time.strftime("%H:%M:%S", time.localtime(self.launched)) if self.launched else None,
+                "launch": self.launch_line, "new_crash_dumps": c, "registry_mod_version_ok": self.mod_version_ok()}
+
+    # ---- user.script.txt (UTF-16 LE as the game/launcher writes it) ---------------------------------------------------
+    def _read_us(self):
+        b = open(self.cfg.user_script, "rb").read()
+        if b[:2] == b"\xff\xfe":
+            return b.decode("utf-16"), "utf-16"
+        return b.decode("utf-8-sig", errors="replace"), "utf-8"
+
+    def _write_us(self, text, enc):
+        with open(self.cfg.user_script, "wb") as f:
+            f.write(text.encode("utf-16") if enc == "utf-16" else text.encode("utf-8"))
+
+    def strip_startup_lines(self):
+        """Remove game_startup_mode lines from user.script.txt; everything else stays as it was."""
+        if not os.path.exists(self.cfg.user_script):
+            return "no user.script.txt"
+        text, enc = self._read_us()
+        lines = text.splitlines(keepends=True)
+        keep = [l for l in lines if not l.strip().startswith("game_startup_mode")]
+        if len(keep) == len(lines):
+            return "no startup line"
+        self._write_us("".join(keep).rstrip() + "\r\n", enc)
+        return "removed %d startup line(s)" % (len(lines) - len(keep))
+
+    def mods(self):
+        text, _ = self._read_us()
+        return [l.strip()[5:].strip().rstrip(";").strip().strip('"') for l in text.splitlines() if l.strip().startswith("mod ")]
+
+    def set_pack_enabled(self, pack, enabled=True):
+        """Add (as the first mod line) or remove `mod "<pack>";` in user.script.txt. Backs the file up first."""
+        text, enc = self._read_us()
+        shutil.copyfile(self.cfg.user_script, self.cfg.user_script + ".bak_rome2bridge")
+        lines = [l for l in text.splitlines() if l.strip() != 'mod "%s";' % pack]
+        if enabled:
+            i = next((n for n, l in enumerate(lines) if l.strip().startswith("mod ")), None)
+            if i is None:
+                i = next((n + 1 for n, l in enumerate(lines) if l.strip().startswith("add_working_directory")), 0)
+            lines.insert(i, 'mod "%s";' % pack)
+        self._write_us("\r\n".join(lines).rstrip() + "\r\n", enc)
+        return self.mods()
+
+    # ---- pack ------------------------------------------------------------------------------------------------------
+    def install_pack(self, src):
+        dst = self.cfg.game("data", os.path.basename(src))
+        shutil.copyfile(src, dst)
+        return dst
+
+    def uninstall_pack(self, name):
+        p = self.cfg.game("data", name)
+        if os.path.exists(p):
+            os.remove(p)
+            return "removed " + p
+        return "not installed"
+
+    # ---- start / stop -----------------------------------------------------------------------------------------------
+    MOD_VERSION = 0x00020004  # registry last_game_version; without it the "out-of-date mods" dialog stops the launch
+
+    def mod_version_ok(self):
+        try:
+            import winreg
+            k = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"SOFTWARE\The Creative Assembly\Rome2")
+            v, _ = winreg.QueryValueEx(k, "last_game_version")
+            winreg.CloseKey(k)
+            return v == self.MOD_VERSION
+        except OSError:
+            return False
+
+    def ensure_mod_version(self):
+        """Set HKCU\\SOFTWARE\\The Creative Assembly\\Rome2 last_game_version before every launch (the game removes it
+        again, and without it the out-of-date mods dialog stops the start). Checked by reading it back."""
+        if self.mod_version_ok():
+            return "registry ok"
+        try:
+            import winreg
+            k = winreg.CreateKey(winreg.HKEY_CURRENT_USER, r"SOFTWARE\The Creative Assembly\Rome2")
+            winreg.SetValueEx(k, "last_game_version", 0, winreg.REG_DWORD, self.MOD_VERSION)
+            winreg.CloseKey(k)
+        except OSError as e:
+            raise BridgeError("could not set registry last_game_version: %s" % e)
+        if not self.mod_version_ok():
+            raise BridgeError("registry last_game_version did not stick")
+        return "registry set"
+
+    def start(self, campaign=None, save=None, check_steam=True, menu=False):
+        """Kill the game and start it straight into a new campaign (the campaign's first faction) or a save, or
+        (menu=True) into the main menu.
+
+        Writes `game_startup_mode ...;` into user.script.txt, launches Rome2.exe, and removes the line again after
+        cfg.startup_restore_s seconds (the game reads the file at startup only). Does not touch the mod list.
+        """
+        if not campaign and not save and not menu:
+            raise BridgeError("give a campaign key or a save name (or menu=True)")
+        if check_steam and not self.steam_running():
+            raise BridgeError("Steam is not running: start Steam first (the game crashes while loading without it)")
+        self.kill()
+        for p in (self.CMD, self.OUT, self.ALIVE):
+            if os.path.exists(p):
+                os.remove(p)
+        self.strip_startup_lines()
+        if menu:
+            line = "(main menu)"
+        else:
+            text, enc = self._read_us()
+            line = ('game_startup_mode campaign_load "%s";' % save) if save else ("game_startup_mode campaign %s;" % campaign)
+            self._write_us(text.rstrip() + "\r\n" + line + "\r\n", enc)
+        self.ensure_mod_version()
+        self.launched = time.time(); self.launch_line = line
+        subprocess.Popen([self.cfg.game("Rome2.exe")], cwd=self.cfg.game_dir)
+
+        def restore():
+            time.sleep(self.cfg.startup_restore_s)
+            self.strip_startup_lines()
+        self._restore_thread = threading.Thread(target=restore, daemon=True)
+        self._restore_thread.start()
+        return line
+
+    def wait_restore(self):
+        if self._restore_thread:
+            self._restore_thread.join()
+
+    def quit(self):
+        self.kill()
+        return self.strip_startup_lines()
+
+    def wait_bridge(self, timeout=300, min_ticks=1, screen=None, since=None):
+        """Wait until the bridge ticks (heartbeat fresh and tick >= min_ticks) after the last start (or `since`), on
+        `screen` ("menu" or "campaign") if given."""
+        t0 = time.time()
+        since = self.launched if since is None else since
+        while time.time() - t0 < timeout:
+            hb = self.heartbeat()
+            if hb and hb["age_s"] < 5 and (hb.get("tick") or 0) >= min_ticks and \
+                    os.path.getmtime(self.ALIVE) >= since and (screen is None or hb.get("screen", "campaign") == screen):
+                return {"alive": True, "heartbeat": hb}
+            if self.launched and not self.running():
+                c = self.new_crashes()
+                return {"alive": False, "running": False, "crashes": c}
+            time.sleep(1)
+        return {"alive": False, "running": self.running(), "waited_s": timeout, "heartbeat": self.heartbeat()}
+
+    # ---- commands ---------------------------------------------------------------------------------------------------
+    def lua(self, code, timeout=30):
+        """Run Lua in the game's campaign state; returns the decoded `return` value. Raises BridgeError on failure."""
+        if not self.running():
+            raise BridgeError("game is not running")
+        hb = self.heartbeat()
+        if not hb or hb["age_s"] > 10:
+            raise BridgeError("bridge not alive (heartbeat %s)" % (hb and ("%ss old" % hb["age_s"])))
+        with self.lock:
+            self.seq += 1
+            cid = "%d_%d_%d" % (os.getpid(), int(time.time() * 1000) % 10000000, self.seq)
+            tmp = self.CMD + ".tmp"
+            with open(tmp, "w", encoding="utf-8", newline="\n") as f:
+                f.write("--id %s\n%s\n" % (cid, code))
+            os.replace(tmp, self.CMD)
+            t0 = time.time()
+            while time.time() - t0 < timeout:
+                time.sleep(0.25)
+                try:
+                    with open(self.OUT, encoding="utf-8", errors="replace") as f:
+                        res = json.load(f)
+                except (OSError, ValueError):
+                    continue
+                if str(res.get("id")) == cid:
+                    if not res.get("ok"):
+                        raise BridgeError("Lua error: %s" % res.get("error"))
+                    return res.get("result")
+                if not self.running():
+                    raise BridgeError("game exited while waiting")
+            # say what the bridge was doing, so a bug report shows whether the game's timer stopped or the command hung
+            hb = self.heartbeat() or {}
+            raise BridgeError("no answer in %ss (loading or AI turn? the command stays queued; heartbeat %ss old, "
+                              "tick %s, command %s)" % (timeout, hb.get("age_s"), hb.get("tick"),
+                                                        "not read yet" if os.path.exists(self.CMD) else "read"))
+
+    def ui_tree(self, root=None, ctx=None, maxd=16, interactive=False, all=False, max=1500):
+        opts = "{root=%s, ctx=%s, maxd=%d, interactive=%s, all=%s, max=%d}" % (
+            lua_str(root), lua_str(ctx), int(maxd), str(bool(interactive)).lower(), str(bool(all)).lower(), int(max))
+        return self.lua("return ROME2_BRIDGE.tree(%s)" % opts, 60)
+
+    def ui_info(self, id, ctx=None):
+        return self.lua("local c = ROME2_BRIDGE.find(%s, %s); if not c then return 'not found' end; return ROME2_BRIDGE.info(c)"
+                        % (lua_str(id), lua_str(ctx)))
+
+    def click(self, id, ctx=None, force=False):
+        return self.lua("return ROME2_BRIDGE.click(%s, %s, %s)" % (lua_str(id), lua_str(ctx), str(bool(force)).lower()))
+
+    def factions(self, name=None):
+        return self.lua("return ROME2_BRIDGE.factions(%s)" % lua_str(name), 60)
+
+    def panels(self):
+        return self.lua("return ROME2_BRIDGE.panels()", 20)
+
+    def auto_click(self, rules):
+        """Set auto-click rules (text, one '<context id> <button id>' per line, or a preset name); empty clears."""
+        rules = PRESETS.get((rules or "").strip(), rules or "").strip()
+        if not rules:
+            if os.path.exists(self.CLICK):
+                os.remove(self.CLICK)
+            return 0
+        with open(self.CLICK, "w", encoding="utf-8", newline="\n") as f:
+            f.write(rules + "\n")
+        return len(rules.splitlines())
+
+    def end_turn(self, wait=True, timeout=900, stall=90, send=True):
+        """End the turn (the bridge retries every 15 s while a dialog blocks it) and wait for the next player turn.
+
+        Returns {"ended": True, ...}, or {"stalled": True, "panels": [...]} when one faction's turn (or our pending
+        end turn) takes longer than `stall` seconds (usually a dialog waiting for the player), or {"game_exited": True}.
+        """
+        hb0 = self.heartbeat()
+        start_n = hb0["turn_starts"] if hb0 else 0
+        if send:
+            r = self.lua("return ROME2_BRIDGE.end_turn()")
+            if str(r).startswith("not the player's turn"):
+                return {"ended": False, "refused": r}
+            if not wait:
+                return {"sent": r}
+        t0 = time.time()
+        while time.time() - t0 < timeout:
+            time.sleep(2)
+            if not self.running():
+                return {"ended": False, "game_exited": True, "crashes": self.new_crashes()}
+            hb = self.heartbeat()
+            if hb and hb.get("defeated"):
+                # game over: the player's faction was destroyed; the game shows its Defeat screen (scripts stop)
+                return {"ended": False, "defeated": hb["defeated"], "seconds": round(time.time() - t0), "heartbeat": hb}
+            if hb and hb["turn_starts"] > start_n and hb["human_turn"]:
+                return {"ended": True, "seconds": round(time.time() - t0), "heartbeat": hb}
+            if hb and hb["age_s"] > max(180, 2 * stall) and time.time() - t0 > max(180, 2 * stall):
+                # the game is open but its scripts stopped (a full-screen panel such as the Defeat screen)
+                return {"ended": False, "stalled": True, "no_heartbeat": True, "seconds": round(time.time() - t0),
+                        "heartbeat": hb, "panels": "the game stopped running scripts (heartbeat %ss old)" % hb["age_s"]}
+            if hb and (hb.get("current_for_s") or 0) > stall and time.time() - t0 > stall:
+                try:
+                    panels = self.panels()
+                except BridgeError as e:
+                    panels = str(e)
+                return {"ended": False, "stalled": True, "seconds": round(time.time() - t0), "heartbeat": hb,
+                        "panels": panels}
+        return {"ended": False, "waited_s": timeout, "heartbeat": self.heartbeat()}
+
+    def wait_turn(self, timeout=900, stall=90):
+        hb0 = self.heartbeat()
+        if hb0 and hb0["human_turn"] and not hb0["want_end"]:
+            return {"ended": True, "already": True, "heartbeat": hb0}
+        return self.end_turn(timeout=timeout, stall=stall, send=False)
+
+    # ---- main menu: faction lists and starting as a chosen faction (2026-11-08) ------------------------------------
+    # The bridge also runs in the front end (all_scripted.lua is loaded there too) and clicks the menu by id:
+    # campaign button (button_new_campaign_<key> / button_dlc_campaign_<n>, force: its menu is hidden until hovered)
+    # -> culture group (faction_group_button_group) -> faction (faction_button_group) -> button_start_campaign.
+    def wait_shown(self, id, timeout=30):
+        t0 = time.time()
+        while time.time() - t0 < timeout:
+            try:
+                if self.lua("return ROME2_BRIDGE.find_shown(%s) ~= nil" % lua_str(id)):
+                    return True
+            except BridgeError:
+                pass
+            time.sleep(1)
+        return False
+
+    def children(self, id, all=False):
+        return self.lua("return ROME2_BRIDGE.children(%s, nil, %s)" % (lua_str(id), "true" if all else "false")) or []
+
+    def menu_campaign_buttons(self):
+        """[(button id, label)] of the New Campaign entries (not Load, not unowned DLC)."""
+        out = []
+        for cont in ("main_container", "dlc_container"):
+            for k in self.children(cont, all=True):
+                if k.startswith("button_") and not k.endswith("_unowned") and k != "button_load_campaign":
+                    label = self.lua("local c = ROME2_BRIDGE.find(%s); local s = c and ROME2_BRIDGE.U(c:Find('string'));"
+                                     " return s and s:GetStateText() or ''" % lua_str(k))
+                    out.append((k, label))
+        return out
+
+    def menu_factions(self, log=print):
+        """Playable factions of every campaign, read from the New Campaign screen (game in the main menu):
+        {button: {"label", "groups": {group: {"name", "factions": [...]}}}}. A campaign without a faction choice
+        (the prologue) has no groups."""
+        out = {}
+        for btn, label in self.menu_campaign_buttons():
+            self.click(btn, force=True)
+            time.sleep(4)
+            camp = {"label": label, "groups": {}}
+            for g in self.children("faction_group_button_group"):
+                self.click(g)
+                time.sleep(1.5)
+                name = self.lua("local c = ROME2_BRIDGE.find('dy_faction/group_name'); return c and ROME2_BRIDGE.info(c).text or ''")
+                camp["groups"][g] = {"name": name, "factions": self.children("faction_button_group")}
+            log("%s (%s): %d groups" % (label, btn, len(camp["groups"])))
+            out[btn] = camp
+        return out
+
+    def start_faction(self, button, group, faction, timeout=420, check_steam=True):
+        """Start the game into the main menu, then a new campaign (`button`) as `faction` (in culture `group`).
+        Waits for the bridge on the campaign map. Returns the wait result plus the human factions found there."""
+        self.start(menu=True, check_steam=check_steam)
+        r = self.wait_bridge(240, screen="menu")
+        if not r.get("alive"):
+            return dict(r, step="main menu")
+        try:  # e.g. "v2.4.0  Build 1339.3427123" (for bug reports)
+            self.menu_version = self.lua("local c = ROME2_BRIDGE.find('version_number'); return c and ROME2_BRIDGE.info(c).text or nil")
+        except BridgeError:
+            pass
+        # the campaign button sits in a hidden (hover) menu: force. The rest: wait until shown (the New Campaign screen
+        # takes longer right after launch than later, seen 2026-11-08), then click.
+        res = self.click(button, force=True)
+        if res != "clicked":
+            return {"alive": False, "step": "click %s: %s" % (button, res)}
+        for id in (group, faction, "button_start_campaign"):
+            if id == faction and not self.wait_shown(id, 8):
+                # one faction in the group (e.g. Caesar in Gaul): the faction row stays hidden and the group click has
+                # already selected it (seen 2026-11-08). The human check on the map confirms it.
+                if self.lua("local c = ROME2_BRIDGE.find(%s); local row = ROME2_BRIDGE.find('faction_button_group');"
+                            " return c ~= nil and row ~= nil and not ROME2_BRIDGE.shown(row)" % lua_str(faction)):
+                    continue
+            if not self.wait_shown(id, 30):
+                return {"alive": False, "step": "%s not shown after 30 s" % id}
+            time.sleep(1)
+            if id == "button_start_campaign":
+                t_click = time.time()
+            res = self.click(id)
+            if res != "clicked":
+                return {"alive": False, "step": "click %s: %s" % (id, res)}
+        if res != "clicked":
+            return {"alive": False, "step": "click button_start_campaign: %s" % res}
+        for p in (self.CMD, self.OUT):  # a command left over from the menu would run on the map
+            if os.path.exists(p):
+                os.remove(p)
+        r = self.wait_bridge(timeout, screen="campaign", since=t_click)
+        if r.get("alive"):
+            try:
+                r["human"] = self.lua("local r = {} for _, f in ipairs(ROME2_BRIDGE.items(ROME2_BRIDGE.game():model():world()"
+                                      ":faction_list())) do if f:is_human() then r[#r+1] = f:name() end end return r")
+            except BridgeError as e:
+                r["human"] = "error: %s" % e
+        return r
+
+    # ---- window: keys, clicks, screenshots (PowerShell helpers in tools\) -----------------------------------------
+    def post_key(self, vk=0x1B, wait=1):
+        return self._ps("post_key.ps1", "-Vk", vk, "-Wait", wait)
+
+    def post_click(self, x, y, wait=1):
+        return self._ps("post_click.ps1", "-X", int(x), "-Y", int(y), "-Wait", wait)
+
+    def screenshot(self, out):
+        return self._ps("game_shot.ps1", "-Out", out)
+
+    def intro_shown(self):
+        return bool(self.lua('return ROME2_BRIDGE.find_shown("cinematic_bars") ~= nil'))
+
+    def _intro_shown_retry(self, tries=3):
+        # once in ~30 test games (Grand Campaign, 2026-11-08) one call during the intro got no answer in 30 s;
+        # the calls before it worked, so ask again before giving up
+        for i in range(tries):
+            try:
+                return self.intro_shown()
+            except BridgeError:
+                if i == tries - 1 or not self.running():
+                    raise
+                time.sleep(5)
+
+    def skip_intro(self,max_presses=10, delay=5):
+        """While the campaign intro shows (cinematic_bars), wait `delay` s and press Esc; never presses Esc on the map
+        (that would open the game menu). Returns the number of presses."""
+        n = 0
+        while n < max_presses and self._intro_shown_retry():
+            time.sleep(delay)
+            self.post_key(0x1B, 2)
+            n += 1
+        return n

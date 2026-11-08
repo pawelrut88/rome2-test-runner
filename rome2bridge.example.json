@@ -1,0 +1,6 @@
+{
+  "_comment": "Copy to rome2bridge.json (next to this file) only if autodetection is wrong. Leave out what is fine.",
+  "game_dir": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Total War Rome II",
+  "app_dir": "C:\\Users\\YOU\\AppData\\Roaming\\The Creative Assembly\\Rome2",
+  "startup_restore_s": 30
+}

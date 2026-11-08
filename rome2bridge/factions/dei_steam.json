@@ -1,0 +1,421 @@
+{
+ "button_new_campaign_main_rome": {
+  "label": "Grand Campaign",
+  "groups": {
+   "rom_rome": {
+    "name": "Roma",
+    "factions": [
+     "rom_politics_rome_julia",
+     "rom_politics_rome_junia",
+     "rom_politics_rome_cornelia"
+    ]
+   },
+   "rom_carthage": {
+    "name": "Qarthadastim",
+    "factions": [
+     "rom_politics_carthage_hannonid",
+     "rom_politics_carthage_magonid",
+     "rom_politics_carthage_barcid"
+    ]
+   },
+   "rom_faction_group_successors": {
+    "name": "Diadokhoi",
+    "factions": [
+     "rom_macedon",
+     "rom_seleucid",
+     "rom_baktria",
+     "rom_epirus",
+     "rom_ptolemaics"
+    ]
+   },
+   "rom_faction_group_indian": {
+    "name": "Bharata",
+    "factions": [
+     "rom_maurya"
+    ]
+   },
+   "rom_faction_group_gallic": {
+    "name": "Galli",
+    "factions": [
+     "rom_scordisci",
+     "rom_boii",
+     "rom_nervii",
+     "rom_galatia",
+     "rom_arverni"
+    ]
+   },
+   "rom_faction_group_britannic": {
+    "name": "Qritani",
+    "factions": [
+     "rom_iceni",
+     "rom_caledones",
+     "rom_ebdani"
+    ]
+   },
+   "rom_faction_group_celtiberian": {
+    "name": "Iberi",
+    "factions": [
+     "rom_edetani",
+     "rom_arevaci",
+     "rom_lusitani"
+    ]
+   },
+   "rom_faction_group_nomadic": {
+    "name": "Skudat",
+    "factions": [
+     "rom_massagetae",
+     "rom_roxolani",
+     "rom_scythia"
+    ]
+   },
+   "rom_faction_group_greek": {
+    "name": "Poleis Hellenikai",
+    "factions": [
+     "rom_sparta",
+     "rom_rhodos",
+     "rom_pergamon",
+     "rom_athens"
+    ]
+   },
+   "rom_faction_group_arabian": {
+    "name": "Malkayn Arabayat",
+    "factions": [
+     "rom_saba",
+     "rom_nabatea"
+    ]
+   },
+   "rom_faction_group_daco_thracian": {
+    "name": "Daci, Thraci et Illyrii",
+    "factions": [
+     "rom_getae",
+     "rom_ardiaei",
+     "rom_odryssia"
+    ]
+   },
+   "rom_faction_group_african": {
+    "name": "Edamim Afrikanim",
+    "factions": [
+     "rom_masaesyli",
+     "rom_kush"
+    ]
+   },
+   "rom_faction_group_black_sea": {
+    "name": "Apoikiai Ton Hellenon",
+    "factions": [
+     "rom_massilia",
+     "rom_colchis",
+     "rom_syracuse",
+     "rom_cimmeria"
+    ]
+   },
+   "rom_faction_group_eastern": {
+    "name": "Arzah-bum",
+    "factions": [
+     "rom_kartli",
+     "rom_parthia",
+     "rom_armenia",
+     "rom_media_atropatene",
+     "rom_pontus"
+    ]
+   },
+   "rom_faction_group_germanic": {
+    "name": "Germani",
+    "factions": [
+     "rom_lugii",
+     "rom_suebi",
+     "rom_cimbri"
+    ]
+   }
+  }
+ },
+ "button_new_campaign_main_emperor": {
+  "label": "Imperator Augustus",
+  "groups": {
+   "emp_faction_group_daco_thracian": {
+    "name": "Balkan Tribes",
+    "factions": [
+     "emp_dacia",
+     "emp_thrace"
+    ]
+   },
+   "emp_faction_group_eastern": {
+    "name": "Eastern Empires",
+    "factions": [
+     "emp_armenia",
+     "emp_pontus",
+     "emp_parthia"
+    ]
+   },
+   "emp_faction_group_rome": {
+    "name": "Rome",
+    "factions": [
+     "emp_lepidus",
+     "emp_octavian",
+     "emp_antony",
+     "emp_pompey"
+    ]
+   },
+   "emp_faction_group_successors": {
+    "name": "Successor Kingdoms",
+    "factions": [
+     "emp_egypt"
+    ]
+   },
+   "emp_faction_group_britannic": {
+    "name": "Britannic Tribes",
+    "factions": [
+     "emp_iceni"
+    ]
+   },
+   "emp_faction_group_germanic": {
+    "name": "Germanic Tribes",
+    "factions": [
+     "emp_marcomanni"
+    ]
+   },
+   "emp_faction_group_celtiberian": {
+    "name": "Iberian Tribes",
+    "factions": [
+     "emp_iberia"
+    ]
+   },
+   "emp_faction_group_gallic": {
+    "name": "Gallic Tribes",
+    "factions": [
+     "emp_gaul"
+    ]
+   }
+  }
+ },
+ "button_dlc_campaign_0": {
+  "label": "Empire Divided",
+  "groups": {
+   "3c_faction_group_germanic": {
+    "name": "Germanic Kingdoms",
+    "factions": [
+     "3c_marcomanni",
+     "3c_gothi",
+     "3c_saxoni"
+    ]
+   },
+   "3c_faction_group_rome": {
+    "name": "The Divided Roman Empire",
+    "factions": [
+     "3c_gallicemp",
+     "3c_palmyra",
+     "3c_rome"
+    ]
+   },
+   "3c_faction_group_eastern": {
+    "name": "Eastern Empires",
+    "factions": [
+     "3c_armenia",
+     "3c_sassanid"
+    ]
+   },
+   "3c_faction_group_nomadic": {
+    "name": "Nomadic Tribes",
+    "factions": [
+     "3c_alani"
+    ]
+   },
+   "3c_faction_group_britannic": {
+    "name": "Britannic Celts",
+    "factions": [
+     "3c_caledoni"
+    ]
+   }
+  }
+ },
+ "button_dlc_campaign_1": {
+  "label": "Rise of the Republic",
+  "groups": {
+   "inv_faction_group_gallic_tribes": {
+    "name": "Gallic Tribes",
+    "factions": [
+     "inv_insubres",
+     "inv_senones"
+    ]
+   },
+   "inv_faction_group_greek_tribes": {
+    "name": "Greek States",
+    "factions": [
+     "inv_taranto",
+     "inv_syracuse"
+    ]
+   },
+   "inv_faction_group_italian_civilizations": {
+    "name": "Italian Civilisations",
+    "factions": [
+     "inv_tarchuna",
+     "inv_rome"
+    ]
+   },
+   "inv_faction_group_italian_tribes": {
+    "name": "Italic Tribes",
+    "factions": [
+     "inv_veneti",
+     "inv_samnites"
+    ]
+   },
+   "inv_faction_group_nuragic_tribes": {
+    "name": "Nuragic Tribes",
+    "factions": [
+     "inv_iolei"
+    ]
+   }
+  }
+ },
+ "button_dlc_campaign_2": {
+  "label": "Caesar in Gaul",
+  "groups": {
+   "gaul_faction_group_rome": {
+    "name": "Rome, the paragon of civilisation",
+    "factions": [
+     "gaul_rome"
+    ]
+   },
+   "gaul_faction_group_arverni": {
+    "name": "The Arverni, champions of Gaul",
+    "factions": [
+     "gaul_arverni"
+    ]
+   },
+   "gaul_faction_group_suebi": {
+    "name": "The Suebi, invaders from Germania",
+    "factions": [
+     "gaul_suebi"
+    ]
+   },
+   "gaul_faction_group_nervii": {
+    "name": "The Nervii, bravest of the Belgae",
+    "factions": [
+     "gaul_nervii"
+    ]
+   },
+   "gaul_faction_group_massilia": {
+    "name": "Massilia, Outpost of Hellenism",
+    "factions": [
+     "gaul_massilia"
+    ]
+   },
+   "gaul_faction_group_iberian": {
+    "name": "Tarbelli, Southern Invaders",
+    "factions": [
+     "gaul_tarbelli"
+    ]
+   },
+   "gaul_faction_group_britannic": {
+    "name": "Cantiaci, Warriors from Beyond the Straits",
+    "factions": [
+     "gaul_cantiaci"
+    ]
+   }
+  }
+ },
+ "button_dlc_campaign_3": {
+  "label": "Hannibal at the Gates",
+  "groups": {
+   "pun_faction_group_carthage": {
+    "name": "Carthage",
+    "factions": [
+     "pun_carthage"
+    ]
+   },
+   "pun_faction_group_african": {
+    "name": "Masaesyli",
+    "factions": [
+     "pun_masaesyli"
+    ]
+   },
+   "pun_faction_group_massilia": {
+    "name": "Massilia",
+    "factions": [
+     "pun_massilia"
+    ]
+   },
+   "pun_faction_group_rome": {
+    "name": "Rome",
+    "factions": [
+     "pun_rome"
+    ]
+   },
+   "pun_faction_group_syracuse": {
+    "name": "Syracuse",
+    "factions": [
+     "pun_syracuse"
+    ]
+   },
+   "pun_faction_group_lusitani": {
+    "name": "The Lusitani",
+    "factions": [
+     "pun_lusitani"
+    ]
+   },
+   "pun_faction_group_arevaci": {
+    "name": "The Arevaci",
+    "factions": [
+     "pun_arevaci"
+    ]
+   }
+  }
+ },
+ "button_dlc_campaign_4": {
+  "label": "Macedonian Wars",
+  "groups": {
+   "MAC_faction_group_pergamon": {
+    "name": "Kingdom of Pergamon",
+    "factions": [
+     "pel_ionian"
+    ]
+   },
+   "MAC_faction_group_rome": {
+    "name": "Roman Republic",
+    "factions": [
+     "pel_korkyra"
+    ]
+   },
+   "MAC_faction_group_macedon": {
+    "name": "Kingdom of Macedon",
+    "factions": [
+     "pel_makedon"
+    ]
+   },
+   "MAC_faction_group_rhodes": {
+    "name": "Rodos",
+    "factions": [
+     "pel_rodos"
+    ]
+   }
+  }
+ },
+ "button_new_campaign_prologue_01": {
+  "label": "Alexander",
+  "groups": {
+   "faction_group_macedon": {
+    "name": "Alexander",
+    "factions": [
+     "rom_macedon_alex"
+    ]
+   }
+  }
+ },
+ "button_new_campaign_prologue_02": {
+  "label": "Mithridatic Wars",
+  "groups": {
+   "mith_faction_group_rome": {
+    "name": "Roma",
+    "factions": [
+     "dei_mith_sulla",
+     "dei_mith_marian"
+    ]
+   },
+   "mith_faction_group_pontus": {
+    "name": "Pontus",
+    "factions": [
+     "dei_mith_pontus"
+    ]
+   }
+  }
+ }
+}

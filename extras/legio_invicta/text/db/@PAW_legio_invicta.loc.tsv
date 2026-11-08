@@ -1,0 +1,4 @@
+key	text	tooltip
+#Loc;1;text/db/@PAW_legio_invicta.loc		
+effects_description_PAW_legio_invicta_strong	Legio Invicta: %+n%% to all soldier and ship stats (1000 times stronger)	true
+effects_description_PAW_legio_invicta_move	Legio Invicta: %+n%% battle speed and range	true

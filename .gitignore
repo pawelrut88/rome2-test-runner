@@ -1,0 +1,23 @@
+# build output (the exe and the zip go up as a GitHub Release, not into the code)
+build/
+dist/
+dist_new/
+pack/build/
+release/*.zip
+release/twc_post/
+__pycache__/
+*.pyc
+
+# local and personal files
+rome2bridge.json
+.mcp.json
+CLAUDE.md
+NOTES.md
+bridge/*.log
+bridge/*.png
+*.log
+
+# test-only files (not part of the tool)
+reference/
+tools/start_direct.ps1
+extras/build/

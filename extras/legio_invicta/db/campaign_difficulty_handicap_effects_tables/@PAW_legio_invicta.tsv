@@ -1,0 +1,16 @@
+campaign_difficulty_handicap	human	effect	effect_scope	effect_value	optional_campaign_key
+#campaign_difficulty_handicap_effects_tables;0;db/campaign_difficulty_handicap_effects_tables/@PAW_legio_invicta					
+-3	true	PAW_legio_invicta_strong	in_all_your_forces	99900.0000	
+-3	true	PAW_legio_invicta_move	in_all_your_forces	50.0000	
+-2	true	PAW_legio_invicta_strong	in_all_your_forces	99900.0000	
+-2	true	PAW_legio_invicta_move	in_all_your_forces	50.0000	
+-1	true	PAW_legio_invicta_strong	in_all_your_forces	99900.0000	
+-1	true	PAW_legio_invicta_move	in_all_your_forces	50.0000	
+0	true	PAW_legio_invicta_strong	in_all_your_forces	99900.0000	
+0	true	PAW_legio_invicta_move	in_all_your_forces	50.0000	
+1	true	PAW_legio_invicta_strong	in_all_your_forces	99900.0000	
+1	true	PAW_legio_invicta_move	in_all_your_forces	50.0000	
+2	true	PAW_legio_invicta_strong	in_all_your_forces	99900.0000	
+2	true	PAW_legio_invicta_move	in_all_your_forces	50.0000	
+3	true	PAW_legio_invicta_strong	in_all_your_forces	99900.0000	
+3	true	PAW_legio_invicta_move	in_all_your_forces	50.0000	
