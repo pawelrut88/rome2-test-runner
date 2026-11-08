@@ -1,0 +1,7357 @@
+{
+"colours": {
+"dei": {
+"dei_alex_macedon_civil_war": [
+"CDD5ED",
+"401E50"
+],
+"dei_alex_maurya": [
+"FFFFFF",
+"E4D9C7"
+],
+"dei_alex_persia": [
+"A7311C",
+"FFD000"
+],
+"dei_alex_rome": [
+"A62416",
+"E4B409"
+],
+"dei_arii": [
+"4B494C",
+"000000"
+],
+"dei_carpetani": [
+"774831",
+"000000"
+],
+"dei_corieltauvi": [
+"A7834C",
+"000000"
+],
+"dei_cyrenaica_civil_war": [
+"995718",
+"E4B409"
+],
+"dei_cyrenaica_secession": [
+"E4D38E",
+"E4B409"
+],
+"dei_extra_faction_1": [
+"867D8B",
+"E4B409"
+],
+"dei_extra_faction_10": [
+"BEADA3",
+"E4B409"
+],
+"dei_extra_faction_11": [
+"BEADA3",
+"E4B409"
+],
+"dei_extra_faction_12": [
+"AA4A3C",
+"E4B409"
+],
+"dei_extra_faction_13": [
+"BEADA3",
+"E4B409"
+],
+"dei_extra_faction_14": [
+"BEADA3",
+"E4B409"
+],
+"dei_extra_faction_15": [
+"B7DE9B",
+"E4B409"
+],
+"dei_extra_faction_16": [
+"BEADA3",
+"E4B409"
+],
+"dei_extra_faction_17": [
+"24412D",
+"E4B409"
+],
+"dei_extra_faction_18": [
+"603433",
+"E4B409"
+],
+"dei_extra_faction_19": [
+"BEADA3",
+"E4B409"
+],
+"dei_extra_faction_2": [
+"BEADA3",
+"E4B409"
+],
+"dei_extra_faction_20": [
+"7D8F75",
+"E4B409"
+],
+"dei_extra_faction_3": [
+"DB9124",
+"E4B409"
+],
+"dei_extra_faction_4": [
+"EBD8C7",
+"E4B409"
+],
+"dei_extra_faction_5": [
+"5568A2",
+"E4B409"
+],
+"dei_extra_faction_6": [
+"BEADA3",
+"E4B409"
+],
+"dei_extra_faction_7": [
+"24412D",
+"E4B409"
+],
+"dei_extra_faction_8": [
+"6386A4",
+"E4B409"
+],
+"dei_extra_faction_9": [
+"BEADA3",
+"E4B409"
+],
+"dei_lazyges": [
+"A74530",
+"000000"
+],
+"dei_lexovii": [
+"7A3E5F",
+"000000"
+],
+"dei_massyli": [
+"644C47",
+"000000"
+],
+"dei_mith_armenia": [
+"7D8F75",
+"E4B409"
+],
+"dei_mith_bithynia": [
+"95A4BB",
+"E4B409"
+],
+"dei_mith_cilician": [
+"5E9347",
+"E4D9C7"
+],
+"dei_mith_hasmonean": [
+"060606",
+"E4B409"
+],
+"dei_mith_lycia": [
+"8E7978",
+"E4B409"
+],
+"dei_mith_marian": [
+"A62416",
+"E4B409"
+],
+"dei_mith_massalia": [
+"212540",
+"E4B409"
+],
+"dei_mith_media": [
+"E5841D",
+"E4B409"
+],
+"dei_mith_nabatea": [
+"A05142",
+"E4B409"
+],
+"dei_mith_numidia": [
+"7F8488",
+"E4B409"
+],
+"dei_mith_parthia": [
+"855C6A",
+"E4B409"
+],
+"dei_mith_pisidia": [
+"9B7D53",
+"E4B409"
+],
+"dei_mith_pontus": [
+"F3B877",
+"E4B409"
+],
+"dei_mith_ptolemaic": [
+"6386A4",
+"E4B409"
+],
+"dei_mith_rome": [
+"433F90",
+"E4B409"
+],
+"dei_mith_seleucid": [
+"B4C7D6",
+"E4B409"
+],
+"dei_mith_sulla": [
+"2B4E84",
+"E4B409"
+],
+"dei_nahanarvali": [
+"9A7C05",
+"000000"
+],
+"dei_tulingi": [
+"ADA656",
+"000000"
+],
+"emp_arii": [
+"4B494C",
+"000000"
+],
+"emp_corieltauvi": [
+"A7834C",
+"000000"
+],
+"emp_lazyges": [
+"A74530",
+"000000"
+],
+"emp_marcomanni": [
+"9B5119",
+"000000"
+],
+"emp_nahanarvali": [
+"9A7C05",
+"000000"
+],
+"gaul_lexovii": [
+"7A3E5F",
+"E4B409"
+],
+"gaul_tulingi": [
+"ADA656",
+"E4B409"
+],
+"gaul_veneti": [
+"D98D1F",
+"E4B409"
+],
+"gen_aedui": [
+"B29792",
+"C66A4C"
+],
+"gen_aetolia": [
+"8D6257",
+"08649C"
+],
+"gen_agrigentum": [
+"89A6B4",
+"FFFFFF"
+],
+"gen_anartes": [
+"566C50",
+"E4B409"
+],
+"gen_aorsoi": [
+"739EA5",
+"FAE5A4"
+],
+"gen_apuli": [
+"98A86D",
+"A65F35"
+],
+"gen_araba": [
+"BEAD91",
+"E4B409"
+],
+"gen_arachosia": [
+"FBE984",
+"E4B409"
+],
+"gen_ardhan": [
+"DDD3BF",
+"3B7674"
+],
+"gen_ardiaei": [
+"AFA9D8",
+"E4B409"
+],
+"gen_aria": [
+"615126",
+"E4B409"
+],
+"gen_armenia_civil_war": [
+"897D9E",
+"000000"
+],
+"gen_arsakia": [
+"F0DA89",
+"ECC03B"
+],
+"gen_artaxiad": [
+"88547C",
+"000000"
+],
+"gen_arverni": [
+"EDDC41",
+"E4B409"
+],
+"gen_athens": [
+"DDEEF0",
+"E4B409"
+],
+"gen_atrebates": [
+"C88E5B",
+"A2C3A6"
+],
+"gen_augila": [
+"9588AD",
+"DDA960"
+],
+"gen_ausci": [
+"E6E6D3",
+"E4B409"
+],
+"gen_avakas": [
+"D21123",
+"E4B409"
+],
+"gen_axum": [
+"A4B390",
+"857456"
+],
+"gen_baktria": [
+"624A77",
+"E4B409"
+],
+"gen_baleares": [
+"125046",
+"C8A77E"
+],
+"gen_bastarnae": [
+"486591",
+"743734"
+],
+"gen_bithynia": [
+"0A1C14",
+"95A4BB"
+],
+"gen_blemmyes": [
+"AACABD",
+"C7A77E"
+],
+"gen_boii": [
+"032C03",
+"E4B409"
+],
+"gen_breuci": [
+"8DB180",
+"D6CFBC"
+],
+"gen_brigantes": [
+"C98452",
+"95A4BB"
+],
+"gen_buri": [
+"375462",
+"000000"
+],
+"gen_byzacium": [
+"0F1938",
+"E4B409"
+],
+"gen_caledones": [
+"D1D7D2",
+"243F5A"
+],
+"gen_cantiaci": [
+"3093D8",
+"E4B409"
+],
+"gen_cantrabri": [
+"D9A9A3",
+"BEADA3"
+],
+"gen_cappadocia": [
+"C798A8",
+"A83F43"
+],
+"gen_carana": [
+"B9613F",
+"E4B409"
+],
+"gen_carmania": [
+"C77CA8",
+"E4B409"
+],
+"gen_carnutes": [
+"EDCAF1",
+"3B6442"
+],
+"gen_carthage": [
+"618850",
+"E4B409"
+],
+"gen_celtiberi": [
+"645647",
+"E4B409"
+],
+"gen_celtici": [
+"972812",
+"48644D"
+],
+"gen_cessetani": [
+"F1E092",
+"C7A77E"
+],
+"gen_characene": [
+"3A6D80",
+"000000"
+],
+"gen_charmuthas": [
+"ECC232",
+"E4D9C7"
+],
+"gen_cherusci": [
+"F0E674",
+"FFFFFF"
+],
+"gen_cilicia": [
+"5E9347",
+"E4D9C7"
+],
+"gen_cimbri": [
+"3E754C",
+"DDA960"
+],
+"gen_cimmeria": [
+"486484",
+"E4B409"
+],
+"gen_cirta": [
+"96A580",
+"7F8488"
+],
+"gen_colchis": [
+"ECE6B6",
+"E4B409"
+],
+"gen_commagene": [
+"3F4833",
+"E4D9C7"
+],
+"gen_corsica": [
+"DDCEAD",
+"524733"
+],
+"gen_crete": [
+"977AAE",
+"B76849"
+],
+"gen_cyprus": [
+"F6D27C",
+"E4B409"
+],
+"gen_dacia": [
+"ABA6A2",
+"000000"
+],
+"gen_dahae": [
+"426D68",
+"64964F"
+],
+"gen_dalmatae": [
+"C06D3B",
+"C2CEC4"
+],
+"gen_daorsi": [
+"242942",
+"A67E41"
+],
+"gen_demetae": [
+"BC9797",
+"CBBA82"
+],
+"gen_dumonii": [
+"829266",
+"943515"
+],
+"gen_dura": [
+"9C7957",
+"3C3022"
+],
+"gen_ebdani": [
+"113613",
+"7F8488"
+],
+"gen_ectabana": [
+"CA748E",
+"6DAEEE"
+],
+"gen_elymais": [
+"DAD1D4",
+"E4B409"
+],
+"gen_ephesus": [
+"6F7DA9",
+"E4D9C7"
+],
+"gen_ephesus_alex": [
+"6D6B5F",
+"E4D9C7"
+],
+"gen_epirus": [
+"5B6247",
+"E4B409"
+],
+"gen_eravisci": [
+"B5D3D2",
+"603F33"
+],
+"gen_etruscan": [
+"BAABA1",
+"E4B409"
+],
+"gen_eucratides": [
+"6EAF5D",
+"E4B409"
+],
+"gen_frisii": [
+"DF7546",
+"704B39"
+],
+"gen_gaditana": [
+"489CD7",
+"E4B409"
+],
+"gen_gaetuli": [
+"395C2B",
+"FAE5A4"
+],
+"gen_galatia": [
+"D2C66E",
+"E4B409"
+],
+"gen_galleaci": [
+"5A0E12",
+"DDA960"
+],
+"gen_gallia_togata": [
+"A78CB0",
+"BF2727"
+],
+"gen_garamantia": [
+"E4BD34",
+"E4B409"
+],
+"gen_gerrhea": [
+"F0E9DC",
+"AB844B"
+],
+"gen_getae": [
+"B16781",
+"E4B409"
+],
+"gen_gondopharid": [
+"EDEBC1",
+"000000"
+],
+"gen_gor": [
+"913356",
+"F5CE6F"
+],
+"gen_gutones": [
+"38A389",
+"9D96A8"
+],
+"gen_hekatompylos": [
+"381647",
+"FFB82A"
+],
+"gen_helisii": [
+"98A6A5",
+"A05142"
+],
+"gen_helveconae": [
+"914F43",
+"CA8738"
+],
+"gen_helvetii": [
+"DCDDE1",
+"7F8488"
+],
+"gen_himyar": [
+"5F2525",
+"857456"
+],
+"gen_iastae": [
+"374729",
+"375462"
+],
+"gen_iazyges": [
+"77A063",
+"AC442B"
+],
+"gen_iceni": [
+"917584",
+"E4B409"
+],
+"gen_iconium": [
+"92B0B9",
+"000000"
+],
+"gen_iconium_alex": [
+"BEADA3",
+"000000"
+],
+"gen_illercavones": [
+"EDA82E",
+"E4B409"
+],
+"gen_insubres": [
+"B6693B",
+"704B39"
+],
+"gen_iol": [
+"B0712E",
+"E4D9C7"
+],
+"gen_judea": [
+"78BADB",
+"000000"
+],
+"gen_kambojas": [
+"041E16",
+"FFB504"
+],
+"gen_kartli": [
+"B0C3AA",
+"996A58"
+],
+"gen_khorasmii": [
+"CA6833",
+"E4B409"
+],
+"gen_libya": [
+"AA4A3C",
+"AA4A3C"
+],
+"gen_liguria": [
+"2E4E48",
+"B6C0A9"
+],
+"gen_lucani": [
+"E4D9C7",
+"974706"
+],
+"gen_lusitani": [
+"BECB9F",
+"E4B409"
+],
+"gen_ma_in": [
+"3D4B1A",
+"82ABA3"
+],
+"gen_macedon": [
+"D5AF49",
+"E4B409"
+],
+"gen_magna_graecia": [
+"99D1CD",
+"23528A"
+],
+"gen_marcomanni": [
+"B0401A",
+"4D2819"
+],
+"gen_margiana": [
+"2885B9",
+"ECC03B"
+],
+"gen_marmarica": [
+"1F2D59",
+"1E1E1E"
+],
+"gen_marricini": [
+"B4B891",
+"FFD706"
+],
+"gen_masaesyli": [
+"E9AA4F",
+"7F8488"
+],
+"gen_mascat": [
+"87C1CB",
+"DDA960"
+],
+"gen_massagetae": [
+"8C6F2A",
+"E4B409"
+],
+"gen_massilia": [
+"D7AA6D",
+"E4B409"
+],
+"gen_massyli": [
+"B49DA2",
+"8B6B64"
+],
+"gen_mauri": [
+"B19D89",
+"5C4C3B"
+],
+"gen_media": [
+"98B3B8",
+"F9D186"
+],
+"gen_media_atropatene": [
+"7D1212",
+"E5841D"
+],
+"gen_mehu": [
+"E1DCB3",
+"203281"
+],
+"gen_meroe": [
+"859AB6",
+"F6D27C"
+],
+"gen_mesopotamia": [
+"101A4D",
+"E4B409"
+],
+"gen_nabatea": [
+"382929",
+"A05142"
+],
+"gen_namnetes": [
+"0CAC77",
+"A67E41"
+],
+"gen_nervii": [
+"44452A",
+"E4B409"
+],
+"gen_nori": [
+"CF3A4C",
+"7C6D46"
+],
+"gen_odryssia": [
+"A05E3A",
+"E4B409"
+],
+"gen_oretani": [
+"ED742E",
+"FFC99C"
+],
+"gen_osroene": [
+"D07B0C",
+"E4D9C7"
+],
+"gen_palmyra": [
+"9A78A2",
+"DDE8EB"
+],
+"gen_pamphylia": [
+"815F53",
+"E4D9C7"
+],
+"gen_pamphylia_alex": [
+"6D6B5F",
+"E4D9C7"
+],
+"gen_panormus": [
+"354A2A",
+"FFFFFF"
+],
+"gen_parthia": [
+"972F15",
+"E4B409"
+],
+"gen_pentapolis": [
+"B5CDD4",
+"F5CE6F"
+],
+"gen_pergamon": [
+"9B7D53",
+"E4B409"
+],
+"gen_persia": [
+"729069",
+"E4B409"
+],
+"gen_petra": [
+"297E88",
+"E4D9C7"
+],
+"gen_phanagoria": [
+"D2DEEB",
+"E4D9C7"
+],
+"gen_pictones": [
+"1B0926",
+"4F360E"
+],
+"gen_pontus": [
+"5D3E24",
+"E4B409"
+],
+"gen_ptolemaics": [
+"E8CD3A",
+"E4B409"
+],
+"gen_qidri": [
+"9C200C",
+"BCC0AF"
+],
+"gen_quadi": [
+"7F8488",
+"7F8488"
+],
+"gen_raeti": [
+"576CCB",
+"C4AA93"
+],
+"gen_rhodos": [
+"3B0F03",
+"5568A2"
+],
+"gen_rome": [
+"F6EEED",
+"E4B409"
+],
+"gen_roxolani": [
+"484852",
+"E4B409"
+],
+"gen_rugii": [
+"2A3A2E",
+"866846"
+],
+"gen_ruteni": [
+"647970",
+"E4B409"
+],
+"gen_saba": [
+"D6B3BE",
+"79A568"
+],
+"gen_sagartia": [
+"544638",
+"E4B409"
+],
+"gen_saka": [
+"CEA98C",
+"FF8A00"
+],
+"gen_samnite": [
+"95A4BB",
+"AD0000"
+],
+"gen_sardes": [
+"ADC4AB",
+"E4B409"
+],
+"gen_sardinia": [
+"C3DCD4",
+"E4B409"
+],
+"gen_scordisci": [
+"F1E1EB",
+"C3A35A"
+],
+"gen_scythia": [
+"887B7B",
+"E4B409"
+],
+"gen_seleucid": [
+"C64B1F",
+"E4B409"
+],
+"gen_sequani": [
+"ACCEA3",
+"4B8300"
+],
+"gen_shemau": [
+"CFDEDF",
+"F9E58C"
+],
+"gen_sinope": [
+"9EA6AA",
+"E4D9C7"
+],
+"gen_siraces": [
+"45533B",
+"A05142"
+],
+"gen_siwa": [
+"9E9B98",
+"E4B409"
+],
+"gen_sogdia": [
+"B3BEC1",
+"F2DCAA"
+],
+"gen_sophene": [
+"E1D14A",
+"E4B409"
+],
+"gen_sparta": [
+"D0C09D",
+"E4B409"
+],
+"gen_suebi": [
+"98C77B",
+"E4B409"
+],
+"gen_susia": [
+"CFB745",
+"000000"
+],
+"gen_syracuse": [
+"E9C846",
+"E4B409"
+],
+"gen_ta_seti": [
+"1B3316",
+"E4B409"
+],
+"gen_tanais": [
+"D478B6",
+"E4D9C7"
+],
+"gen_tauri": [
+"DACBB6",
+"6386A4"
+],
+"gen_thapsacus": [
+"E8DEDC",
+"E4B409"
+],
+"gen_thyni": [
+"7B5473",
+"E3B32C"
+],
+"gen_tidamensi": [
+"230303",
+"A67A57"
+],
+"gen_tingis": [
+"B8C8CA",
+"E4D9C7"
+],
+"gen_trapezos": [
+"D06A6A",
+"A2C3A6"
+],
+"gen_treverii": [
+"A5B9B8",
+"4E7D5D"
+],
+"gen_triballi": [
+"467E7B",
+"5A7E52"
+],
+"gen_tripolitania": [
+"C0A273",
+"E4B409"
+],
+"gen_turdetani": [
+"ABBEB8",
+"B76849"
+],
+"gen_tylis": [
+"B6BB7B",
+"E4B409"
+],
+"gen_tyros": [
+"244AAA",
+"78BADB"
+],
+"gen_ubii": [
+"E7A930",
+"8E7978"
+],
+"gen_unelli": [
+"67642D",
+"E4B409"
+],
+"gen_veneti": [
+"649DB8",
+"EBD8C7"
+],
+"gen_vettones": [
+"E3542C",
+"E4B409"
+],
+"gen_vindelici": [
+"F8D8E8",
+"3D4A2E"
+],
+"gen_vivisci": [
+"67A6B8",
+"3D4A2E"
+],
+"gen_zadrakata": [
+"5E572F",
+"FFF335"
+],
+"pel_athenai_civil_war": [
+"74192B",
+"E4B409"
+],
+"pel_ionian": [
+"74192B",
+"E4B409"
+],
+"pel_korinthos": [
+"6386A4",
+"E4B409"
+],
+"pel_korkyra": [
+"A62416",
+"E4B409"
+],
+"pel_persia": [
+"B4C7D6",
+"E4B409"
+],
+"pel_rebels_barbarian": [
+"6386A4",
+"E4B409"
+],
+"pel_rebels_ionian": [
+"74192B",
+"E4B409"
+],
+"pel_rebels_persian": [
+"B4C7D6",
+"E4B409"
+],
+"pel_sparta_civil_war": [
+"2B4E84",
+"E4B409"
+],
+"pun_massyli": [
+"644C47",
+"E4B409"
+],
+"pun_veneti": [
+"EBD8C7",
+"E4B409"
+],
+"rom_aetolia": [
+"F3B68C",
+"E4B409"
+],
+"rom_arachosia": [
+"536454",
+"E4B409"
+],
+"rom_arachosia_alex": [
+"A98A95",
+"EBE6D8"
+],
+"rom_ardiaei_alex": [
+"EBD8C7",
+"E4B409"
+],
+"rom_ardiaei_secession": [
+"47537C",
+"E4B409"
+],
+"rom_arevaci_civil_war": [
+"518B78",
+"E4B409"
+],
+"rom_arevaci_secession": [
+"E4B442",
+"E4B409"
+],
+"rom_armenia_alex": [
+"778668",
+"832535"
+],
+"rom_armenia_secession": [
+"8B5554",
+"E4B409"
+],
+"rom_arverni_alex": [
+"24412D",
+"E4B409"
+],
+"rom_arverni_secession": [
+"F5D576",
+"E4B409"
+],
+"rom_athens_alex": [
+"6386A4",
+"E4B409"
+],
+"rom_athens_secession": [
+"B2A27F",
+"E4B409"
+],
+"rom_bactria_alex": [
+"CADDCB",
+"B34F24"
+],
+"rom_baktria_secession": [
+"D8D9CF",
+"E4B409"
+],
+"rom_boii_secession": [
+"D1C480",
+"E4B409"
+],
+"rom_bosporus_alex": [
+"25354C",
+"E4B409"
+],
+"rom_breuci": [
+"BABFAF",
+"E4B409"
+],
+"rom_caledones_civil_war": [
+"D1C272",
+"E4B409"
+],
+"rom_caledones_secession": [
+"6E5A59",
+"E4B409"
+],
+"rom_cappadocia_alex": [
+"B8A07B",
+"6D9295"
+],
+"rom_carthage_alex": [
+"E4D9C7",
+"E4B409"
+],
+"rom_carthage_civil_war": [
+"0F291D",
+"E4B409"
+],
+"rom_carthage_secession": [
+"AD4444",
+"E4B409"
+],
+"rom_cimbri_civil_war": [
+"BDBFC1",
+"E4B409"
+],
+"rom_cimbri_secession": [
+"AD939C",
+"E4B409"
+],
+"rom_cimmeria_secession": [
+"2E0002",
+"E4B409"
+],
+"rom_colchis_secession": [
+"D8CBB6",
+"E4B409"
+],
+"rom_cyrenaica": [
+"809573",
+"E4B409"
+],
+"rom_daci": [
+"CEC0D2",
+"000000"
+],
+"rom_daorsi_alex": [
+"A67E41",
+"E4B409"
+],
+"rom_delmatae_alex": [
+"C2CEC4",
+"E4B409"
+],
+"rom_ebdani_civil_war": [
+"84BC68",
+"E4B409"
+],
+"rom_ebdani_secession": [
+"3F9A8E",
+"E4B409"
+],
+"rom_edetani_civil_war": [
+"0A1741",
+"E4B409"
+],
+"rom_edetani_secession": [
+"B29642",
+"E4B409"
+],
+"rom_egypt_alex": [
+"E1DB74",
+"6449A9"
+],
+"rom_epirus_alex": [
+"BA7148",
+"E4B409"
+],
+"rom_epirus_secession": [
+"FAD88D",
+"E4B409"
+],
+"rom_etruscan_alex": [
+"95A4BB",
+"E4B409"
+],
+"rom_galatia_civil_war": [
+"33A697",
+"E4B409"
+],
+"rom_galatia_secession": [
+"472308",
+"E4B409"
+],
+"rom_getae_secession": [
+"ADB6BE",
+"E4B409"
+],
+"rom_iceni_civil_war": [
+"F9D186",
+"E4B409"
+],
+"rom_iceni_secession": [
+"9F4E37",
+"E4B409"
+],
+"rom_kartli_civil_war": [
+"DB9124",
+"E4B409"
+],
+"rom_kartli_secession": [
+"0D439A",
+"E4B409"
+],
+"rom_knossos_alex": [
+"B76849",
+"E4B409"
+],
+"rom_kush": [
+"F6D27C",
+"E4B409"
+],
+"rom_kush_secession": [
+"771A08",
+"E4B409"
+],
+"rom_liguria_alex": [
+"827E72",
+"E4B409"
+],
+"rom_lugii_civil_war": [
+"BE8DBF",
+"E4B409"
+],
+"rom_lugii_secession": [
+"B87669",
+"E4B409"
+],
+"rom_lusitani_civil_war": [
+"BCC0AF",
+"E4B409"
+],
+"rom_lusitani_secession": [
+"811717",
+"E4B409"
+],
+"rom_lydia_alex": [
+"847B70",
+"E7B00F"
+],
+"rom_macedon": [
+"401E50",
+"E4B409"
+],
+"rom_macedon_alex": [
+"5F234B",
+"ECE2C6"
+],
+"rom_macedon_civil_war": [
+"CDD5ED",
+"E4B409"
+],
+"rom_macedon_secession": [
+"CB9648",
+"E4B409"
+],
+"rom_marcomanni": [
+"9B5119",
+"E4B409"
+],
+"rom_masaesyli_civil_war": [
+"89A5BC",
+"E4B409"
+],
+"rom_masaesyli_secession": [
+"8FA58C",
+"E4B409"
+],
+"rom_massagetae_secession": [
+"C88F08",
+"E4B409"
+],
+"rom_massilia_alex": [
+"212540",
+"E4B409"
+],
+"rom_massilia_secession": [
+"E6E1C6",
+"E4B409"
+],
+"rom_maurya": [
+"5D5EA3",
+"E4D9C7"
+],
+"rom_maurya_civil_war": [
+"D5CEDB",
+"E4D9C7"
+],
+"rom_maurya_secession": [
+"C2BA8C",
+"E4D9C7"
+],
+"rom_media_atropatene": [
+"E6841D",
+"E4B409"
+],
+"rom_media_atropatene_civil_war": [
+"9EA8DC",
+"E4B409"
+],
+"rom_media_atropatene_secession": [
+"016D34",
+"E4B409"
+],
+"rom_meroe_civil_war": [
+"3F372B",
+"E4B409"
+],
+"rom_nabatea_civil_war": [
+"7F9261",
+"E4B409"
+],
+"rom_nabatea_secession": [
+"4C270A",
+"E4B409"
+],
+"rom_nervii_secession": [
+"063A67",
+"E4B409"
+],
+"rom_odryssia_secession": [
+"CD6841",
+"E4B409"
+],
+"rom_parthava": [
+"9C9886",
+"E4B409"
+],
+"rom_parthia_secession": [
+"E0A10B",
+"E4B409"
+],
+"rom_pergamon_alex": [
+"74192B",
+"E4B409"
+],
+"rom_pergamon_civil_war": [
+"61625D",
+"E4B409"
+],
+"rom_pergamon_secession": [
+"E4C09A",
+"E4B409"
+],
+"rom_persia": [
+"7A738B",
+"E4B409"
+],
+"rom_pontus_secession": [
+"867D8B",
+"E4B409"
+],
+"rom_ptolemaics_civil_war": [
+"451058",
+"E4B409"
+],
+"rom_ptolemaics_secession": [
+"E0B5B0",
+"E4B409"
+],
+"rom_rhodos_alex": [
+"5568A2",
+"E4B409"
+],
+"rom_rhodos_civil_war": [
+"E2AD2E",
+"E4B409"
+],
+"rom_rhodos_secession": [
+"D3BEAC",
+"E4B409"
+],
+"rom_rome": [
+"870000",
+"E4B409"
+],
+"rom_rome_secession": [
+"EBC572",
+"E4B409"
+],
+"rom_roxolani_secession": [
+"302424",
+"E4B409"
+],
+"rom_rugii": [
+"93826F",
+"E4B409"
+],
+"rom_saba_civil_war": [
+"CD6830",
+"E4B409"
+],
+"rom_saba_secession": [
+"C0A94B",
+"E4B409"
+],
+"rom_sardes": [
+"CCC2C1",
+"E4B409"
+],
+"rom_sardes_alex": [
+"D68734",
+"E4B409"
+],
+"rom_scythia_secession": [
+"233A63",
+"E4B409"
+],
+"rom_seleucid_civil_war": [
+"0F0F0F",
+"E4B409"
+],
+"rom_seleucid_secession": [
+"851A3E",
+"E4B409"
+],
+"rom_sequani": [
+"4B833C",
+"E4B409"
+],
+"rom_sinope": [
+"823C71",
+"E4D9C7"
+],
+"rom_sparta_alex": [
+"600502",
+"E4B409"
+],
+"rom_sparta_secession": [
+"C7CCCB",
+"E4B409"
+],
+"rom_suebi_secession": [
+"C5BA82",
+"E4B409"
+],
+"rom_syracuse_alex": [
+"4674B0",
+"E4B409"
+],
+"rom_syracuse_civil_war": [
+"A5945E",
+"E4B409"
+],
+"rom_syracuse_secession": [
+"D0802B",
+"E4B409"
+],
+"rom_tectosages": [
+"BBB146",
+"7D8F75"
+],
+"rom_thyni": [
+"3A2E20",
+"921417"
+],
+"rom_triballi": [
+"2E4B36",
+"E4B409"
+],
+"rom_tylis_civil_war": [
+"80648D",
+"E4B409"
+],
+"rom_tylis_secession": [
+"5D8043",
+"E4B409"
+],
+"rom_ubii": [
+"9B5119",
+"E4B409"
+],
+"rom_veneti": [
+"EBD8C7",
+"E4B409"
+],
+"rom_veneti_alex": [
+"EBD8C7",
+"E4B409"
+]
+},
+"vanilla": {
+"3c_alani": [
+"B7DE9B",
+"000000"
+],
+"3c_alani_civil_war": [
+"2B4E84",
+"000000"
+],
+"3c_alani_secession": [
+"2B4E84",
+"000000"
+],
+"3c_alemanni": [
+"DDA960",
+"000000"
+],
+"3c_ardhan": [
+"3B7674",
+"000000"
+],
+"3c_armenia": [
+"7D8F75",
+"E4B409"
+],
+"3c_armenia_civil_war": [
+"2B4E84",
+"000000"
+],
+"3c_armenia_secession": [
+"2B4E84",
+"000000"
+],
+"3c_axum": [
+"857456",
+"000000"
+],
+"3c_baktria": [
+"9D8DAB",
+"000000"
+],
+"3c_blemmyes": [
+"C7A77E",
+"000000"
+],
+"3c_bosporou": [
+"B53C59",
+"000000"
+],
+"3c_britannia": [
+"87B455",
+"704185"
+],
+"3c_burgundii": [
+"943515",
+"000000"
+],
+"3c_buri": [
+"375462",
+"000000"
+],
+"3c_caledoni": [
+"243F5A",
+"000000"
+],
+"3c_caledoni_civil_war": [
+"2B4E84",
+"000000"
+],
+"3c_caledoni_secession": [
+"2B4E84",
+"000000"
+],
+"3c_colchis": [
+"503723",
+"000000"
+],
+"3c_dahae": [
+"64964F",
+"000000"
+],
+"3c_ebdani": [
+"5494BD",
+"FFEAA2"
+],
+"3c_egypt": [
+"F2EB9B",
+"000000"
+],
+"3c_franci": [
+"4D5097",
+"000000"
+],
+"3c_galatia": [
+"3D4A2E",
+"000000"
+],
+"3c_gallicemp": [
+"24412D",
+"E4B409"
+],
+"3c_gallicemp_civil_war": [
+"2B4E84",
+"000000"
+],
+"3c_gallicemp_secession": [
+"2B4E84",
+"000000"
+],
+"3c_garamantia": [
+"A67A57",
+"000000"
+],
+"3c_gerrhea": [
+"AB844B",
+"000000"
+],
+"3c_gothi": [
+"323547",
+"000000"
+],
+"3c_gothi_civil_war": [
+"2B4E84",
+"000000"
+],
+"3c_gothi_secession": [
+"2B4E84",
+"000000"
+],
+"3c_heruli": [
+"DDA960",
+"000000"
+],
+"3c_himyar": [
+"857456",
+"000000"
+],
+"3c_hispania": [
+"A0B450",
+"A84B67"
+],
+"3c_iastae": [
+"B86849",
+"000000"
+],
+"3c_kartli": [
+"996A58",
+"000000"
+],
+"3c_kwarezm": [
+"F6D27C",
+"000000"
+],
+"3c_lakhmids": [
+"BCC0AF",
+"000000"
+],
+"3c_langobardi": [
+"465078",
+"000000"
+],
+"3c_lusitania": [
+"B4BE78",
+"6850A0"
+],
+"3c_lydia": [
+"3B7674",
+"000000"
+],
+"3c_ma_in": [
+"82ABA3",
+"000000"
+],
+"3c_marcomanni": [
+"4D2819",
+"000000"
+],
+"3c_marcomanni_civil_war": [
+"2B4E84",
+"000000"
+],
+"3c_marcomanni_secession": [
+"2B4E84",
+"000000"
+],
+"3c_margiana": [
+"CF6834",
+"000000"
+],
+"3c_mascat": [
+"DDA960",
+"000000"
+],
+"3c_mauretania": [
+"7C3C3E",
+"000000"
+],
+"3c_mauri": [
+"C8A77E",
+"000000"
+],
+"3c_media": [
+"E5841D",
+"000000"
+],
+"3c_meroe": [
+"F6D27C",
+"000000"
+],
+"3c_nabatea": [
+"A05142",
+"000000"
+],
+"3c_nahanarvali": [
+"4F3A28",
+"000000"
+],
+"3c_nasamones": [
+"DDA960",
+"000000"
+],
+"3c_numidia": [
+"EC6161",
+"000000"
+],
+"3c_palmyra": [
+"FBB517",
+"000000"
+],
+"3c_palmyra_civil_war": [
+"2B4E84",
+"000000"
+],
+"3c_palmyra_secession": [
+"2B4E84",
+"000000"
+],
+"3c_quadi": [
+"7F8488",
+"000000"
+],
+"3c_rebel_african": [
+"6D6B5F",
+"E4B409"
+],
+"3c_rebel_arabian": [
+"6D6B5F",
+"E4B409"
+],
+"3c_rebel_celtic": [
+"6D6B5F",
+"E4B409"
+],
+"3c_rebel_eastern": [
+"6D6B5F",
+"E4B409"
+],
+"3c_rebel_germanic": [
+"6D6B5F",
+"E4B409"
+],
+"3c_rebel_latin": [
+"6D6B5F",
+"E4B409"
+],
+"3c_rebel_nomadic": [
+"6D6B5F",
+"E4B409"
+],
+"3c_roman_pretender": [
+"6B84E0",
+"000000"
+],
+"3c_roman_secession": [
+"2B4E84",
+"000000"
+],
+"3c_rome": [
+"A62416",
+"E4B409"
+],
+"3c_roxolani": [
+"DB9124",
+"000000"
+],
+"3c_rugii": [
+"866846",
+"000000"
+],
+"3c_saba": [
+"79A568",
+"000000"
+],
+"3c_sakastan": [
+"95A4BB",
+"000000"
+],
+"3c_sassanid": [
+"855C6A",
+"000000"
+],
+"3c_sassanid_civil_war": [
+"2B4E84",
+"000000"
+],
+"3c_sassanid_secession": [
+"2B4E84",
+"000000"
+],
+"3c_saxoni": [
+"5A7133",
+"000000"
+],
+"3c_saxoni_civil_war": [
+"2B4E84",
+"000000"
+],
+"3c_saxoni_secession": [
+"2B4E84",
+"000000"
+],
+"3c_semnones": [
+"603433",
+"000000"
+],
+"3c_vandali": [
+"D68734",
+"000000"
+],
+"3c_varini": [
+"094F96",
+"000000"
+],
+"emp_alani": [
+"B7DE9B",
+"000000"
+],
+"emp_antony": [
+"E4D9C7",
+"E4B409"
+],
+"emp_antony_civil_war": [
+"54170A",
+"E4B409"
+],
+"emp_antony_secession": [
+"54170A",
+"E4B409"
+],
+"emp_aorsoi": [
+"FAE5A4",
+"000000"
+],
+"emp_ardhan": [
+"3B7674",
+"000000"
+],
+"emp_arii": [
+"4A484B",
+"000000"
+],
+"emp_armenia": [
+"7D8F75",
+"000000"
+],
+"emp_armenia_civil_war": [
+"E4D9C7",
+"000000"
+],
+"emp_armenia_secession": [
+"E4D9C7",
+"000000"
+],
+"emp_axum": [
+"857456",
+"000000"
+],
+"emp_bastarnae": [
+"743734",
+"000000"
+],
+"emp_belgae": [
+"E5CF95",
+"000000"
+],
+"emp_blemmyes": [
+"C7A77E",
+"000000"
+],
+"emp_boii": [
+"79A568",
+"000000"
+],
+"emp_breuci": [
+"D6CFBC",
+"000000"
+],
+"emp_brigantes": [
+"95A4BB",
+"000000"
+],
+"emp_buri": [
+"375462",
+"000000"
+],
+"emp_caledones": [
+"243F5A",
+"000000"
+],
+"emp_cantabri": [
+"BEADA3",
+"000000"
+],
+"emp_cappadocia": [
+"A83F43",
+"000000"
+],
+"emp_characene": [
+"3A6D80",
+"000000"
+],
+"emp_cherusci": [
+"323547",
+"000000"
+],
+"emp_cimbri": [
+"DDA960",
+"000000"
+],
+"emp_corieltauvi": [
+"AB844B",
+"000000"
+],
+"emp_dacia": [
+"8D6B48",
+"000000"
+],
+"emp_dacia_civil_war": [
+"5D201F",
+"000000"
+],
+"emp_dacia_secession": [
+"5D201F",
+"000000"
+],
+"emp_dahae": [
+"64964F",
+"000000"
+],
+"emp_demetae": [
+"CBBA82",
+"000000"
+],
+"emp_drangiana": [
+"95A4BB",
+"000000"
+],
+"emp_dumonii": [
+"943515",
+"000000"
+],
+"emp_ebdani": [
+"7F8488",
+"000000"
+],
+"emp_egypt": [
+"6386A4",
+"000000"
+],
+"emp_egypt_civil_war": [
+"F5CE6F",
+"000000"
+],
+"emp_egypt_secession": [
+"F5CE6F",
+"000000"
+],
+"emp_frisii": [
+"704B39",
+"000000"
+],
+"emp_gaetuli": [
+"FAE5A4",
+"000000"
+],
+"emp_galatia": [
+"3D4A2E",
+"000000"
+],
+"emp_garamantia": [
+"A67A57",
+"000000"
+],
+"emp_gaul": [
+"24412D",
+"000000"
+],
+"emp_gerrhea": [
+"AB844B",
+"000000"
+],
+"emp_gutones": [
+"9D96A8",
+"000000"
+],
+"emp_helisii": [
+"8E7978",
+"000000"
+],
+"emp_helveconae": [
+"914F43",
+"000000"
+],
+"emp_helvetii": [
+"7F8488",
+"000000"
+],
+"emp_himyar": [
+"857456",
+"000000"
+],
+"emp_iastae": [
+"B86849",
+"000000"
+],
+"emp_iberia": [
+"95A4BB",
+"000000"
+],
+"emp_iceni": [
+"4674B0",
+"000000"
+],
+"emp_iceni_civil_war": [
+"993D24",
+"000000"
+],
+"emp_iceni_secession": [
+"993D24",
+"000000"
+],
+"emp_judea": [
+"78BADB",
+"000000"
+],
+"emp_kartli": [
+"996A58",
+"000000"
+],
+"emp_lazyges": [
+"AC442B",
+"000000"
+],
+"emp_lepidus": [
+"FBB517",
+"000000"
+],
+"emp_lepidus_civil_war": [
+"6A1707",
+"000000"
+],
+"emp_lepidus_secession": [
+"6A1707",
+"000000"
+],
+"emp_ma_in": [
+"82ABA3",
+"000000"
+],
+"emp_marcomanni": [
+"4D2819",
+"000000"
+],
+"emp_marcomanni_civil_war": [
+"BEADA3",
+"000000"
+],
+"emp_marcomanni_secession": [
+"BEADA3",
+"000000"
+],
+"emp_mascat": [
+"DDA960",
+"000000"
+],
+"emp_mauri": [
+"C8A77E",
+"000000"
+],
+"emp_media_atropatene": [
+"E5841D",
+"000000"
+],
+"emp_meroe": [
+"F6D27C",
+"000000"
+],
+"emp_nabatea": [
+"A05142",
+"000000"
+],
+"emp_nahanarvali": [
+"4F3A28",
+"000000"
+],
+"emp_nasamones": [
+"DDA960",
+"000000"
+],
+"emp_nori": [
+"7C6D46",
+"000000"
+],
+"emp_numidia": [
+"7F8488",
+"000000"
+],
+"emp_octavian": [
+"A71402",
+"E4B409"
+],
+"emp_octavian_civil_war": [
+"EDD970",
+"E4B409"
+],
+"emp_octavian_secession": [
+"EDD970",
+"E4B409"
+],
+"emp_palmyra": [
+"B7C6E6",
+"000000"
+],
+"emp_paradene": [
+"4A484B",
+"000000"
+],
+"emp_parthia": [
+"855C6A",
+"000000"
+],
+"emp_parthia_civil_war": [
+"7AB7AF",
+"000000"
+],
+"emp_parthia_secession": [
+"7AB7AF",
+"000000"
+],
+"emp_persia": [
+"6DAEEE",
+"000000"
+],
+"emp_pompey": [
+"433F90",
+"000000"
+],
+"emp_pompey_civil_war": [
+"E8DEC9",
+"000000"
+],
+"emp_pompey_secession": [
+"E8DEC9",
+"000000"
+],
+"emp_pontus": [
+"264C61",
+"000000"
+],
+"emp_qidri": [
+"BCC0AF",
+"000000"
+],
+"emp_quadi": [
+"7F8488",
+"000000"
+],
+"emp_raeti": [
+"C4AA93",
+"000000"
+],
+"emp_rebel_african": [
+"6D6B5F",
+"E4B409"
+],
+"emp_rebel_arabian": [
+"6D6B5F",
+"E4B409"
+],
+"emp_rebel_briton": [
+"6D6B5F",
+"E4B409"
+],
+"emp_rebel_celt": [
+"6D6B5F",
+"E4B409"
+],
+"emp_rebel_dacian": [
+"6D6B5F",
+"E4B409"
+],
+"emp_rebel_eastern": [
+"6D6B5F",
+"E4B409"
+],
+"emp_rebel_egyptian": [
+"6D6B5F",
+"E4B409"
+],
+"emp_rebel_german": [
+"6D6B5F",
+"E4B409"
+],
+"emp_rebel_hellenic": [
+"6D6B5F",
+"E4B409"
+],
+"emp_rebel_iberian": [
+"6D6B5F",
+"E4B409"
+],
+"emp_rebel_illyrian": [
+"6D6B5F",
+"E4B409"
+],
+"emp_rebel_latin": [
+"6D6B5F",
+"E4B409"
+],
+"emp_rebel_nomadic": [
+"6D6B5F",
+"E4B409"
+],
+"emp_rebel_punic": [
+"6D6B5F",
+"E4B409"
+],
+"emp_rebel_spartan": [
+"6D6B5F",
+"E4B409"
+],
+"emp_rebel_thracian": [
+"6D6B5F",
+"E4B409"
+],
+"emp_roxolani": [
+"DB9124",
+"000000"
+],
+"emp_rugii": [
+"866846",
+"000000"
+],
+"emp_saba": [
+"79A568",
+"000000"
+],
+"emp_scordisci": [
+"C3A35A",
+"000000"
+],
+"emp_semnones": [
+"603433",
+"000000"
+],
+"emp_siraces": [
+"A05142",
+"000000"
+],
+"emp_thrace": [
+"C2CEC4",
+"000000"
+],
+"emp_vindelici": [
+"804A3E",
+"000000"
+],
+"gaul_aedui": [
+"732A0B",
+"E4B409"
+],
+"gaul_allobroges": [
+"77B559",
+"E4B409"
+],
+"gaul_arverni": [
+"24412D",
+"E4B409"
+],
+"gaul_arverni_civil_war": [
+"DD904C",
+"E4B409"
+],
+"gaul_arverni_secession": [
+"DD904C",
+"E4B409"
+],
+"gaul_atrebates": [
+"A2C3A6",
+"E4B409"
+],
+"gaul_ausci": [
+"758835",
+"E4B409"
+],
+"gaul_belgae": [
+"9DC06F",
+"E4B409"
+],
+"gaul_bellovaci": [
+"537443",
+"E4B409"
+],
+"gaul_bituriges": [
+"C8954B",
+"E4B409"
+],
+"gaul_cadurci": [
+"E0C54F",
+"E4B409"
+],
+"gaul_cantiaci": [
+"68ACFF",
+"E4B409"
+],
+"gaul_carnutes": [
+"3B6442",
+"E4B409"
+],
+"gaul_cenomani": [
+"69804A",
+"E4B409"
+],
+"gaul_dumnonii": [
+"943515",
+"E4B409"
+],
+"gaul_eburones": [
+"CC7762",
+"E4B409"
+],
+"gaul_helvetii": [
+"7F8488",
+"E4B409"
+],
+"gaul_lemovices": [
+"B2A39E",
+"E4B409"
+],
+"gaul_lexovii": [
+"A93907",
+"E4B409"
+],
+"gaul_mandubii": [
+"AB6F00",
+"E4B409"
+],
+"gaul_massilia": [
+"212540",
+"E4B409"
+],
+"gaul_mediomatrici": [
+"664036",
+"E4B409"
+],
+"gaul_morini": [
+"957B74",
+"E4B409"
+],
+"gaul_namnetes": [
+"A67E41",
+"E4B409"
+],
+"gaul_nemetes": [
+"CD794D",
+"E4B409"
+],
+"gaul_nervii": [
+"E5CF95",
+"E4B409"
+],
+"gaul_nervii_civil_war": [
+"69804A",
+"E4B409"
+],
+"gaul_nervii_secession": [
+"69804A",
+"E4B409"
+],
+"gaul_osismii": [
+"A0F277",
+"E4B409"
+],
+"gaul_parisii": [
+"797709",
+"E4B409"
+],
+"gaul_pictones": [
+"4F360E",
+"E4B409"
+],
+"gaul_raurici": [
+"743734",
+"E4B409"
+],
+"gaul_rebel_briton": [
+"6D6B5F",
+"E4B409"
+],
+"gaul_rebel_celt": [
+"6D6B5F",
+"E4B409"
+],
+"gaul_rebel_gaul": [
+"6D6B5F",
+"E4B409"
+],
+"gaul_rebel_german": [
+"6D6B5F",
+"E4B409"
+],
+"gaul_rebel_latin": [
+"6D6B5F",
+"E4B409"
+],
+"gaul_redones": [
+"235908",
+"E4B409"
+],
+"gaul_remi": [
+"6B6026",
+"E4B409"
+],
+"gaul_rome": [
+"A62416",
+"E4B409"
+],
+"gaul_rome_civil_war": [
+"2B4E84",
+"E4B409"
+],
+"gaul_rome_secession": [
+"2B4E84",
+"E4B409"
+],
+"gaul_ruteni": [
+"8FB299",
+"E4B409"
+],
+"gaul_santones": [
+"85251C",
+"E4B409"
+],
+"gaul_senones": [
+"BFA64F",
+"E4B409"
+],
+"gaul_sequani": [
+"4B8300",
+"E4B409"
+],
+"gaul_sotiates": [
+"D68734",
+"E4B409"
+],
+"gaul_suebi": [
+"603433",
+"E4B409"
+],
+"gaul_suebi_civil_war": [
+"9C5A20",
+"E4B409"
+],
+"gaul_suebi_secession": [
+"9C5A20",
+"E4B409"
+],
+"gaul_suessiones": [
+"B6C0A9",
+"E4B409"
+],
+"gaul_tarbelli": [
+"4A8858",
+"E4B409"
+],
+"gaul_treverii": [
+"4E7D5D",
+"E4B409"
+],
+"gaul_tulingi": [
+"EBD254",
+"E4B409"
+],
+"gaul_turones": [
+"CC682A",
+"E4B409"
+],
+"gaul_unelli": [
+"938704",
+"E4B409"
+],
+"gaul_vangiones": [
+"90455F",
+"E4B409"
+],
+"gaul_veneti": [
+"982E2E",
+"B2E74E"
+],
+"gaul_vivisci": [
+"3D4A2E",
+"E4B409"
+],
+"gaul_vocontii": [
+"167A1F",
+"E4B409"
+],
+"gaul_volcae": [
+"AA4A3C",
+"E4B409"
+],
+"inv_aequi": [
+"CCA314",
+"632613"
+],
+"inv_agrigento": [
+"C0C679",
+"968223"
+],
+"inv_agyrion": [
+"D8A24C",
+"758431"
+],
+"inv_aleria": [
+"EEE19C",
+"69804A"
+],
+"inv_aritim": [
+"95A4BB",
+"E4D9C7"
+],
+"inv_balari": [
+"8E7978",
+"9B2440"
+],
+"inv_bituriges": [
+"C8954B",
+"4A8858"
+],
+"inv_boii": [
+"79A568",
+"943515"
+],
+"inv_bruttii": [
+"7B95AB",
+"7B9FAB"
+],
+"inv_carni": [
+"BD6261",
+"315708"
+],
+"inv_carnutes": [
+"3B6442",
+"CBBA82"
+],
+"inv_carthage": [
+"E4D9C7",
+"E4B409"
+],
+"inv_cenomani": [
+"69804A",
+"D98D1F"
+],
+"inv_corsi": [
+"819578",
+"2C451C"
+],
+"inv_croton": [
+"BA9D6D",
+"354B5C"
+],
+"inv_daunians": [
+"5F667F",
+"5F667F"
+],
+"inv_felathri": [
+"C6534C",
+"375462"
+],
+"inv_frentani": [
+"69520D",
+"B4C7D6"
+],
+"inv_hernici": [
+"3B6442",
+"3B6442"
+],
+"inv_inc_helvetii": [
+"6D6B5F",
+"E4B409"
+],
+"inv_inc_hirpini": [
+"6D6B5F",
+"E4B409"
+],
+"inv_inc_histri": [
+"6D6B5F",
+"E4B409"
+],
+"inv_inc_massylii": [
+"6D6B5F",
+"E4B409"
+],
+"inv_inc_nurrensi": [
+"6D6B5F",
+"E4B409"
+],
+"inv_inc_sikelians": [
+"6D6B5F",
+"E4B409"
+],
+"inv_insubres": [
+"704B39",
+"D98D1F"
+],
+"inv_insubres_civil_war": [
+"2B4E84",
+"E4B409"
+],
+"inv_insubres_secession": [
+"2B4E84",
+"E4B409"
+],
+"inv_iolei": [
+"B1B9A3",
+"3D3703"
+],
+"inv_iolei_civil_war": [
+"2B4E84",
+"E4B409"
+],
+"inv_iolei_secession": [
+"2B4E84",
+"E4B409"
+],
+"inv_lepontii": [
+"2F95B2",
+"B6693B"
+],
+"inv_ligures": [
+"B6C0A9",
+"704B39"
+],
+"inv_lucani": [
+"BD9A66",
+"376F49"
+],
+"inv_marrucini": [
+"87AECA",
+"C2AF64"
+],
+"inv_messapians": [
+"557794",
+"D5A44E"
+],
+"inv_neapolis": [
+"8EB1B0",
+"8EB1B0"
+],
+"inv_paeligni": [
+"76903A",
+"5F4D6E"
+],
+"inv_peucetians": [
+"404F3B",
+"404F3B"
+],
+"inv_picentes": [
+"79BEBE",
+"4C496B"
+],
+"inv_pirate_illyrian": [
+"6D6B5F",
+"E4B409"
+],
+"inv_raeti": [
+"C4AA93",
+"6386A4"
+],
+"inv_rebel_carthage": [
+"6D6B5F",
+"E4B409"
+],
+"inv_rebel_etruscan": [
+"6D6B5F",
+"E4B409"
+],
+"inv_rebel_gaul": [
+"6D6B5F",
+"E4B409"
+],
+"inv_rebel_greek": [
+"6D6B5F",
+"E4B409"
+],
+"inv_rebel_iapygian": [
+"6D6B5F",
+"E4B409"
+],
+"inv_rebel_italic": [
+"6D6B5F",
+"E4B409"
+],
+"inv_rebel_nuragic": [
+"6D6B5F",
+"E4B409"
+],
+"inv_rebels_greek": [
+"6B5F09",
+"B409E4"
+],
+"inv_rhegion": [
+"A83F43",
+"517F79"
+],
+"inv_rome": [
+"A62416",
+"DB9124"
+],
+"inv_rome_civil_war": [
+"2B4E84",
+"E4B409"
+],
+"inv_rome_secession": [
+"2B4E84",
+"E4B409"
+],
+"inv_sabines": [
+"D3AE58",
+"82758A"
+],
+"inv_samnites": [
+"538DD5",
+"AD0000"
+],
+"inv_samnites_civil_war": [
+"2B4E84",
+"E4D9C7"
+],
+"inv_samnites_secession": [
+"2B4E84",
+"E4D9C7"
+],
+"inv_senones": [
+"537443",
+"53BFA6"
+],
+"inv_senones_civil_war": [
+"2B4E84",
+"E4D9C7"
+],
+"inv_senones_secession": [
+"2B4E84",
+"E4D9C7"
+],
+"inv_slaves_greek": [
+"6B5F09",
+"B409E4"
+],
+"inv_syracuse": [
+"4674B0",
+"FAE5A4"
+],
+"inv_syracuse_civil_war": [
+"2B4E84",
+"08649C"
+],
+"inv_syracuse_secession": [
+"2B4E84",
+"08649C"
+],
+"inv_taranto": [
+"551A1A",
+"BEAD81"
+],
+"inv_taranto_civil_war": [
+"2B4E84",
+"E4D9C7"
+],
+"inv_taranto_secession": [
+"2B4E84",
+"E4D9C7"
+],
+"inv_tarchuna": [
+"3B7674",
+"3B7674"
+],
+"inv_tarchuna_civil_war": [
+"2B4E84",
+"E4D9C7"
+],
+"inv_tarchuna_secession": [
+"2B4E84",
+"E4D9C7"
+],
+"inv_umbri": [
+"683F4D",
+"683F4D"
+],
+"inv_veii": [
+"A396B4",
+"DDA960"
+],
+"inv_veneti": [
+"BE001E",
+"B2E74E"
+],
+"inv_veneti_civil_war": [
+"2B4E84",
+"E4D9C7"
+],
+"inv_veneti_secession": [
+"2B4E84",
+"E4D9C7"
+],
+"inv_viesul": [
+"A15243",
+"D3A63F"
+],
+"inv_volsci": [
+"B77148",
+"BA7148"
+],
+"pel_aitolian": [
+"BD6261",
+"E4B409"
+],
+"pel_akaian": [
+"2F5995",
+"E4B409"
+],
+"pel_argos": [
+"252331",
+"E4B409"
+],
+"pel_athenai": [
+"6386A4",
+"E4B409"
+],
+"pel_athenai_civil_war": [
+"526B6F",
+"E4B409"
+],
+"pel_athenai_secession": [
+"526B6F",
+"E4B409"
+],
+"pel_boiotia": [
+"855C6A",
+"E4B409"
+],
+"pel_boiotia_civil_war": [
+"F5CE6F",
+"E4B409"
+],
+"pel_boiotia_secession": [
+"F5CE6F",
+"E4B409"
+],
+"pel_byzantion": [
+"9E2B3C",
+"E4B409"
+],
+"pel_elis": [
+"E4D9C7",
+"E4B409"
+],
+"pel_epeiros": [
+"BA7148",
+"E4B409"
+],
+"pel_gortyn": [
+"C69C6C",
+"E4B409"
+],
+"pel_ionian": [
+"7D8F75",
+"E4B409"
+],
+"pel_knossos": [
+"B76849",
+"E4B409"
+],
+"pel_korinthos": [
+"F6D27C",
+"E4B409"
+],
+"pel_korinthos_civil_war": [
+"2F5995",
+"E4B409"
+],
+"pel_korinthos_secession": [
+"2F5995",
+"E4B409"
+],
+"pel_korkyra": [
+"749566",
+"E4B409"
+],
+"pel_kydonia": [
+"4A484B",
+"E4B409"
+],
+"pel_makedon": [
+"53152A",
+"E4B409"
+],
+"pel_melos": [
+"B7B7B7",
+"E4B409"
+],
+"pel_persia": [
+"E5841D",
+"E4B409"
+],
+"pel_rebels_aiolian": [
+"6D6B5F",
+"E4B409"
+],
+"pel_rebels_akaian": [
+"6D6B5F",
+"E4B409"
+],
+"pel_rebels_barbarian": [
+"6D6B5F",
+"E4B409"
+],
+"pel_rebels_dorian": [
+"6D6B5F",
+"E4B409"
+],
+"pel_rebels_ionian": [
+"6D6B5F",
+"E4B409"
+],
+"pel_rebels_makedonian": [
+"6D6B5F",
+"E4B409"
+],
+"pel_rebels_other_greeks": [
+"6D6B5F",
+"E4B409"
+],
+"pel_rebels_persian": [
+"6D6B5F",
+"E4B409"
+],
+"pel_rodos": [
+"5568A2",
+"E4B409"
+],
+"pel_sparta": [
+"600502",
+"E4B409"
+],
+"pel_sparta_civil_war": [
+"4A484B",
+"E4B409"
+],
+"pel_sparta_secession": [
+"4A484B",
+"E4B409"
+],
+"pel_thessaly": [
+"983109",
+"E4B409"
+],
+"pel_thraike": [
+"C2CEC4",
+"E4B409"
+],
+"pro_gaul": [
+"76933C",
+"E4B409"
+],
+"pro_greek_cities": [
+"E2741A",
+"E4B409"
+],
+"pro_lucanian": [
+"FFFFFF",
+"E4B409"
+],
+"pro_rebels": [
+"858585",
+"E4B409"
+],
+"pro_roman_allies": [
+"8D0D04",
+"E4B409"
+],
+"pro_rome": [
+"A62416",
+"E4B409"
+],
+"pro_samnites": [
+"538DD5",
+"E4B409"
+],
+"pun_allobroges": [
+"77B559",
+"E4B409"
+],
+"pun_arevaci": [
+"AA4A3C",
+"E4B409"
+],
+"pun_arevaci_civil_war": [
+"E3B32C",
+"E4B409"
+],
+"pun_arevaci_secession": [
+"E3B32C",
+"E4B409"
+],
+"pun_astures": [
+"7B2E24",
+"E4B409"
+],
+"pun_boii": [
+"76933C",
+"E4B409"
+],
+"pun_cantrabri": [
+"BEADA3",
+"E4B409"
+],
+"pun_carpetani": [
+"774831",
+"E4B409"
+],
+"pun_carthage": [
+"E4D9C7",
+"E4B409"
+],
+"pun_carthage_civil_war": [
+"74192B",
+"E4B409"
+],
+"pun_carthage_secession": [
+"74192B",
+"E4B409"
+],
+"pun_celtici": [
+"48644D",
+"E4B409"
+],
+"pun_cessetani": [
+"C7A77E",
+"E4B409"
+],
+"pun_emporion": [
+"0D5683",
+"E4B409"
+],
+"pun_etruscan": [
+"95A4BB",
+"E4B409"
+],
+"pun_gaetuli": [
+"FAE5A4",
+"E4B409"
+],
+"pun_galleaci": [
+"DDA960",
+"E4B409"
+],
+"pun_garamantia": [
+"A67A57",
+"E4B409"
+],
+"pun_illercavones": [
+"EDA82E",
+"E4B409"
+],
+"pun_illergetes": [
+"8A5014",
+"E4B409"
+],
+"pun_insubres": [
+"704B39",
+"E4B409"
+],
+"pun_libya": [
+"AA4A3C",
+"E4B409"
+],
+"pun_liguria": [
+"B6C0A9",
+"E4B409"
+],
+"pun_lusitani": [
+"ECC03B",
+"E4B409"
+],
+"pun_lusitani_civil_war": [
+"758835",
+"E4B409"
+],
+"pun_lusitani_secession": [
+"758835",
+"E4B409"
+],
+"pun_masaesyli": [
+"7F8488",
+"E4B409"
+],
+"pun_massilia": [
+"212540",
+"E4B409"
+],
+"pun_massyli": [
+"8B6B64",
+"E4B409"
+],
+"pun_mauri": [
+"B19D89",
+"E4B409"
+],
+"pun_oretani": [
+"ED742E",
+"E4B409"
+],
+"pun_rebel_african": [
+"6D6B5F",
+"E4B409"
+],
+"pun_rebel_celt": [
+"6D6B5F",
+"E4B409"
+],
+"pun_rebel_celtiberian": [
+"6D6B5F",
+"E4B409"
+],
+"pun_rebel_hellenic": [
+"6D6B5F",
+"E4B409"
+],
+"pun_rebel_latin": [
+"6D6B5F",
+"E4B409"
+],
+"pun_rebel_punic": [
+"6D6B5F",
+"E4B409"
+],
+"pun_rome": [
+"A62416",
+"E4B409"
+],
+"pun_rome_civil_war": [
+"2B4E84",
+"E4B409"
+],
+"pun_rome_secession": [
+"2B4E84",
+"E4B409"
+],
+"pun_samnites": [
+"538DD5",
+"E4B409"
+],
+"pun_syracuse": [
+"08649C",
+"E4B409"
+],
+"pun_syracuse_civil_war": [
+"FFFFFF",
+"E4B409"
+],
+"pun_syracuse_secession": [
+"FFFFFF",
+"E4B409"
+],
+"pun_tarbelli": [
+"4A8858",
+"E4B409"
+],
+"pun_turdetani": [
+"B76849",
+"E4B409"
+],
+"pun_vaccaei": [
+"DBC27D",
+"E4B409"
+],
+"pun_vascones": [
+"758835",
+"E4B409"
+],
+"pun_veneti": [
+"982E2E",
+"B2E74E"
+],
+"pun_vettones": [
+"E3542C",
+"E4B409"
+],
+"pun_volcae": [
+"AA4A3C",
+"E4B409"
+],
+"rom_aedui": [
+"A62416",
+"E4B409"
+],
+"rom_aestii": [
+"A65738",
+"E4B409"
+],
+"rom_anartes": [
+"DCD4AD",
+"E4B409"
+],
+"rom_aorsoi": [
+"FAE5A4",
+"E4B409"
+],
+"rom_arachosia": [
+"4A484B",
+"E4B409"
+],
+"rom_ardhan": [
+"3B7674",
+"E4B409"
+],
+"rom_ardiaei": [
+"EBD8C7",
+"E4B409"
+],
+"rom_ardiaei_civil_war": [
+"968E76",
+"E4B409"
+],
+"rom_ardiaei_secession": [
+"968E76",
+"E4B409"
+],
+"rom_arevaci": [
+"AA4A3C",
+"E4B409"
+],
+"rom_arevaci_civil_war": [
+"E3B32C",
+"E4B409"
+],
+"rom_arevaci_secession": [
+"E3B32C",
+"E4B409"
+],
+"rom_aria": [
+"B76849",
+"E4B409"
+],
+"rom_armenia": [
+"7D8F75",
+"E4B409"
+],
+"rom_armenia_civil_war": [
+"E4D9C7",
+"E4B409"
+],
+"rom_armenia_secession": [
+"E4D9C7",
+"E4B409"
+],
+"rom_artebartes": [
+"A2C3A6",
+"E4B409"
+],
+"rom_arverni": [
+"24412D",
+"E4B409"
+],
+"rom_arverni_civil_war": [
+"DD904C",
+"E4B409"
+],
+"rom_arverni_secession": [
+"DD904C",
+"E4B409"
+],
+"rom_athens": [
+"6386A4",
+"E4B409"
+],
+"rom_athens_civil_war": [
+"526B6F",
+"E4B409"
+],
+"rom_athens_secession": [
+"526B6F",
+"E4B409"
+],
+"rom_axum": [
+"857456",
+"E4B409"
+],
+"rom_baktria": [
+"2B4E84",
+"E4B409"
+],
+"rom_baktria_civil_war": [
+"9F1D1D",
+"E4B409"
+],
+"rom_baktria_secession": [
+"9F1D1D",
+"E4B409"
+],
+"rom_bastarnae": [
+"743734",
+"E4B409"
+],
+"rom_biephi": [
+"A65F35",
+"E4B409"
+],
+"rom_bithynia": [
+"95A4BB",
+"E4B409"
+],
+"rom_blemmyes": [
+"C7A77E",
+"E4B409"
+],
+"rom_boii": [
+"79A568",
+"E4B409"
+],
+"rom_boii_civil_war": [
+"743734",
+"E4B409"
+],
+"rom_boii_secession": [
+"743734",
+"E4B409"
+],
+"rom_breuci": [
+"D6CFBC",
+"E4B409"
+],
+"rom_brigantes": [
+"95A4BB",
+"E4B409"
+],
+"rom_budini": [
+"FCF253",
+"E4B409"
+],
+"rom_caledones": [
+"243F5A",
+"E4B409"
+],
+"rom_cantabri": [
+"BEADA3",
+"E4B409"
+],
+"rom_cappadocia": [
+"A83F43",
+"E4B409"
+],
+"rom_carnutes": [
+"3B6442",
+"E4B409"
+],
+"rom_carthage": [
+"E4D9C7",
+"E4B409"
+],
+"rom_carthage_civil_war": [
+"74192B",
+"E4B409"
+],
+"rom_carthage_secession": [
+"74192B",
+"E4B409"
+],
+"rom_catiaroi": [
+"6386A4",
+"E4B409"
+],
+"rom_celtici": [
+"48644D",
+"E4B409"
+],
+"rom_cessetani": [
+"C7A77E",
+"E4B409"
+],
+"rom_cherusci": [
+"323547",
+"E4B409"
+],
+"rom_cimbri": [
+"DDA960",
+"E4B409"
+],
+"rom_cimmeria": [
+"25354C",
+"E4B409"
+],
+"rom_cimmeria_civil_war": [
+"B76849",
+"E4B409"
+],
+"rom_cimmeria_secession": [
+"B76849",
+"E4B409"
+],
+"rom_colchis": [
+"9D96A8",
+"E4B409"
+],
+"rom_colchis_civil_war": [
+"503723",
+"E4B409"
+],
+"rom_colchis_secession": [
+"503723",
+"E4B409"
+],
+"rom_cyprus": [
+"F6D27C",
+"E4B409"
+],
+"rom_cyrenaica": [
+"F5CE6F",
+"E4B409"
+],
+"rom_dahae": [
+"64964F",
+"E4B409"
+],
+"rom_daorsi": [
+"A67E41",
+"E4B409"
+],
+"rom_delmatae": [
+"C2CEC4",
+"E4B409"
+],
+"rom_demetae": [
+"CBBA82",
+"E4B409"
+],
+"rom_drangiana": [
+"95A4BB",
+"E4B409"
+],
+"rom_dumnonii": [
+"943515",
+"E4B409"
+],
+"rom_ebdani": [
+"7F8488",
+"E4B409"
+],
+"rom_edetani": [
+"95A4BB",
+"E4B409"
+],
+"rom_epirus": [
+"BA7148",
+"E4B409"
+],
+"rom_epirus_civil_war": [
+"64964F",
+"E4B409"
+],
+"rom_epirus_secession": [
+"64964F",
+"E4B409"
+],
+"rom_eravisci": [
+"603F33",
+"E4B409"
+],
+"rom_etruscan": [
+"95A4BB",
+"E4B409"
+],
+"rom_frisii": [
+"704B39",
+"E4B409"
+],
+"rom_gaetuli": [
+"FAE5A4",
+"E4B409"
+],
+"rom_galatia": [
+"3D4A2E",
+"E4B409"
+],
+"rom_galatia_civil_war": [
+"EEE19D",
+"E4B409"
+],
+"rom_galatia_secession": [
+"EEE19D",
+"E4B409"
+],
+"rom_galleaci": [
+"DDA960",
+"E4B409"
+],
+"rom_garamantia": [
+"A67A57",
+"E4B409"
+],
+"rom_gerrhaea": [
+"AB844B",
+"E4B409"
+],
+"rom_getae": [
+"8D6B48",
+"E4B409"
+],
+"rom_getae_civil_war": [
+"5D201F",
+"E4B409"
+],
+"rom_getae_secession": [
+"5D201F",
+"E4B409"
+],
+"rom_gutones": [
+"9D96A8",
+"E4B409"
+],
+"rom_helvetii": [
+"7F8488",
+"E4B409"
+],
+"rom_himyar": [
+"857456",
+"E4B409"
+],
+"rom_iceni": [
+"4674B0",
+"E4B409"
+],
+"rom_iceni_civil_war": [
+"993D24",
+"E4B409"
+],
+"rom_iceni_secession": [
+"993D24",
+"E4B409"
+],
+"rom_insubres": [
+"704B39",
+"E4B409"
+],
+"rom_kartli": [
+"996A58",
+"E4B409"
+],
+"rom_khorasmii": [
+"FCC29D",
+"E4B409"
+],
+"rom_knossos": [
+"B76849",
+"E4B409"
+],
+"rom_kush": [
+"DB9124",
+"E4B409"
+],
+"rom_kush_civil_war": [
+"F6D27C",
+"E4B409"
+],
+"rom_kush_secession": [
+"F6D27C",
+"E4B409"
+],
+"rom_libya": [
+"AA4A3C",
+"E4B409"
+],
+"rom_liguria": [
+"827E72",
+"E4B409"
+],
+"rom_lugii": [
+"8E7978",
+"E4B409"
+],
+"rom_lusitani": [
+"ECC03B",
+"E4B409"
+],
+"rom_lusitani_civil_war": [
+"758835",
+"E4B409"
+],
+"rom_lusitani_secession": [
+"758835",
+"E4B409"
+],
+"rom_ma_in": [
+"82ABA3",
+"E4B409"
+],
+"rom_macedon": [
+"53152A",
+"E4B409"
+],
+"rom_macedon_civil_war": [
+"8D2B3A",
+"E4B409"
+],
+"rom_macedon_secession": [
+"8D2B3A",
+"E4B409"
+],
+"rom_marcomanni": [
+"4D2819",
+"E4B409"
+],
+"rom_masaesyli": [
+"7F8488",
+"E4B409"
+],
+"rom_masaesyli_civil_war": [
+"F6D27C",
+"E4B409"
+],
+"rom_masaesyli_secession": [
+"F6D27C",
+"E4B409"
+],
+"rom_mascat": [
+"DDA960",
+"E4B409"
+],
+"rom_massagetae": [
+"B7DE9B",
+"E4B409"
+],
+"rom_massagetae_civil_war": [
+"007FAF",
+"E4B409"
+],
+"rom_massagetae_secession": [
+"007FAF",
+"E4B409"
+],
+"rom_massilia": [
+"212540",
+"E4B409"
+],
+"rom_massilia_civil_war": [
+"955911",
+"E4B409"
+],
+"rom_massilia_secession": [
+"955911",
+"E4B409"
+],
+"rom_media": [
+"7F8488",
+"E4B409"
+],
+"rom_media_atropatene": [
+"E5841D",
+"E4B409"
+],
+"rom_meroe": [
+"F6D27C",
+"E4B409"
+],
+"rom_nabatea": [
+"A05142",
+"E4B409"
+],
+"rom_nabatea_civil_war": [
+"25354C",
+"E4B409"
+],
+"rom_nabatea_secession": [
+"25354C",
+"E4B409"
+],
+"rom_namnetes": [
+"A67E41",
+"E4B409"
+],
+"rom_nasamones": [
+"DDA960",
+"E4B409"
+],
+"rom_nervii": [
+"E5CF95",
+"E4B409"
+],
+"rom_nervii_civil_war": [
+"69804A",
+"E4B409"
+],
+"rom_nervii_secession": [
+"69804A",
+"E4B409"
+],
+"rom_nori": [
+"7C6D46",
+"E4B409"
+],
+"rom_nova_carthago": [
+"74192B",
+"E4B409"
+],
+"rom_odryssia": [
+"C2CEC4",
+"E4B409"
+],
+"rom_odryssia_civil_war": [
+"DEBF89",
+"E4B409"
+],
+"rom_odryssia_secession": [
+"DEBF89",
+"E4B409"
+],
+"rom_parthava": [
+"83868D",
+"E4B409"
+],
+"rom_parthia": [
+"855C6A",
+"E4B409"
+],
+"rom_parthia_civil_war": [
+"7AB7AF",
+"E4B409"
+],
+"rom_parthia_secession": [
+"7AB7AF",
+"E4B409"
+],
+"rom_pergamon": [
+"74192B",
+"E4B409"
+],
+"rom_pergamon_civil_war": [
+"4B833C",
+"E4B409"
+],
+"rom_pergamon_secession": [
+"4B833C",
+"E4B409"
+],
+"rom_persia": [
+"6DAEEE",
+"E4B409"
+],
+"rom_pictones": [
+"4F360E",
+"E4B409"
+],
+"rom_pontus": [
+"264C61",
+"E4B409"
+],
+"rom_pontus_civil_war": [
+"DB9124",
+"E4B409"
+],
+"rom_pontus_secession": [
+"DB9124",
+"E4B409"
+],
+"rom_ptolemaics": [
+"6386A4",
+"E4B409"
+],
+"rom_ptolemaics_civil_war": [
+"F5CE6F",
+"E4B409"
+],
+"rom_ptolemaics_secession": [
+"F5CE6F",
+"E4B409"
+],
+"rom_qidri": [
+"BCC0AF",
+"E4B409"
+],
+"rom_raeti": [
+"C4AA93",
+"E4B409"
+],
+"rom_rebel_african": [
+"6D6B5F",
+"E4B409"
+],
+"rom_rebel_arabian": [
+"6D6B5F",
+"E4B409"
+],
+"rom_rebel_briton": [
+"6D6B5F",
+"E4B409"
+],
+"rom_rebel_celt": [
+"6D6B5F",
+"E4B409"
+],
+"rom_rebel_dacian": [
+"6D6B5F",
+"E4B409"
+],
+"rom_rebel_eastern": [
+"6D6B5F",
+"E4B409"
+],
+"rom_rebel_egyptian": [
+"6D6B5F",
+"E4B409"
+],
+"rom_rebel_german": [
+"6D6B5F",
+"E4B409"
+],
+"rom_rebel_hellenic": [
+"6D6B5F",
+"E4B409"
+],
+"rom_rebel_iberian": [
+"6D6B5F",
+"E4B409"
+],
+"rom_rebel_illyrian": [
+"6D6B5F",
+"E4B409"
+],
+"rom_rebel_latin": [
+"6D6B5F",
+"E4B409"
+],
+"rom_rebel_nomadic": [
+"6D6B5F",
+"E4B409"
+],
+"rom_rebel_punic": [
+"6D6B5F",
+"E4B409"
+],
+"rom_rebel_spartan": [
+"6D6B5F",
+"E4B409"
+],
+"rom_rebel_thracian": [
+"6D6B5F",
+"E4B409"
+],
+"rom_rhodos": [
+"5568A2",
+"E4B409"
+],
+"rom_rome": [
+"A62416",
+"E4B409"
+],
+"rom_rome_civil_war": [
+"2B4E84",
+"E4B409"
+],
+"rom_rome_secession": [
+"2B4E84",
+"E4B409"
+],
+"rom_roxolani": [
+"DB9124",
+"E4B409"
+],
+"rom_roxolani_civil_war": [
+"007958",
+"E4B409"
+],
+"rom_roxolani_secession": [
+"007958",
+"E4B409"
+],
+"rom_rugii": [
+"866846",
+"E4B409"
+],
+"rom_saba": [
+"79A568",
+"E4B409"
+],
+"rom_saba_civil_war": [
+"E4D9C7",
+"E4B409"
+],
+"rom_saba_secession": [
+"E4D9C7",
+"E4B409"
+],
+"rom_sagartia": [
+"526B6F",
+"E4B409"
+],
+"rom_sardes": [
+"8E7978",
+"E4B409"
+],
+"rom_scordisci": [
+"C3A35A",
+"E4B409"
+],
+"rom_scythia": [
+"ECC03B",
+"E4B409"
+],
+"rom_scythia_civil_war": [
+"D4C5B5",
+"E4B409"
+],
+"rom_scythia_secession": [
+"D4C5B5",
+"E4B409"
+],
+"rom_seleucid": [
+"B4C7D6",
+"E4B409"
+],
+"rom_seleucid_civil_war": [
+"232323",
+"E4B409"
+],
+"rom_seleucid_secession": [
+"232323",
+"E4B409"
+],
+"rom_sequani": [
+"4B8300",
+"E4B409"
+],
+"rom_siraces": [
+"A05142",
+"E4B409"
+],
+"rom_slave": [
+"6D6B5F",
+"E4B409"
+],
+"rom_sparta": [
+"600502",
+"E4B409"
+],
+"rom_sparta_civil_war": [
+"4A484B",
+"E4B409"
+],
+"rom_sparta_secession": [
+"4A484B",
+"E4B409"
+],
+"rom_suebi": [
+"603433",
+"E4B409"
+],
+"rom_suebi_civil_war": [
+"25354C",
+"E4B409"
+],
+"rom_suebi_secession": [
+"25354C",
+"E4B409"
+],
+"rom_syracuse": [
+"4674B0",
+"E4B409"
+],
+"rom_syracuse_civil_war": [
+"FFFFFF",
+"E4B409"
+],
+"rom_syracuse_secession": [
+"FFFFFF",
+"E4B409"
+],
+"rom_thyssagetae": [
+"C6534C",
+"E4B409"
+],
+"rom_trapezos": [
+"A2C3A6",
+"E4B409"
+],
+"rom_treverii": [
+"4E7D5D",
+"E4B409"
+],
+"rom_triballi": [
+"5A7E52",
+"E4B409"
+],
+"rom_turdetani": [
+"B76849",
+"E4B409"
+],
+"rom_tylis": [
+"7D8F75",
+"E4B409"
+],
+"rom_tylis_civil_war": [
+"C45617",
+"E4B409"
+],
+"rom_tylis_secession": [
+"C45617",
+"E4B409"
+],
+"rom_veneti": [
+"982E2E",
+"B2E74E"
+],
+"rom_vivisci": [
+"3D4A2E",
+"E4B409"
+],
+"rom_volcae": [
+"AA4A3C",
+"E4B409"
+],
+"test_easterners": [
+"744B2F",
+"E4B409"
+],
+"test_islanders": [
+"060606",
+"E4B409"
+],
+"test_northerners": [
+"060606",
+"E4B409"
+],
+"test_southerners": [
+"060606",
+"E4B409"
+],
+"test_westerners": [
+"060606",
+"E4B409"
+]
+}
+},
+"maps": {
+"main_emperor": {
+"image": "campaign_maps/main_emperor/main_rome_map.png",
+"lookup": "campaign_maps/main_emperor/main_rome_lookup.tga"
+},
+"main_gaul": {
+"image": "campaign_maps/main_gaul/main_gaul_map.png",
+"lookup": "campaign_maps/main_gaul/main_gaul_lookup.tga"
+},
+"main_greek": {
+"image": "campaign_maps/main_greek/main_rome_map.png",
+"lookup": "campaign_maps/main_greek/main_rome_lookup.tga"
+},
+"main_invasion": {
+"image": "campaign_maps/main_invasion/main_invasion_map.png",
+"lookup": "campaign_maps/main_invasion/main_invasion_lookup.tga"
+},
+"main_punic": {
+"image": "campaign_maps/main_punic/main_punic_map.png",
+"lookup": "campaign_maps/main_punic/main_punic_lookup.tga"
+},
+"main_rome_map": {
+"image": "campaign_maps/main_rome_map/main_rome_map.png",
+"lookup": "campaign_maps/main_rome_map/main_rome_lookup.tga"
+},
+"prologue_map_01": {
+"image": "campaign_maps/prologue_map_01/pro_rome_map.png",
+"lookup": "campaign_maps/prologue_map_01/pro_rome_lookup.tga"
+}
+},
+"regions": {
+"emp_achaia_athenae": [
+"main_emperor",
+"010000"
+],
+"emp_achaia_gortyna": [
+"main_emperor",
+"050000"
+],
+"emp_achaia_sparta": [
+"main_emperor",
+"0A0000"
+],
+"emp_aegyptos_alexandria": [
+"main_emperor",
+"0F0000"
+],
+"emp_aegyptos_diospolis": [
+"main_emperor",
+"140000"
+],
+"emp_aegyptos_memphis": [
+"main_emperor",
+"190000"
+],
+"emp_aegyptos_myos_hormos": [
+"main_emperor",
+"1E0000"
+],
+"emp_aethiopia_aksum": [
+"main_emperor",
+"230000"
+],
+"emp_aethiopia_meroe": [
+"main_emperor",
+"280000"
+],
+"emp_aethiopia_ptolemais_theron": [
+"main_emperor",
+"2D0000"
+],
+"emp_africa_carthago": [
+"main_emperor",
+"320000"
+],
+"emp_africa_hadrumentum": [
+"main_emperor",
+"370000"
+],
+"emp_africa_leptis_magna": [
+"main_emperor",
+"3C0000"
+],
+"emp_africa_macomades": [
+"main_emperor",
+"410000"
+],
+"emp_aquitania_burdigala": [
+"main_emperor",
+"460000"
+],
+"emp_aquitania_gergovia": [
+"main_emperor",
+"4B0000"
+],
+"emp_aquitania_limonum": [
+"main_emperor",
+"500000"
+],
+"emp_arabia_felix_eudaemon": [
+"main_emperor",
+"550000"
+],
+"emp_arabia_felix_maas_gat": [
+"main_emperor",
+"5A0000"
+],
+"emp_arabia_felix_marib": [
+"main_emperor",
+"5F0000"
+],
+"emp_arabia_magna_adummatu": [
+"main_emperor",
+"640000"
+],
+"emp_arabia_magna_gerrha": [
+"main_emperor",
+"690000"
+],
+"emp_arabia_magna_yathrib": [
+"main_emperor",
+"6E0000"
+],
+"emp_aria_amul": [
+"main_emperor",
+"730000"
+],
+"emp_aria_artacoana": [
+"main_emperor",
+"780000"
+],
+"emp_aria_merv": [
+"main_emperor",
+"7D0000"
+],
+"emp_armenia_arsamosata": [
+"main_emperor",
+"820000"
+],
+"emp_armenia_artaxa": [
+"main_emperor",
+"870000"
+],
+"emp_armenia_carana": [
+"main_emperor",
+"8C0000"
+],
+"emp_armenia_tigranocerta": [
+"main_emperor",
+"910000"
+],
+"emp_asia_ephesus": [
+"main_emperor",
+"960000"
+],
+"emp_asia_pergamum": [
+"main_emperor",
+"FF00FF"
+],
+"emp_asia_pessinus": [
+"main_emperor",
+"9B0000"
+],
+"emp_asia_rhodos": [
+"main_emperor",
+"A06432"
+],
+"emp_bactria_baktria": [
+"main_emperor",
+"A00000"
+],
+"emp_bactria_eucratides": [
+"main_emperor",
+"A50000"
+],
+"emp_bactria_kapisene": [
+"main_emperor",
+"AA0000"
+],
+"emp_baetica_corduba": [
+"main_emperor",
+"AF0000"
+],
+"emp_baetica_gades": [
+"main_emperor",
+"B40000"
+],
+"emp_baetica_toletum": [
+"main_emperor",
+"B90000"
+],
+"emp_belgica_nemecatum": [
+"main_emperor",
+"BE0000"
+],
+"emp_belgica_treverorum": [
+"main_emperor",
+"C30000"
+],
+"emp_bithynia_et_pontus_amaseia": [
+"main_emperor",
+"C80000"
+],
+"emp_bithynia_et_pontus_nicomedia": [
+"main_emperor",
+"CD0000"
+],
+"emp_bithynia_et_pontus_sinope": [
+"main_emperor",
+"D20000"
+],
+"emp_bithynia_et_pontus_trapezos": [
+"main_emperor",
+"D70000"
+],
+"emp_bosporus_panticapaeum": [
+"main_emperor",
+"DC0000"
+],
+"emp_bosporus_phanagoria": [
+"main_emperor",
+"E10000"
+],
+"emp_bosporus_tanais": [
+"main_emperor",
+"E60000"
+],
+"emp_britannia_camulodunum": [
+"main_emperor",
+"EB0000"
+],
+"emp_britannia_iska": [
+"main_emperor",
+"F00000"
+],
+"emp_britannia_mordiunon": [
+"main_emperor",
+"F50000"
+],
+"emp_britannia_sleaford": [
+"main_emperor",
+"FA0000"
+],
+"emp_carmania_bam": [
+"main_emperor",
+"FF0000"
+],
+"emp_carmania_harmozia": [
+"main_emperor",
+"000500"
+],
+"emp_caucasia_gabata": [
+"main_emperor",
+"000A00"
+],
+"emp_caucasia_mtskheta": [
+"main_emperor",
+"000F00"
+],
+"emp_caucasia_phasis": [
+"main_emperor",
+"001400"
+],
+"emp_chorasmia_akhur": [
+"main_emperor",
+"001900"
+],
+"emp_chorasmia_aktau": [
+"main_emperor",
+"001E00"
+],
+"emp_cisalpina_genua": [
+"main_emperor",
+"002300"
+],
+"emp_cisalpina_mediolanium": [
+"main_emperor",
+"002800"
+],
+"emp_cisalpina_patavium": [
+"main_emperor",
+"002D00"
+],
+"emp_corsica_et_sardinia_aleria": [
+"main_emperor",
+"003200"
+],
+"emp_corsica_et_sardinia_caralis": [
+"main_emperor",
+"003700"
+],
+"emp_dacia_pelendava": [
+"main_emperor",
+"003C00"
+],
+"emp_dacia_petrodava": [
+"main_emperor",
+"004100"
+],
+"emp_dacia_piscul": [
+"main_emperor",
+"004600"
+],
+"emp_dacia_zarmizegetusa": [
+"main_emperor",
+"004B00"
+],
+"emp_galatia_et_cappadocia_ancyra": [
+"main_emperor",
+"005000"
+],
+"emp_galatia_et_cappadocia_iconium": [
+"main_emperor",
+"005500"
+],
+"emp_galatia_et_cappadocia_mazaca": [
+"main_emperor",
+"005A00"
+],
+"emp_galatia_et_cappadocia_side": [
+"main_emperor",
+"005F00"
+],
+"emp_gallia_bibracte": [
+"main_emperor",
+"006400"
+],
+"emp_gallia_cenabum": [
+"main_emperor",
+"006900"
+],
+"emp_gallia_darioritum": [
+"main_emperor",
+"006E00"
+],
+"emp_gallia_iuliobana": [
+"main_emperor",
+"007300"
+],
+"emp_gedrosia_oraea": [
+"main_emperor",
+"007800"
+],
+"emp_gedrosia_phrada": [
+"main_emperor",
+"007D00"
+],
+"emp_gedrosia_pura": [
+"main_emperor",
+"008200"
+],
+"emp_germania_minor_bavay": [
+"main_emperor",
+"008700"
+],
+"emp_germania_minor_vesonto": [
+"main_emperor",
+"008C00"
+],
+"emp_hercynia_bergium": [
+"main_emperor",
+"009100"
+],
+"emp_hercynia_budorgis": [
+"main_emperor",
+"009600"
+],
+"emp_hercynia_istros": [
+"main_emperor",
+"009B00"
+],
+"emp_hispania_ibossim": [
+"main_emperor",
+"00A000"
+],
+"emp_hispania_nova_carthago": [
+"main_emperor",
+"00A500"
+],
+"emp_hispania_numantia": [
+"main_emperor",
+"00AA00"
+],
+"emp_hispania_saguntum": [
+"main_emperor",
+"00AF00"
+],
+"emp_illyricum_dyrrachium": [
+"main_emperor",
+"00B400"
+],
+"emp_illyricum_narona": [
+"main_emperor",
+"00B900"
+],
+"emp_illyricum_salona": [
+"main_emperor",
+"00BE00"
+],
+"emp_italia_beneventum": [
+"main_emperor",
+"00C300"
+],
+"emp_italia_brundisium": [
+"main_emperor",
+"00C800"
+],
+"emp_italia_cosentia": [
+"main_emperor",
+"00CD00"
+],
+"emp_judea_jerusalem": [
+"main_emperor",
+"00D200"
+],
+"emp_judea_salamis": [
+"main_emperor",
+"00D700"
+],
+"emp_judea_tyros": [
+"main_emperor",
+"00DC00"
+],
+"emp_latium_ariminium": [
+"main_emperor",
+"00E100"
+],
+"emp_latium_arretium": [
+"main_emperor",
+"00E600"
+],
+"emp_latium_asculum": [
+"main_emperor",
+"00EB00"
+],
+"emp_latium_roma": [
+"main_emperor",
+"00F000"
+],
+"emp_libya_ammonium": [
+"main_emperor",
+"00F500"
+],
+"emp_libya_augila": [
+"main_emperor",
+"00FA00"
+],
+"emp_libya_cyrene": [
+"main_emperor",
+"00FF00"
+],
+"emp_libya_paraitonion": [
+"main_emperor",
+"000005"
+],
+"emp_lugii_arsenium": [
+"main_emperor",
+"00000A"
+],
+"emp_lugii_carrodunum": [
+"main_emperor",
+"00000F"
+],
+"emp_lugii_grinev": [
+"main_emperor",
+"000014"
+],
+"emp_lugii_oblin": [
+"main_emperor",
+"000019"
+],
+"emp_lusitania_ebora": [
+"main_emperor",
+"00001E"
+],
+"emp_lusitania_olisipo": [
+"main_emperor",
+"000023"
+],
+"emp_macedonia_apollonia": [
+"main_emperor",
+"000028"
+],
+"emp_macedonia_pharsalus": [
+"main_emperor",
+"00002D"
+],
+"emp_macedonia_thessalonica": [
+"main_emperor",
+"000032"
+],
+"emp_magna_germania_flevium": [
+"main_emperor",
+"000037"
+],
+"emp_magna_germania_treva": [
+"main_emperor",
+"00003C"
+],
+"emp_magna_germania_tulifurdum": [
+"main_emperor",
+"000041"
+],
+"emp_mauretania_rutubis": [
+"main_emperor",
+"000046"
+],
+"emp_mauretania_siga": [
+"main_emperor",
+"00004B"
+],
+"emp_mauretania_tingis": [
+"main_emperor",
+"000050"
+],
+"emp_media_magna_arsakia": [
+"main_emperor",
+"000055"
+],
+"emp_media_magna_ekbatana": [
+"main_emperor",
+"00005A"
+],
+"emp_media_magna_gazaca": [
+"main_emperor",
+"00005F"
+],
+"emp_media_magna_phraaspa": [
+"main_emperor",
+"000064"
+],
+"emp_mesopotamia_charax": [
+"main_emperor",
+"000069"
+],
+"emp_mesopotamia_ctesiphon": [
+"main_emperor",
+"00006E"
+],
+"emp_mesopotamia_edessa": [
+"main_emperor",
+"000073"
+],
+"emp_mesopotamia_hatra": [
+"main_emperor",
+"000078"
+],
+"emp_nabataea_charmuthas": [
+"main_emperor",
+"00007D"
+],
+"emp_nabataea_hegra": [
+"main_emperor",
+"000082"
+],
+"emp_nabataea_petra": [
+"main_emperor",
+"000087"
+],
+"emp_narbonensis_massilia": [
+"main_emperor",
+"00008C"
+],
+"emp_narbonensis_narbo": [
+"main_emperor",
+"000091"
+],
+"emp_narbonensis_tolosa": [
+"main_emperor",
+"000096"
+],
+"emp_numidia_capsa": [
+"main_emperor",
+"00009B"
+],
+"emp_numidia_cirta": [
+"main_emperor",
+"0000A0"
+],
+"emp_numidia_dimmidi": [
+"main_emperor",
+"0000A5"
+],
+"emp_numidia_iol": [
+"main_emperor",
+"0000AA"
+],
+"emp_palmyra_dura": [
+"main_emperor",
+"0000AF"
+],
+"emp_palmyra_palmyra": [
+"main_emperor",
+"0000B4"
+],
+"emp_pannonia_aquincum": [
+"main_emperor",
+"0000B9"
+],
+"emp_pannonia_segestica": [
+"main_emperor",
+"0000BE"
+],
+"emp_pannonia_singidun": [
+"main_emperor",
+"0000C3"
+],
+"emp_parthia_hekatompylos": [
+"main_emperor",
+"0000C8"
+],
+"emp_parthia_nisa": [
+"main_emperor",
+"0000CD"
+],
+"emp_parthia_susia": [
+"main_emperor",
+"0000D2"
+],
+"emp_parthia_zadrakata": [
+"main_emperor",
+"0000D7"
+],
+"emp_persis_gor": [
+"main_emperor",
+"0000DC"
+],
+"emp_persis_persepolis": [
+"main_emperor",
+"0000F0"
+],
+"emp_persis_susa": [
+"main_emperor",
+"0000F5"
+],
+"emp_phazania_cydamus": [
+"main_emperor",
+"0000FA"
+],
+"emp_phazania_garama": [
+"main_emperor",
+"0000FF"
+],
+"emp_pretanic_isles_eilodon": [
+"main_emperor",
+"050500"
+],
+"emp_pretanic_isles_elbana": [
+"main_emperor",
+"0A0A00"
+],
+"emp_pretanic_isles_stanwick": [
+"main_emperor",
+"9B9B00"
+],
+"emp_raetia_et_noricum_kelheim": [
+"main_emperor",
+"A0A000"
+],
+"emp_raetia_et_noricum_koria": [
+"main_emperor",
+"A5A500"
+],
+"emp_raetia_et_noricum_noreia": [
+"main_emperor",
+"AAAA00"
+],
+"emp_raetia_et_noricum_octoduris": [
+"main_emperor",
+"AFAF00"
+],
+"emp_riv_danuvius": [
+"main_emperor",
+"0000E1"
+],
+"emp_riv_nilos": [
+"main_emperor",
+"0000E6"
+],
+"emp_riv_rhenus": [
+"main_emperor",
+"0000EB"
+],
+"emp_sarmatia_melgunov": [
+"main_emperor",
+"B4B400"
+],
+"emp_sarmatia_olbia": [
+"main_emperor",
+"B9B900"
+],
+"emp_sarmatia_solokha": [
+"main_emperor",
+"BEBE00"
+],
+"emp_scythia_gelonus": [
+"main_emperor",
+"C3C300"
+],
+"emp_scythia_samandar": [
+"main_emperor",
+"C8C800"
+],
+"emp_scythia_sarai": [
+"main_emperor",
+"CDCD00"
+],
+"emp_scythia_siracena": [
+"main_emperor",
+"D2D200"
+],
+"emp_sea_lake": [
+"main_emperor",
+"0F0F00"
+],
+"emp_sea_mare_adriaticum": [
+"main_emperor",
+"141400"
+],
+"emp_sea_mare_aegaeum": [
+"main_emperor",
+"191900"
+],
+"emp_sea_mare_aegyptum": [
+"main_emperor",
+"1E1E00"
+],
+"emp_sea_mare_africum": [
+"main_emperor",
+"232300"
+],
+"emp_sea_mare_carpathium": [
+"main_emperor",
+"282800"
+],
+"emp_sea_mare_caspium": [
+"main_emperor",
+"2D2D00"
+],
+"emp_sea_mare_hibernicum": [
+"main_emperor",
+"323200"
+],
+"emp_sea_mare_hispanum": [
+"main_emperor",
+"373700"
+],
+"emp_sea_mare_ibericum": [
+"main_emperor",
+"3C3C00"
+],
+"emp_sea_mare_indicum": [
+"main_emperor",
+"414100"
+],
+"emp_sea_mare_internum": [
+"main_emperor",
+"464600"
+],
+"emp_sea_mare_ionium": [
+"main_emperor",
+"4B4B00"
+],
+"emp_sea_mare_phoenicum": [
+"main_emperor",
+"505000"
+],
+"emp_sea_mare_suevicum": [
+"main_emperor",
+"555500"
+],
+"emp_sea_mare_tyrrhenum": [
+"main_emperor",
+"5A5A00"
+],
+"emp_sea_oceanus_atlanticus": [
+"main_emperor",
+"5F5F00"
+],
+"emp_sea_oceanus_britannicus": [
+"main_emperor",
+"646400"
+],
+"emp_sea_oceanus_gallicus": [
+"main_emperor",
+"696900"
+],
+"emp_sea_oceanus_germanicus": [
+"main_emperor",
+"6E6E00"
+],
+"emp_sea_pontus_cimmerius": [
+"main_emperor",
+"737300"
+],
+"emp_sea_pontus_euxinus": [
+"main_emperor",
+"787800"
+],
+"emp_sea_pontus_thracius": [
+"main_emperor",
+"7D7D00"
+],
+"emp_sea_sinus_aquitanus": [
+"main_emperor",
+"828200"
+],
+"emp_sea_sinus_arabicus": [
+"main_emperor",
+"878700"
+],
+"emp_sea_sinus_gallicus": [
+"main_emperor",
+"8C8C00"
+],
+"emp_sea_sinus_persicus": [
+"main_emperor",
+"919100"
+],
+"emp_sea_syrtis": [
+"main_emperor",
+"969600"
+],
+"emp_sicily_agrigentum": [
+"main_emperor",
+"D7D700"
+],
+"emp_sicily_panormus": [
+"main_emperor",
+"DCDC00"
+],
+"emp_sicily_syracuse": [
+"main_emperor",
+"E1E100"
+],
+"emp_suebia_calancorum": [
+"main_emperor",
+"E6E600"
+],
+"emp_suebia_pelplin": [
+"main_emperor",
+"EBEB00"
+],
+"emp_suebia_setidava": [
+"main_emperor",
+"F0F000"
+],
+"emp_suebia_virunium": [
+"main_emperor",
+"F5F500"
+],
+"emp_syria_antioch": [
+"main_emperor",
+"FAFA00"
+],
+"emp_syria_samosata": [
+"main_emperor",
+"0F0019"
+],
+"emp_syria_tarsus": [
+"main_emperor",
+"23002D"
+],
+"emp_syria_thapsacus": [
+"main_emperor",
+"370041"
+],
+"emp_tarraconensis_aracillum": [
+"main_emperor",
+"4B0050"
+],
+"emp_tarraconensis_brigantium": [
+"main_emperor",
+"5F0064"
+],
+"emp_tarraconensis_tarraco": [
+"main_emperor",
+"730078"
+],
+"emp_terra_incognita": [
+"main_emperor",
+"DCDC00"
+],
+"emp_thracia_antheia": [
+"main_emperor",
+"820087"
+],
+"emp_thracia_naissos": [
+"main_emperor",
+"910096"
+],
+"emp_thracia_odessos": [
+"main_emperor",
+"A000AA"
+],
+"emp_thracia_pulpudeva": [
+"main_emperor",
+"AF00B4"
+],
+"emp_transoxania_bukhara": [
+"main_emperor",
+"BE00C3"
+],
+"emp_transoxania_maracanda": [
+"main_emperor",
+"D200DC"
+],
+"gaul_aquitania_aquae_tarbellicae": [
+"main_gaul",
+"006400"
+],
+"gaul_aquitania_burdigala": [
+"main_gaul",
+"007800"
+],
+"gaul_aquitania_elimberris": [
+"main_gaul",
+"005A00"
+],
+"gaul_aquitania_sotium": [
+"main_gaul",
+"006E00"
+],
+"gaul_arduenna_silva_divoduron": [
+"main_gaul",
+"460000"
+],
+"gaul_arduenna_silva_durocorteron": [
+"main_gaul",
+"500000"
+],
+"gaul_arduenna_silva_noviodunon": [
+"main_gaul",
+"5A0000"
+],
+"gaul_arduenna_silva_treverorum": [
+"main_gaul",
+"3C0000"
+],
+"gaul_aremorica_condate": [
+"main_gaul",
+"00DC00"
+],
+"gaul_aremorica_darioritum": [
+"main_gaul",
+"00D200"
+],
+"gaul_aremorica_namnetum": [
+"main_gaul",
+"00C800"
+],
+"gaul_aremorica_vorgion": [
+"main_gaul",
+"00E600"
+],
+"gaul_britannia_durovernon": [
+"main_gaul",
+"00F000"
+],
+"gaul_britannia_iska": [
+"main_gaul",
+"000005"
+],
+"gaul_britannia_venta_belgarum": [
+"main_gaul",
+"00FA00"
+],
+"gaul_gergovia_avaricon": [
+"main_gaul",
+"EB0000"
+],
+"gaul_gergovia_durotincon": [
+"main_gaul",
+"E10000"
+],
+"gaul_gergovia_nemossos": [
+"main_gaul",
+"D70000"
+],
+"gaul_germania_inferior_atuatuca": [
+"main_gaul",
+"0A0000"
+],
+"gaul_germania_inferior_bagacum": [
+"main_gaul",
+"140000"
+],
+"gaul_helvetia_octoduron": [
+"main_gaul",
+"B90000"
+],
+"gaul_helvetia_turicum": [
+"main_gaul",
+"AF0000"
+],
+"gaul_insubria_medhlan": [
+"main_gaul",
+"000A00"
+],
+"gaul_insubria_vercelum": [
+"main_gaul",
+"001400"
+],
+"gaul_liguria_genua": [
+"main_gaul",
+"001E00"
+],
+"gaul_liguria_pollentia": [
+"main_gaul",
+"002800"
+],
+"gaul_lugdunensis_bibracte": [
+"main_gaul",
+"CD0000"
+],
+"gaul_lugdunensis_vienna": [
+"main_gaul",
+"C30000"
+],
+"gaul_lutetia_cenabum": [
+"main_gaul",
+"00A000"
+],
+"gaul_lutetia_crociatonum": [
+"main_gaul",
+"00BE00"
+],
+"gaul_lutetia_lexovion": [
+"main_gaul",
+"00B400"
+],
+"gaul_lutetia_suindinum": [
+"main_gaul",
+"00AA00"
+],
+"gaul_maxima_sequanorum_rauricon": [
+"main_gaul",
+"820000"
+],
+"gaul_maxima_sequanorum_vesontio": [
+"main_gaul",
+"8C0000"
+],
+"gaul_narbonensis_divona": [
+"main_gaul",
+"005000"
+],
+"gaul_narbonensis_narbo_martius": [
+"main_gaul",
+"003200"
+],
+"gaul_narbonensis_segodunum": [
+"main_gaul",
+"004600"
+],
+"gaul_narbonensis_tolosa": [
+"main_gaul",
+"003C00"
+],
+"gaul_pictavis_ambatia": [
+"main_gaul",
+"009600"
+],
+"gaul_pictavis_lemonum": [
+"main_gaul",
+"008C00"
+],
+"gaul_pictavis_mediolanum_santonum": [
+"main_gaul",
+"008200"
+],
+"gaul_riv_rhine": [
+"main_gaul",
+"0000E1"
+],
+"gaul_riv_seine": [
+"main_gaul",
+"0000E6"
+],
+"gaul_riv_thames": [
+"main_gaul",
+"0000EB"
+],
+"gaul_sea_atlantic": [
+"main_gaul",
+"1E1E00"
+],
+"gaul_sea_britannicus": [
+"main_gaul",
+"232300"
+],
+"gaul_sea_lake": [
+"main_gaul",
+"0F0F00"
+],
+"gaul_sea_med": [
+"main_gaul",
+"282800"
+],
+"gaul_senonia_agedineum": [
+"main_gaul",
+"9B0000"
+],
+"gaul_senonia_alesia": [
+"main_gaul",
+"960000"
+],
+"gaul_senonia_lutetia": [
+"main_gaul",
+"A50000"
+],
+"gaul_silva_carbonaria_bratuspantion": [
+"main_gaul",
+"1E0000"
+],
+"gaul_silva_carbonaria_gesoriacum": [
+"main_gaul",
+"320000"
+],
+"gaul_silva_carbonaria_nemetocenna": [
+"main_gaul",
+"280000"
+],
+"gaul_silva_nigra_argentorate": [
+"main_gaul",
+"780000"
+],
+"gaul_silva_nigra_noviiomagos": [
+"main_gaul",
+"6E0000"
+],
+"gaul_silva_nigra_uburzis": [
+"main_gaul",
+"640000"
+],
+"gaul_terra_incognita": [
+"main_gaul",
+"DCDC00"
+],
+"gaul_transalpina_massalia": [
+"main_gaul",
+"F50000"
+],
+"gaul_transalpina_vasio": [
+"main_gaul",
+"FF0000"
+],
+"inv_apulia_barion": [
+"main_invasion",
+"00A000"
+],
+"inv_apulia_herdonia": [
+"main_invasion",
+"009600"
+],
+"inv_apulia_siponto": [
+"main_invasion",
+"009B00"
+],
+"inv_apulia_sylbion": [
+"main_invasion",
+"00A500"
+],
+"inv_balaria_alghero": [
+"main_invasion",
+"0A0A00"
+],
+"inv_balaria_nurra": [
+"main_invasion",
+"A0A000"
+],
+"inv_balaria_olbia": [
+"main_invasion",
+"050505"
+],
+"inv_balaria_sassari": [
+"main_invasion",
+"9B9B00"
+],
+"inv_bruttium_consentia": [
+"main_invasion",
+"005A00"
+],
+"inv_bruttium_croton": [
+"main_invasion",
+"006900"
+],
+"inv_bruttium_terina": [
+"main_invasion",
+"00050A"
+],
+"inv_bruttium_thurii": [
+"main_invasion",
+"000505"
+],
+"inv_calabria_brentesion": [
+"main_invasion",
+"009100"
+],
+"inv_calabria_hydrus": [
+"main_invasion",
+"008C00"
+],
+"inv_calabria_manduria": [
+"main_invasion",
+"008700"
+],
+"inv_calabria_taranto": [
+"main_invasion",
+"008200"
+],
+"inv_campania_capua": [
+"main_invasion",
+"00B400"
+],
+"inv_campania_neapolis": [
+"main_invasion",
+"00AA00"
+],
+"inv_campania_pithecusae": [
+"main_invasion",
+"F5F5F5"
+],
+"inv_campania_poseidonia": [
+"main_invasion",
+"00AF00"
+],
+"inv_carthago_carthago": [
+"main_invasion",
+"000500"
+],
+"inv_carthago_kerkouane": [
+"main_invasion",
+"F0F0F0"
+],
+"inv_carthago_utica": [
+"main_invasion",
+"000A00"
+],
+"inv_corsica_aethalia": [
+"main_invasion",
+"FF0000"
+],
+"inv_corsica_aleria": [
+"main_invasion",
+"002300"
+],
+"inv_corsica_mantinorum": [
+"main_invasion",
+"002D00"
+],
+"inv_corsica_pallas": [
+"main_invasion",
+"002800"
+],
+"inv_elymia_agrigento": [
+"main_invasion",
+"003200"
+],
+"inv_elymia_entella": [
+"main_invasion",
+"003700"
+],
+"inv_elymia_motya": [
+"main_invasion",
+"004100"
+],
+"inv_elymia_panormus": [
+"main_invasion",
+"003C00"
+],
+"inv_etruria_luna": [
+"main_invasion",
+"000073"
+],
+"inv_etruria_pisa": [
+"main_invasion",
+"00006E"
+],
+"inv_etruria_sarsina": [
+"main_invasion",
+"00007D"
+],
+"inv_etruria_viesul": [
+"main_invasion",
+"000078"
+],
+"inv_frentania_aesernia": [
+"main_invasion",
+"00D200"
+],
+"inv_frentania_histonium": [
+"main_invasion",
+"00D700"
+],
+"inv_frentania_teate": [
+"main_invasion",
+"00E100"
+],
+"inv_gallia_cispadana_felsina": [
+"main_invasion",
+"0000A0"
+],
+"inv_gallia_cispadana_parma": [
+"main_invasion",
+"00009B"
+],
+"inv_gallia_cispadana_placentia": [
+"main_invasion",
+"000096"
+],
+"inv_gallia_cispadana_ravenna": [
+"main_invasion",
+"0000A5"
+],
+"inv_gallia_transpadana_brixia": [
+"main_invasion",
+"0000CD"
+],
+"inv_gallia_transpadana_eporedia": [
+"main_invasion",
+"0000C3"
+],
+"inv_gallia_transpadana_mediolanum": [
+"main_invasion",
+"0000BE"
+],
+"inv_gallia_transpadana_vercelum": [
+"main_invasion",
+"0000C8"
+],
+"inv_ioleia_bosa": [
+"main_invasion",
+"001900"
+],
+"inv_ioleia_caralis": [
+"main_invasion",
+"000F00"
+],
+"inv_ioleia_su_nuraxi": [
+"main_invasion",
+"001400"
+],
+"inv_ioleia_sulci": [
+"main_invasion",
+"001E00"
+],
+"inv_italia_hipponion": [
+"main_invasion",
+"005F00"
+],
+"inv_italia_locri": [
+"main_invasion",
+"00050F"
+],
+"inv_italia_rhegion": [
+"main_invasion",
+"000514"
+],
+"inv_italia_skyllition": [
+"main_invasion",
+"006400"
+],
+"inv_latium_anagni": [
+"main_invasion",
+"00EB00"
+],
+"inv_latium_antium": [
+"main_invasion",
+"00E600"
+],
+"inv_latium_casinum": [
+"main_invasion",
+"00F000"
+],
+"inv_latium_fregellae": [
+"main_invasion",
+"05F000"
+],
+"inv_lepontii_clavenna": [
+"main_invasion",
+"0A0000"
+],
+"inv_lepontii_comum": [
+"main_invasion",
+"050000"
+],
+"inv_lepontii_oscela": [
+"main_invasion",
+"050500"
+],
+"inv_liguria_albingaunum": [
+"main_invasion",
+"0000AF"
+],
+"inv_liguria_asta": [
+"main_invasion",
+"0000B4"
+],
+"inv_liguria_retovium": [
+"main_invasion",
+"0000B9"
+],
+"inv_liguria_stalia": [
+"main_invasion",
+"0000AA"
+],
+"inv_lucania_aceruntia": [
+"main_invasion",
+"007D00"
+],
+"inv_lucania_elea": [
+"main_invasion",
+"007300"
+],
+"inv_lucania_herakleia": [
+"main_invasion",
+"007800"
+],
+"inv_lucania_potentia": [
+"main_invasion",
+"006E00"
+],
+"inv_picenum_ausculum": [
+"main_invasion",
+"00000F"
+],
+"inv_picenum_firmum": [
+"main_invasion",
+"000019"
+],
+"inv_picenum_hadria": [
+"main_invasion",
+"000014"
+],
+"inv_raetia_bergamum": [
+"main_invasion",
+"0000FA"
+],
+"inv_raetia_feltria": [
+"main_invasion",
+"0000FF"
+],
+"inv_raetia_sebatum": [
+"main_invasion",
+"010000"
+],
+"inv_raetia_tridentum": [
+"main_invasion",
+"0000F5"
+],
+"inv_riv_padus": [
+"main_invasion",
+"0000E6"
+],
+"inv_roma_ostia": [
+"main_invasion",
+"00FA00"
+],
+"inv_roma_roma": [
+"main_invasion",
+"00F500"
+],
+"inv_sabinium_alba_fucens": [
+"main_invasion",
+"000A0A"
+],
+"inv_sabinium_cures": [
+"main_invasion",
+"000005"
+],
+"inv_sabinium_nursia": [
+"main_invasion",
+"00000A"
+],
+"inv_sabinium_reate": [
+"main_invasion",
+"00FF00"
+],
+"inv_samnium_bovianum": [
+"main_invasion",
+"00BE00"
+],
+"inv_samnium_compsa": [
+"main_invasion",
+"00C800"
+],
+"inv_samnium_corfinium": [
+"main_invasion",
+"00CD00"
+],
+"inv_samnium_terventum": [
+"main_invasion",
+"00C300"
+],
+"inv_sea_fretum_siculum": [
+"main_invasion",
+"323200"
+],
+"inv_sea_fretum_yapigium": [
+"main_invasion",
+"414100"
+],
+"inv_sea_lake": [
+"main_invasion",
+"B4B400"
+],
+"inv_sea_mare_adriaticum": [
+"main_invasion",
+"464600"
+],
+"inv_sea_mare_africum": [
+"main_invasion",
+"232300"
+],
+"inv_sea_mare_corsicum": [
+"main_invasion",
+"141400"
+],
+"inv_sea_mare_ionium": [
+"main_invasion",
+"373700"
+],
+"inv_sea_mare_ligusticum": [
+"main_invasion",
+"0F0F00"
+],
+"inv_sea_mare_sadroum": [
+"main_invasion",
+"1E1E00"
+],
+"inv_sea_mare_siculum": [
+"main_invasion",
+"2D2D00"
+],
+"inv_sea_mare_tyrrhenum": [
+"main_invasion",
+"191900"
+],
+"inv_sea_sinus_laus": [
+"main_invasion",
+"282800"
+],
+"inv_sea_sinus_tarentinus": [
+"main_invasion",
+"3C3C00"
+],
+"inv_sea_sinus_venetus": [
+"main_invasion",
+"4B4B00"
+],
+"inv_senonia_ariminum": [
+"main_invasion",
+"000082"
+],
+"inv_senonia_caesena": [
+"main_invasion",
+"000091"
+],
+"inv_senonia_sena": [
+"main_invasion",
+"000087"
+],
+"inv_sicania_agyrion": [
+"main_invasion",
+"A5A500"
+],
+"inv_sicania_catana": [
+"main_invasion",
+"AFAF00"
+],
+"inv_sicania_cephaloidis": [
+"main_invasion",
+"AAAA00"
+],
+"inv_sicania_messene": [
+"main_invasion",
+"0000E1"
+],
+"inv_sikelia_gela": [
+"main_invasion",
+"004B00"
+],
+"inv_sikelia_hybla_heraea": [
+"main_invasion",
+"FAFAFA"
+],
+"inv_sikelia_leontini": [
+"main_invasion",
+"005500"
+],
+"inv_sikelia_syracuse": [
+"main_invasion",
+"004600"
+],
+"inv_tarchuna_fufluna": [
+"main_invasion",
+"000055"
+],
+"inv_tarchuna_tarchuna": [
+"main_invasion",
+"000046"
+],
+"inv_tarchuna_vatluna": [
+"main_invasion",
+"000050"
+],
+"inv_tarchuna_velusna": [
+"main_invasion",
+"00004B"
+],
+"inv_terra_incognita": [
+"main_invasion",
+"DCDC00"
+],
+"inv_tuscia_aritim": [
+"main_invasion",
+"00005A"
+],
+"inv_tuscia_clevsin": [
+"main_invasion",
+"00005F"
+],
+"inv_tuscia_felathri": [
+"main_invasion",
+"000069"
+],
+"inv_tuscia_siena": [
+"main_invasion",
+"000064"
+],
+"inv_umbria_iguvium": [
+"main_invasion",
+"00003C"
+],
+"inv_umbria_perusia": [
+"main_invasion",
+"000041"
+],
+"inv_umbria_sestinum": [
+"main_invasion",
+"000037"
+],
+"inv_umbria_spolettium": [
+"main_invasion",
+"000032"
+],
+"inv_vei_caere": [
+"main_invasion",
+"00002D"
+],
+"inv_vei_vei": [
+"main_invasion",
+"000023"
+],
+"inv_venetia_patavium": [
+"main_invasion",
+"0000D2"
+],
+"inv_venetia_tarvisium": [
+"main_invasion",
+"0000D7"
+],
+"inv_venetia_tegeste": [
+"main_invasion",
+"0000F0"
+],
+"inv_venetia_vedinum": [
+"main_invasion",
+"0000DC"
+],
+"pel_aigian_khios": [
+"main_greek",
+"010000"
+],
+"pel_aigian_mytilene": [
+"main_greek",
+"050000"
+],
+"pel_aigian_oinoi": [
+"main_greek",
+"0A0000"
+],
+"pel_aigian_samos": [
+"main_greek",
+"0F0000"
+],
+"pel_aitolia_naupaktos": [
+"main_greek",
+"140000"
+],
+"pel_aitolia_thermon": [
+"main_greek",
+"190000"
+],
+"pel_ambrakia_ambrakia": [
+"main_greek",
+"1E0000"
+],
+"pel_ambrakia_anaktorio": [
+"main_greek",
+"230000"
+],
+"pel_ambrakia_pronnoi": [
+"main_greek",
+"280000"
+],
+"pel_amphipolis_amphipolis": [
+"main_greek",
+"2D0000"
+],
+"pel_amphipolis_krinides": [
+"main_greek",
+"320000"
+],
+"pel_argolis_argos": [
+"main_greek",
+"370000"
+],
+"pel_argolis_korinthos": [
+"main_greek",
+"3C0000"
+],
+"pel_argolis_mantinea": [
+"main_greek",
+"410000"
+],
+"pel_argolis_melos": [
+"main_greek",
+"460000"
+],
+"pel_attike_athenai": [
+"main_greek",
+"4B0000"
+],
+"pel_attike_laviro": [
+"main_greek",
+"500000"
+],
+"pel_attike_naxos": [
+"main_greek",
+"550000"
+],
+"pel_attike_paros": [
+"main_greek",
+"5A0000"
+],
+"pel_boiotia_delphi": [
+"main_greek",
+"5F0000"
+],
+"pel_boiotia_lamia": [
+"main_greek",
+"640000"
+],
+"pel_boiotia_opos": [
+"main_greek",
+"690000"
+],
+"pel_boiotia_thebai": [
+"main_greek",
+"6E0000"
+],
+"pel_dodekanisa_karpathos": [
+"main_greek",
+"730000"
+],
+"pel_dodekanisa_kos": [
+"main_greek",
+"780000"
+],
+"pel_dodekanisa_lindos": [
+"main_greek",
+"7D0000"
+],
+"pel_dodekanisa_rodos": [
+"main_greek",
+"820000"
+],
+"pel_elis_elis": [
+"main_greek",
+"870000"
+],
+"pel_elis_olympia": [
+"main_greek",
+"8C0000"
+],
+"pel_elis_patrai": [
+"main_greek",
+"910000"
+],
+"pel_elis_zakynthos": [
+"main_greek",
+"960000"
+],
+"pel_epeiros_antigonia": [
+"main_greek",
+"FF00FF"
+],
+"pel_epeiros_dodona": [
+"main_greek",
+"9B0000"
+],
+"pel_epeiros_elaea": [
+"main_greek",
+"A00000"
+],
+"pel_epeiros_korkyra": [
+"main_greek",
+"A50000"
+],
+"pel_euboia_andros": [
+"main_greek",
+"AA0000"
+],
+"pel_euboia_kalkis": [
+"main_greek",
+"AF0000"
+],
+"pel_euboia_karystos": [
+"main_greek",
+"B40000"
+],
+"pel_euboia_oreos": [
+"main_greek",
+"B90000"
+],
+"pel_hellespontos_byzantion": [
+"main_greek",
+"C30000"
+],
+"pel_hellespontos_kypsela": [
+"main_greek",
+"C80000"
+],
+"pel_hellespontos_perinthos": [
+"main_greek",
+"CD0000"
+],
+"pel_hellespontos_sestos": [
+"main_greek",
+"BE0000"
+],
+"pel_ionia_ephesos": [
+"main_greek",
+"D20000"
+],
+"pel_ionia_halikarnassos": [
+"main_greek",
+"D70000"
+],
+"pel_ionia_knidos": [
+"main_greek",
+"DC0000"
+],
+"pel_ionia_miletos": [
+"main_greek",
+"E10000"
+],
+"pel_kalkidike_mende": [
+"main_greek",
+"E60000"
+],
+"pel_kalkidike_olinthos": [
+"main_greek",
+"EB0000"
+],
+"pel_kalkidike_torone": [
+"main_greek",
+"F00000"
+],
+"pel_karia_kibyra": [
+"main_greek",
+"F50000"
+],
+"pel_karia_kolossai": [
+"main_greek",
+"FA0000"
+],
+"pel_karia_phaselis": [
+"main_greek",
+"FF0000"
+],
+"pel_karia_xanthos": [
+"main_greek",
+"000500"
+],
+"pel_krete_gortyna": [
+"main_greek",
+"000A00"
+],
+"pel_krete_knossos": [
+"main_greek",
+"000F00"
+],
+"pel_krete_kydonia": [
+"main_greek",
+"001400"
+],
+"pel_lakedaimon_kythera": [
+"main_greek",
+"001900"
+],
+"pel_lakedaimon_messenia": [
+"main_greek",
+"001E00"
+],
+"pel_lakedaimon_pylos": [
+"main_greek",
+"002300"
+],
+"pel_lakedaimon_sparta": [
+"main_greek",
+"002800"
+],
+"pel_lydia_sardeis": [
+"main_greek",
+"002D00"
+],
+"pel_lydia_smyrna": [
+"main_greek",
+"003200"
+],
+"pel_makedon_aigai": [
+"main_greek",
+"003700"
+],
+"pel_makedon_argos_orestiko": [
+"main_greek",
+"003C00"
+],
+"pel_makedon_arnisa": [
+"main_greek",
+"004100"
+],
+"pel_makedon_dion": [
+"main_greek",
+"004600"
+],
+"pel_minor_cyclades": [
+"main_greek",
+"EB0000"
+],
+"pel_minor_dodecanese": [
+"main_greek",
+"EB0000"
+],
+"pel_minor_islands": [
+"main_greek",
+"EB0000"
+],
+"pel_minor_saronic": [
+"main_greek",
+"EB0000"
+],
+"pel_minor_sporades": [
+"main_greek",
+"EB0000"
+],
+"pel_mysia_ilion": [
+"main_greek",
+"004B00"
+],
+"pel_mysia_kyzikos": [
+"main_greek",
+"005000"
+],
+"pel_mysia_myrina": [
+"main_greek",
+"005500"
+],
+"pel_mysia_pergamon": [
+"main_greek",
+"005A00"
+],
+"pel_sea_arkipelago": [
+"main_greek",
+"2D2D00"
+],
+"pel_sea_dodekanisa": [
+"main_greek",
+"232300"
+],
+"pel_sea_euripos": [
+"main_greek",
+"373700"
+],
+"pel_sea_ikario-pelagos": [
+"main_greek",
+"282800"
+],
+"pel_sea_ionian_pelagos": [
+"main_greek",
+"141400"
+],
+"pel_sea_korinthiakos_kolpos": [
+"main_greek",
+"191900"
+],
+"pel_sea_kritiko_pelgao": [
+"main_greek",
+"1E1E00"
+],
+"pel_sea_lake": [
+"main_greek",
+"0F0F00"
+],
+"pel_sea_propontis": [
+"main_greek",
+"373700"
+],
+"pel_sea_thrakiko_pelagos": [
+"main_greek",
+"323200"
+],
+"pel_terra_incognita": [
+"main_greek",
+"DCDC00"
+],
+"pel_thessaly_larisa": [
+"main_greek",
+"005F00"
+],
+"pel_thessaly_pharsalos": [
+"main_greek",
+"006400"
+],
+"pel_thessaly_pherae": [
+"main_greek",
+"006900"
+],
+"pel_thraike_abdera": [
+"main_greek",
+"006E00"
+],
+"pel_thraike_ainos": [
+"main_greek",
+"007300"
+],
+"pel_thraike_maroneia": [
+"main_greek",
+"007800"
+],
+"pel_thraike_thasos": [
+"main_greek",
+"007D00"
+],
+"pro_campania_campania": [
+"prologue_map_01",
+"FF8644"
+],
+"pro_campania_cilento": [
+"prologue_map_01",
+"FF9F84"
+],
+"pro_latium_latium": [
+"prologue_map_01",
+"AD2626"
+],
+"pro_latium_volsci": [
+"prologue_map_01",
+"CE6B6B"
+],
+"pro_magna_grecia_calabria": [
+"prologue_map_01",
+"FFF723"
+],
+"pro_magna_grecia_italia": [
+"prologue_map_01",
+"FFBE56"
+],
+"pro_magna_grecia_lucania": [
+"prologue_map_01",
+"FF6A00"
+],
+"pro_samnium_apulia": [
+"prologue_map_01",
+"629F00"
+],
+"pro_samnium_irpinia": [
+"prologue_map_01",
+"36B500"
+],
+"pro_samnium_pentria": [
+"prologue_map_01",
+"267F00"
+],
+"pro_samnium_umbria": [
+"prologue_map_01",
+"8AC100"
+],
+"pro_sea_mare_adriaticum": [
+"prologue_map_01",
+"141419"
+],
+"pro_sea_mare_africum": [
+"prologue_map_01",
+"232319"
+],
+"pro_sea_mare_ionium": [
+"prologue_map_01",
+"4B4B19"
+],
+"pro_sea_mare_tyrrhenum": [
+"prologue_map_01",
+"5A5A19"
+],
+"pro_sea_mare_tyrrhenum_australis": [
+"prologue_map_01",
+"6E6E19"
+],
+"pro_terra_incognita": [
+"prologue_map_01",
+"DCDC19"
+],
+"pun_africa_capsa": [
+"main_punic",
+"969664"
+],
+"pun_africa_carthago": [
+"main_punic",
+"8C8C64"
+],
+"pun_africa_hadrumentum": [
+"main_punic",
+"919164"
+],
+"pun_aquitania_burdigala": [
+"main_punic",
+"9B9B00"
+],
+"pun_aquitania_iruna": [
+"main_punic",
+"969600"
+],
+"pun_celtiberia_libisosa": [
+"main_punic",
+"8C8C00"
+],
+"pun_celtiberia_numantia": [
+"main_punic",
+"878700"
+],
+"pun_celtiberia_toletum": [
+"main_punic",
+"919100"
+],
+"pun_corsica_et_sardinia_alalia": [
+"main_punic",
+"5F5F64"
+],
+"pun_corsica_et_sardinia_karalis": [
+"main_punic",
+"555564"
+],
+"pun_corsica_et_sardinia_olbia": [
+"main_punic",
+"5A5A64"
+],
+"pun_etruria_arretium": [
+"main_punic",
+"D2D200"
+],
+"pun_etruria_pisae": [
+"main_punic",
+"CDCD00"
+],
+"pun_etruria_tarquinii": [
+"main_punic",
+"C8C800"
+],
+"pun_gallaecia_asturica": [
+"main_punic",
+"323200"
+],
+"pun_gallaecia_lugos": [
+"main_punic",
+"3C3C00"
+],
+"pun_gallaecia_pallantia": [
+"main_punic",
+"373700"
+],
+"pun_gallaecia_portus_amanum": [
+"main_punic",
+"414100"
+],
+"pun_gallia_cisalpina_genua": [
+"main_punic",
+"C3C300"
+],
+"pun_gallia_cisalpina_patavium": [
+"main_punic",
+"B4B400"
+],
+"pun_gallia_cisalpina_placentia": [
+"main_punic",
+"B9B900"
+],
+"pun_gallia_cisalpina_vercellae": [
+"main_punic",
+"BEBE00"
+],
+"pun_gallia_transalpina_lugdunum": [
+"main_punic",
+"AFAF00"
+],
+"pun_gallia_transalpina_massilia": [
+"main_punic",
+"A0A000"
+],
+"pun_gallia_transalpina_nemausus": [
+"main_punic",
+"AAAA00"
+],
+"pun_gallia_transalpina_tolosa": [
+"main_punic",
+"A5A500"
+],
+"pun_hispania_citerior_cissis": [
+"main_punic",
+"7D7D00"
+],
+"pun_hispania_citerior_emporiae": [
+"main_punic",
+"737300"
+],
+"pun_hispania_citerior_ilerda": [
+"main_punic",
+"787800"
+],
+"pun_hispania_citerior_salduba": [
+"main_punic",
+"828200"
+],
+"pun_hispania_ulterior_carthago_nova": [
+"main_punic",
+"5F5F00"
+],
+"pun_hispania_ulterior_ibossim": [
+"main_punic",
+"6E6E00"
+],
+"pun_hispania_ulterior_ilici": [
+"main_punic",
+"646400"
+],
+"pun_hispania_ulterior_saguntum": [
+"main_punic",
+"696900"
+],
+"pun_latium_et_campania_capua": [
+"main_punic",
+"F0F000"
+],
+"pun_latium_et_campania_roma": [
+"main_punic",
+"EBEB00"
+],
+"pun_latium_et_campania_tarracina": [
+"main_punic",
+"DCEB32"
+],
+"pun_lusitania_ebora": [
+"main_punic",
+"505000"
+],
+"pun_lusitania_helmantica": [
+"main_punic",
+"4B4B00"
+],
+"pun_lusitania_olisipo": [
+"main_punic",
+"464600"
+],
+"pun_magna_graecia_buxentum": [
+"main_punic",
+"414164"
+],
+"pun_magna_graecia_croton": [
+"main_punic",
+"373764"
+],
+"pun_magna_graecia_tarentum": [
+"main_punic",
+"323264"
+],
+"pun_magna_graecia_thurii": [
+"main_punic",
+"3C3C64"
+],
+"pun_mauretania_rutubis": [
+"main_punic",
+"696964"
+],
+"pun_mauretania_siga": [
+"main_punic",
+"737364"
+],
+"pun_mauretania_tingis": [
+"main_punic",
+"646464"
+],
+"pun_mauretania_volubilis": [
+"main_punic",
+"6E6E64"
+],
+"pun_numidia_cirta": [
+"main_punic",
+"787864"
+],
+"pun_numidia_hippo_regius": [
+"main_punic",
+"878764"
+],
+"pun_numidia_iol": [
+"main_punic",
+"828264"
+],
+"pun_numidia_sitifi": [
+"main_punic",
+"7D7D64"
+],
+"pun_samnium_barium": [
+"main_punic",
+"FFFF00"
+],
+"pun_samnium_beneventum": [
+"main_punic",
+"F5F500"
+],
+"pun_samnium_sipontum": [
+"main_punic",
+"FAFA00"
+],
+"pun_sea_atlanticus_oceanus": [
+"main_punic",
+"6969FA"
+],
+"pun_sea_gaditanum_fretum": [
+"main_punic",
+"6464FA"
+],
+"pun_sea_lacus_benacus": [
+"main_punic",
+"1919FA"
+],
+"pun_sea_lacus_salinarum": [
+"main_punic",
+"5F5FFA"
+],
+"pun_sea_lacus_trasimenus": [
+"main_punic",
+"1414FA"
+],
+"pun_sea_lacus_volsiniensis": [
+"main_punic",
+"1E1EFA"
+],
+"pun_sea_mare_adriaticum": [
+"main_punic",
+"2323FA"
+],
+"pun_sea_mare_africum": [
+"main_punic",
+"2D2DFA"
+],
+"pun_sea_mare_baliaricum": [
+"main_punic",
+"3737FA"
+],
+"pun_sea_mare_gallicum": [
+"main_punic",
+"3C3CFA"
+],
+"pun_sea_mare_hispanum": [
+"main_punic",
+"5555FA"
+],
+"pun_sea_mare_ibericum": [
+"main_punic",
+"3232FA"
+],
+"pun_sea_mare_internum": [
+"main_punic",
+"5A5AFA"
+],
+"pun_sea_mare_ionium": [
+"main_punic",
+"4B4BFA"
+],
+"pun_sea_mare_ligusticum": [
+"main_punic",
+"4141FA"
+],
+"pun_sea_mare_sardoum": [
+"main_punic",
+"4646FA"
+],
+"pun_sea_mare_siculum": [
+"main_punic",
+"5050FA"
+],
+"pun_sea_mare_tyrrenum": [
+"main_punic",
+"2828FA"
+],
+"pun_sicilia_lilybaeum": [
+"main_punic",
+"505064"
+],
+"pun_sicilia_messana": [
+"main_punic",
+"4B4B64"
+],
+"pun_sicilia_syracuse": [
+"main_punic",
+"464664"
+],
+"pun_terra_incognita": [
+"main_punic",
+"141414"
+],
+"pun_tripolitana_leptis_magna": [
+"main_punic",
+"A0A064"
+],
+"pun_tripolitana_tacapae": [
+"main_punic",
+"9B9B64"
+],
+"pun_tripolitana_thenteos": [
+"main_punic",
+"AAAA64"
+],
+"pun_tripolitana_turris_tamalleni": [
+"main_punic",
+"A5A564"
+],
+"pun_turdetania_gades": [
+"main_punic",
+"5A5A00"
+],
+"pun_turdetania_kartuba": [
+"main_punic",
+"555500"
+],
+"pun_umbria_et_picenum_ancona": [
+"main_punic",
+"E6E600"
+],
+"pun_umbria_et_picenum_corfinium": [
+"main_punic",
+"D7D700"
+],
+"pun_umbria_et_picenum_pisaurum": [
+"main_punic",
+"E1E100"
+],
+"pun_umbria_et_picenum_spoletium": [
+"main_punic",
+"DCDC00"
+],
+"rom_aegyptos_ta_abt": [
+"main_rome_map",
+"010000"
+],
+"rom_aegyptos_ta_ament": [
+"main_rome_map",
+"050000"
+],
+"rom_aegyptos_ta_mehu": [
+"main_rome_map",
+"0A0000"
+],
+"rom_aegyptos_ta_shemau": [
+"main_rome_map",
+"0F0000"
+],
+"rom_africa_byzacium": [
+"main_rome_map",
+"140000"
+],
+"rom_africa_syrtis": [
+"main_rome_map",
+"190000"
+],
+"rom_africa_tripolis": [
+"main_rome_map",
+"1E0000"
+],
+"rom_africa_zeugitana": [
+"main_rome_map",
+"230000"
+],
+"rom_aithiops_ityopya": [
+"main_rome_map",
+"280000"
+],
+"rom_aithiops_kush": [
+"main_rome_map",
+"2D0000"
+],
+"rom_aithiops_medjay": [
+"main_rome_map",
+"320000"
+],
+"rom_aquitania_aquitania": [
+"main_rome_map",
+"370000"
+],
+"rom_aquitania_gergovia": [
+"main_rome_map",
+"3C0000"
+],
+"rom_aquitania_pictavis": [
+"main_rome_map",
+"410000"
+],
+"rom_arabia_felix_himyar": [
+"main_rome_map",
+"460000"
+],
+"rom_arabia_felix_maka": [
+"main_rome_map",
+"4B0000"
+],
+"rom_arabia_felix_saba": [
+"main_rome_map",
+"500000"
+],
+"rom_arabia_magna_dilmun": [
+"main_rome_map",
+"550000"
+],
+"rom_arabia_magna_kedar": [
+"main_rome_map",
+"5A0000"
+],
+"rom_arabia_magna_lathrippa": [
+"main_rome_map",
+"5F0000"
+],
+"rom_arachosia_arachosia": [
+"main_rome_map",
+"640000"
+],
+"rom_arachosia_paropamisadae": [
+"main_rome_map",
+"690000"
+],
+"rom_aria_aria": [
+"main_rome_map",
+"6E0000"
+],
+"rom_aria_drangiana": [
+"main_rome_map",
+"730000"
+],
+"rom_aria_margiana": [
+"main_rome_map",
+"780000"
+],
+"rom_armenia_armenia": [
+"main_rome_map",
+"7D0000"
+],
+"rom_armenia_corduene": [
+"main_rome_map",
+"820000"
+],
+"rom_armenia_sophene": [
+"main_rome_map",
+"870000"
+],
+"rom_asia_lydia": [
+"main_rome_map",
+"8C0000"
+],
+"rom_asia_mysia": [
+"main_rome_map",
+"910000"
+],
+"rom_asia_phrygia": [
+"main_rome_map",
+"960000"
+],
+"rom_asia_rhodes": [
+"main_rome_map",
+"FF00FF"
+],
+"rom_bactria_baktria": [
+"main_rome_map",
+"9B0000"
+],
+"rom_bactria_tocharia": [
+"main_rome_map",
+"A00000"
+],
+"rom_baetica_baeturia": [
+"main_rome_map",
+"A50000"
+],
+"rom_baetica_turdetania": [
+"main_rome_map",
+"AA0000"
+],
+"rom_belgica_arduenna_silva": [
+"main_rome_map",
+"AF0000"
+],
+"rom_belgica_silva_carbonaria": [
+"main_rome_map",
+"B40000"
+],
+"rom_bithynia_et_pontus_bythynia": [
+"main_rome_map",
+"B90000"
+],
+"rom_bithynia_et_pontus_paphlagonia": [
+"main_rome_map",
+"BE0000"
+],
+"rom_bithynia_et_pontus_pontos": [
+"main_rome_map",
+"C30000"
+],
+"rom_bithynia_et_pontus_riza": [
+"main_rome_map",
+"C80000"
+],
+"rom_bosporus_maeotia": [
+"main_rome_map",
+"CD0000"
+],
+"rom_bosporus_sindica": [
+"main_rome_map",
+"D20000"
+],
+"rom_bosporus_taurica": [
+"main_rome_map",
+"D70000"
+],
+"rom_britannia_brigantia": [
+"main_rome_map",
+"DC0000"
+],
+"rom_britannia_britannia": [
+"main_rome_map",
+"E10000"
+],
+"rom_britannia_demetia": [
+"main_rome_map",
+"E60000"
+],
+"rom_britannia_dumnonia": [
+"main_rome_map",
+"EB0000"
+],
+"rom_caledonia_et_hibernia_caledonia": [
+"main_rome_map",
+"F00000"
+],
+"rom_caledonia_et_hibernia_hibernia": [
+"main_rome_map",
+"F50000"
+],
+"rom_carmania_eremos_karmania": [
+"main_rome_map",
+"FA0000"
+],
+"rom_carmania_karmania": [
+"main_rome_map",
+"FF0000"
+],
+"rom_cartaginensis_baleareis": [
+"main_rome_map",
+"000500"
+],
+"rom_cartaginensis_bastetania": [
+"main_rome_map",
+"000A00"
+],
+"rom_cartaginensis_celtiberia": [
+"main_rome_map",
+"000F00"
+],
+"rom_cartaginensis_edetania": [
+"main_rome_map",
+"001400"
+],
+"rom_caucasia_albania": [
+"main_rome_map",
+"001900"
+],
+"rom_caucasia_colchis": [
+"main_rome_map",
+"001E00"
+],
+"rom_caucasia_iberia": [
+"main_rome_map",
+"002300"
+],
+"rom_celtica_aremorica": [
+"main_rome_map",
+"002800"
+],
+"rom_celtica_lugdunensis": [
+"main_rome_map",
+"002D00"
+],
+"rom_celtica_lutetia": [
+"main_rome_map",
+"003200"
+],
+"rom_chorasmia_korasmia": [
+"main_rome_map",
+"003700"
+],
+"rom_chorasmia_transcaspia": [
+"main_rome_map",
+"003C00"
+],
+"rom_cilicia_cilicia": [
+"main_rome_map",
+"004100"
+],
+"rom_cilicia_cyprus": [
+"main_rome_map",
+"004600"
+],
+"rom_cilicia_pamphylia": [
+"main_rome_map",
+"004B00"
+],
+"rom_cisalpina_insubria": [
+"main_rome_map",
+"005000"
+],
+"rom_cisalpina_liguria": [
+"main_rome_map",
+"005500"
+],
+"rom_cisalpina_venetia": [
+"main_rome_map",
+"005A00"
+],
+"rom_corsica_et_sardinia_corsica": [
+"main_rome_map",
+"005F00"
+],
+"rom_corsica_et_sardinia_sardinia": [
+"main_rome_map",
+"006400"
+],
+"rom_dacia_bastarnia": [
+"main_rome_map",
+"006900"
+],
+"rom_dacia_dacia_inferior": [
+"main_rome_map",
+"006E00"
+],
+"rom_dacia_dacia_superior": [
+"main_rome_map",
+"007300"
+],
+"rom_galatia_et_cappadocia_cappadocia": [
+"main_rome_map",
+"007800"
+],
+"rom_galatia_et_cappadocia_commagene": [
+"main_rome_map",
+"007D00"
+],
+"rom_galatia_et_cappadocia_galatia": [
+"main_rome_map",
+"008200"
+],
+"rom_galatia_et_cappadocia_lycaonia": [
+"main_rome_map",
+"008700"
+],
+"rom_gedrosia_gedrosia": [
+"main_rome_map",
+"008C00"
+],
+"rom_gedrosia_rhambacia": [
+"main_rome_map",
+"009100"
+],
+"rom_germania_minor_germania_inferior": [
+"main_rome_map",
+"009600"
+],
+"rom_germania_minor_germania_superior": [
+"main_rome_map",
+"009B00"
+],
+"rom_hellas_attiki": [
+"main_rome_map",
+"00A000"
+],
+"rom_hellas_creta": [
+"main_rome_map",
+"00A500"
+],
+"rom_hellas_peloponnesos": [
+"main_rome_map",
+"00AA00"
+],
+"rom_hercynia_hercynia_silva": [
+"main_rome_map",
+"00AF00"
+],
+"rom_hercynia_luna_silva": [
+"main_rome_map",
+"00B400"
+],
+"rom_illyria_dalmatia": [
+"main_rome_map",
+"00B900"
+],
+"rom_illyria_illyria": [
+"main_rome_map",
+"00BE00"
+],
+"rom_illyria_liburnia": [
+"main_rome_map",
+"00C300"
+],
+"rom_italia_etruria": [
+"main_rome_map",
+"00C800"
+],
+"rom_italia_latium": [
+"main_rome_map",
+"00CD00"
+],
+"rom_italia_picenum": [
+"main_rome_map",
+"00D200"
+],
+"rom_italia_samnium": [
+"main_rome_map",
+"00D700"
+],
+"rom_libue_cyrenaica": [
+"main_rome_map",
+"00DC00"
+],
+"rom_libue_marmarica": [
+"main_rome_map",
+"00E100"
+],
+"rom_libue_oases": [
+"main_rome_map",
+"00E600"
+],
+"rom_libue_siwa": [
+"main_rome_map",
+"00EB00"
+],
+"rom_lusitania_celtica": [
+"main_rome_map",
+"00F000"
+],
+"rom_lusitania_lusitania": [
+"main_rome_map",
+"00F500"
+],
+"rom_macedonia_epeiros": [
+"main_rome_map",
+"00FA00"
+],
+"rom_macedonia_makedonia": [
+"main_rome_map",
+"00FF00"
+],
+"rom_macedonia_thessalia": [
+"main_rome_map",
+"000005"
+],
+"rom_magna_germania_frisia": [
+"main_rome_map",
+"00000A"
+],
+"rom_magna_germania_silva_bacenis": [
+"main_rome_map",
+"00000F"
+],
+"rom_magna_germania_silva_nigra": [
+"main_rome_map",
+"000014"
+],
+"rom_magna_graecia_bruttium": [
+"main_rome_map",
+"000019"
+],
+"rom_magna_graecia_calabria": [
+"main_rome_map",
+"00001E"
+],
+"rom_magna_graecia_lilybaion": [
+"main_rome_map",
+"000023"
+],
+"rom_magna_graecia_sirako": [
+"main_rome_map",
+"000028"
+],
+"rom_mauretania_atlas": [
+"main_rome_map",
+"00002D"
+],
+"rom_mauretania_gaetulia": [
+"main_rome_map",
+"000032"
+],
+"rom_mauretania_numidia": [
+"main_rome_map",
+"000037"
+],
+"rom_mauretania_tingitana": [
+"main_rome_map",
+"00003C"
+],
+"rom_media_magna_atropatene": [
+"main_rome_map",
+"000041"
+],
+"rom_media_magna_media": [
+"main_rome_map",
+"000046"
+],
+"rom_media_magna_rhagau": [
+"main_rome_map",
+"00004B"
+],
+"rom_mesopotamia_athura": [
+"main_rome_map",
+"000050"
+],
+"rom_mesopotamia_babylonia": [
+"main_rome_map",
+"000055"
+],
+"rom_mesopotamia_mesene": [
+"main_rome_map",
+"00005A"
+],
+"rom_mesopotamia_osroene": [
+"main_rome_map",
+"00005F"
+],
+"rom_nabataea_havilah": [
+"main_rome_map",
+"000064"
+],
+"rom_nabataea_iudaea": [
+"main_rome_map",
+"000069"
+],
+"rom_nabataea_jordan": [
+"main_rome_map",
+"00006E"
+],
+"rom_nabataea_lihyan": [
+"main_rome_map",
+"000073"
+],
+"rom_pannonia_pannonia_inferior": [
+"main_rome_map",
+"000078"
+],
+"rom_pannonia_pannonia_superior": [
+"main_rome_map",
+"00007D"
+],
+"rom_pannonia_transdanubia": [
+"main_rome_map",
+"000082"
+],
+"rom_parthia_astauene": [
+"main_rome_map",
+"000087"
+],
+"rom_parthia_hyrcania": [
+"main_rome_map",
+"00008C"
+],
+"rom_parthia_parthia": [
+"main_rome_map",
+"000091"
+],
+"rom_parthia_traxiane": [
+"main_rome_map",
+"000096"
+],
+"rom_persis_elam": [
+"main_rome_map",
+"00009B"
+],
+"rom_persis_lyan": [
+"main_rome_map",
+"0000A0"
+],
+"rom_persis_parsa": [
+"main_rome_map",
+"0000A5"
+],
+"rom_phazania_tidamensi": [
+"main_rome_map",
+"0000AA"
+],
+"rom_phazania_zinchecra": [
+"main_rome_map",
+"0000AF"
+],
+"rom_ponto_caspia_cimmeria": [
+"main_rome_map",
+"0000B4"
+],
+"rom_ponto_caspia_didoya": [
+"main_rome_map",
+"0000B9"
+],
+"rom_ponto_caspia_oium": [
+"main_rome_map",
+"0000BE"
+],
+"rom_ponto_caspia_zyx": [
+"main_rome_map",
+"0000C3"
+],
+"rom_provincia_narbonensis": [
+"main_rome_map",
+"0000C8"
+],
+"rom_provincia_transalpina": [
+"main_rome_map",
+"0000CD"
+],
+"rom_raetia_et_noricum_helvetia": [
+"main_rome_map",
+"0000D2"
+],
+"rom_raetia_et_noricum_noricum": [
+"main_rome_map",
+"0000D7"
+],
+"rom_raetia_et_noricum_raetia": [
+"main_rome_map",
+"0000DC"
+],
+"rom_riv_danuvius": [
+"main_rome_map",
+"0000E1"
+],
+"rom_riv_nilos": [
+"main_rome_map",
+"0000E6"
+],
+"rom_riv_rhenus": [
+"main_rome_map",
+"0000EB"
+],
+"rom_sarmatia_aestia": [
+"main_rome_map",
+"0000F0"
+],
+"rom_sarmatia_galicia": [
+"main_rome_map",
+"0000F5"
+],
+"rom_sarmatia_pripet": [
+"main_rome_map",
+"0000FA"
+],
+"rom_scythia_scythia": [
+"main_rome_map",
+"0000FF"
+],
+"rom_scythia_turan": [
+"main_rome_map",
+"050500"
+],
+"rom_scythia_usturt": [
+"main_rome_map",
+"0A0A00"
+],
+"rom_sea_lake": [
+"main_rome_map",
+"0F0F00"
+],
+"rom_sea_mare_adriaticum": [
+"main_rome_map",
+"141400"
+],
+"rom_sea_mare_aegaeum": [
+"main_rome_map",
+"191900"
+],
+"rom_sea_mare_aegyptum": [
+"main_rome_map",
+"1E1E00"
+],
+"rom_sea_mare_africum": [
+"main_rome_map",
+"232300"
+],
+"rom_sea_mare_carpathium": [
+"main_rome_map",
+"282800"
+],
+"rom_sea_mare_caspium": [
+"main_rome_map",
+"2D2D00"
+],
+"rom_sea_mare_hibernicum": [
+"main_rome_map",
+"323200"
+],
+"rom_sea_mare_hispanum": [
+"main_rome_map",
+"373700"
+],
+"rom_sea_mare_ibericum": [
+"main_rome_map",
+"3C3C00"
+],
+"rom_sea_mare_indicum": [
+"main_rome_map",
+"414100"
+],
+"rom_sea_mare_internum": [
+"main_rome_map",
+"464600"
+],
+"rom_sea_mare_ionium": [
+"main_rome_map",
+"4B4B00"
+],
+"rom_sea_mare_phoenicum": [
+"main_rome_map",
+"505000"
+],
+"rom_sea_mare_suevicum": [
+"main_rome_map",
+"555500"
+],
+"rom_sea_mare_tyrrhenum": [
+"main_rome_map",
+"5A5A00"
+],
+"rom_sea_oceanus_atlanticus": [
+"main_rome_map",
+"5F5F00"
+],
+"rom_sea_oceanus_britannicus": [
+"main_rome_map",
+"646400"
+],
+"rom_sea_oceanus_gallicus": [
+"main_rome_map",
+"696900"
+],
+"rom_sea_oceanus_germanicus": [
+"main_rome_map",
+"6E6E00"
+],
+"rom_sea_pontus_cimmerius": [
+"main_rome_map",
+"737300"
+],
+"rom_sea_pontus_euxinus": [
+"main_rome_map",
+"787800"
+],
+"rom_sea_pontus_thracius": [
+"main_rome_map",
+"7D7D00"
+],
+"rom_sea_sinus_aquitanus": [
+"main_rome_map",
+"828200"
+],
+"rom_sea_sinus_arabicus": [
+"main_rome_map",
+"878700"
+],
+"rom_sea_sinus_gallicus": [
+"main_rome_map",
+"8C8C00"
+],
+"rom_sea_sinus_persicus": [
+"main_rome_map",
+"919100"
+],
+"rom_sea_syrtis": [
+"main_rome_map",
+"969600"
+],
+"rom_silesia_leda": [
+"main_rome_map",
+"9B9B00"
+],
+"rom_silesia_silesia": [
+"main_rome_map",
+"A0A000"
+],
+"rom_suebia_bomeranorum": [
+"main_rome_map",
+"A5A500"
+],
+"rom_suebia_cimbria": [
+"main_rome_map",
+"AAAA00"
+],
+"rom_suebia_lusatia": [
+"main_rome_map",
+"AFAF00"
+],
+"rom_suebia_rugia": [
+"main_rome_map",
+"B4B400"
+],
+"rom_syria_aram": [
+"main_rome_map",
+"B9B900"
+],
+"rom_syria_eremos_syria": [
+"main_rome_map",
+"BEBE00"
+],
+"rom_syria_phonecia": [
+"main_rome_map",
+"C3C300"
+],
+"rom_syria_syria": [
+"main_rome_map",
+"C8C800"
+],
+"rom_tarraconensis_callaecia": [
+"main_rome_map",
+"CDCD00"
+],
+"rom_tarraconensis_cantabria": [
+"main_rome_map",
+"D2D200"
+],
+"rom_tarraconensis_tarraconensis": [
+"main_rome_map",
+"D7D700"
+],
+"rom_terra_incognita": [
+"main_rome_map",
+"DCDC00"
+],
+"rom_thracia_byzantion": [
+"main_rome_map",
+"E1E100"
+],
+"rom_thracia_dardania": [
+"main_rome_map",
+"E6E600"
+],
+"rom_thracia_moesia": [
+"main_rome_map",
+"EBEB00"
+],
+"rom_thracia_thracia": [
+"main_rome_map",
+"F0F000"
+],
+"rom_transoxania_kangju": [
+"main_rome_map",
+"F5F500"
+],
+"rom_transoxania_sodgiana": [
+"main_rome_map",
+"FAFA00"
+]
+},
+"source": "data_rome2.pack, _divide_et_impera_release_12_Part1.pack (tools/build_map_data.py)"
+}

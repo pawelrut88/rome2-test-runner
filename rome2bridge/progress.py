@@ -3,7 +3,10 @@
 Reads a run folder written by testrun.Runner:
   <run>\\<campaign>__<faction>\\turn<N>.png        campaign map after each turn
   <run>\\<campaign>__<faction>\\turn<N>_map.png    world map without fog (Map screenshot turns, and turn 1)
-  <run>\\<campaign>__<faction>\\turn<N>_stats.json faction stats (turn 1, the Map screenshot turns, the last turn)
+  <run>\\<campaign>__<faction>\\turn<N>_stats.json faction stats (every turn since 2026-11-08 late; before that
+                                                   turn 1, the Map screenshot turns and the last turn)
+"Drawn map" (mapdraw.py) is drawn from the stats' region owners on the game's own strategic map (read from the
+game's files), so it shows the whole map for every faction.
 Nothing else is needed (no PIL: Tk 8.6 reads PNG itself; images are shrunk with subsample)."""
 import json
 import os
@@ -75,7 +78,8 @@ class ProgressWindow(tk.Toplevel):
         self.live = live  # True while a test run is going: the window refreshes itself
         self.run_dir, self.game_dir, self.data, self.photo, self.cur = None, None, {}, None, None
         self.stats, self.order, self.rows = {}, [], []
-        self.v_game, self.v_pic = tk.StringVar(), tk.StringVar(value="map")
+        self.v_game, self.v_pic = tk.StringVar(), tk.StringVar(value="drawn")
+        self.selected, self._drawn, self._drawn_text = None, {}, ""  # picked faction (yellow), drawn-map cache
 
         top = ttk.Frame(self, padding=(10, 8)); top.pack(fill="x")
         ttk.Button(top, text="Open run...", command=self.pick_run).pack(side="left")
@@ -85,7 +89,7 @@ class ProgressWindow(tk.Toplevel):
         self.cb_game.pack(side="left")
         self.cb_game.bind("<<ComboboxSelected>>", lambda e: self.load_game())
         ttk.Label(top, text="Picture").pack(side="left", padx=(16, 4))
-        for v, text in (("map", "World map (no fog)"), ("shot", "Campaign view")):
+        for v, text in (("drawn", "Drawn map"), ("map", "World map (no fog)"), ("shot", "Campaign view")):
             ttk.Radiobutton(top, text=text, value=v, variable=self.v_pic, command=self.show_picture).pack(side="left")
         ttk.Button(top, text="Open folder", command=self.open_folder).pack(side="right")
         ttk.Button(top, text="Refresh", command=self.refresh).pack(side="right", padx=6)
@@ -204,29 +208,80 @@ class ProgressWindow(tk.Toplevel):
 
     def picture_path(self):
         v = self.data.get(self.cur) or {}
-        first, second = ("map", "shot") if self.v_pic.get() == "map" else ("shot", "map")
+        first, second = ("shot", "map") if self.v_pic.get() == "shot" else ("map", "shot")
         return v.get(first) or v.get(second), bool(v.get(first))
 
+    def is_dei(self):
+        try:
+            return str(json.load(open(os.path.join(self.run_dir, "info.json"), encoding="utf-8")).get("mod_set", "")).startswith("DeI")
+        except (OSError, ValueError, TypeError):
+            return False
+
+    def drawn(self):
+        """(Tk image, cache key, status text) of the drawn map for the current turn, or (None, None, why not)."""
+        from . import mapdraw
+        have = [t for t in sorted(self.stats) if self.stats[t] and t <= self.cur]
+        if not have:
+            return None, None, "no faction numbers for this turn yet"
+        st = have[-1]
+        owners, human = mapdraw.owners_from_stats(self.stats[st])
+        if owners is None:
+            return None, None, "this run's numbers have no region owners (runs from before the drawn map)"
+        key = (self.game_dir, st, self.selected)
+        if key in self._drawn:
+            return self._drawn[key]
+        try:
+            from .config import load_config
+            mk = mapdraw.map_for(owners)
+            if not mk:
+                return None, None, "these regions are on no known campaign map"
+            m = mapdraw.load_map(load_config().game_dir, mk)
+            img = mapdraw.tk_picture(self, m, mapdraw.overlay_png(m, owners, human, self.selected, self.is_dei()))
+        except Exception as e:  # missing game files, unknown pack layout: say why, show a screenshot instead
+            return None, None, "can't draw the map: %s" % e
+        text = "Drawn map, turn %d%s: regions in their owner's colour, white = your faction%s. Map: %s" % (
+            self.cur, "" if st == self.cur else " (owners from turn %d)" % st,
+            ", yellow = " + pretty(self.selected) if self.selected else " (click a faction in the table to mark it yellow)", mk)
+        if len(self._drawn) > 40:
+            self._drawn.clear()
+        self._drawn[key] = (img, key, text)
+        return self._drawn[key]
+
+    def fit(self, img, aw, ah):
+        f = min(1.0, aw / img.width(), ah / img.height())  # fit, never enlarge
+        z, s = max(((z, s) for s in range(1, 9) for z in range(1, s + 1) if z / s <= f), key=lambda p: p[0] / p[1])
+        return img if (z, s) == (1, 1) else img.zoom(z).subsample(s) if z > 1 else img.subsample(s)
+
     def show_picture(self):
+        aw, ah = max(self.pic.winfo_width(), 200), max(self.pic.winfo_height(), 150)
+        why = ""
+        if self.cur is not None and self.v_pic.get() == "drawn":
+            img, key, text = self.drawn()
+            if img is not None:
+                if self._pic_size != (key, aw, ah):
+                    self.photo = self.fit(img, aw, ah)
+                    self.pic.configure(image=self.photo, text="")
+                    self._pic_size = (key, aw, ah)
+                self._drawn_text = text
+                self.status.configure(text=text)
+                return
+            why = "   (drawn map: %s; showing a screenshot)" % text
         path, exact = self.picture_path() if self.cur is not None else (None, False)
         if not path:
             self.photo = None
             self.pic.configure(image="", text="No picture for this turn")
+            self.status.configure(text=why.strip(" ()"))
             return
-        aw, ah = max(self.pic.winfo_width(), 200), max(self.pic.winfo_height(), 150)
         if self._pic_size == (path, aw, ah):
             return
         try:
-            img = tk.PhotoImage(file=path, master=self)
-            f = min(1.0, aw / img.width(), ah / img.height())  # fit, never enlarge
-            z, s = max(((z, s) for s in range(1, 9) for z in range(1, s + 1) if z / s <= f), key=lambda p: p[0] / p[1])
-            self.photo = img if (z, s) == (1, 1) else img.zoom(z).subsample(s) if z > 1 else img.subsample(s)
+            self.photo = self.fit(tk.PhotoImage(file=path, master=self), aw, ah)
             self.pic.configure(image=self.photo, text="")
             self._pic_size = (path, aw, ah)
         except tk.TclError as e:
             self.photo = None
             self.pic.configure(image="", text="Can't show %s: %s" % (os.path.basename(path), e))
-        self.status.configure(text="%s%s" % (path, "" if exact else "   (the other picture is not there for this turn)"))
+        self.status.configure(text="%s%s%s" % (path, "" if exact else "   (the other picture is not there for this turn)", why))
 
     def prev_stats(self, turn):
         earlier = [t for t in sorted(self.stats) if t < turn and self.stats[t]]
@@ -239,8 +294,8 @@ class ProgressWindow(tk.Toplevel):
         have = [t for t in sorted(self.stats) if self.stats[t] and self.cur is not None and t <= self.cur]
         if not have:
             self.lb_head.configure(text="Turn %s" % self.cur if self.cur is not None else "")
-            self.lb_note.configure(text="No faction numbers yet. They are taken at turn 1, on every Map screenshot "
-                                        "turn and on the last turn of the run.")
+            self.lb_note.configure(text="No faction numbers yet. They are taken every turn (runs made with 0.7.0: "
+                                        "turn 1, the Map screenshot turns and the last turn).")
             return
         st = have[-1]
         cur = self.stats[st]
@@ -315,4 +370,8 @@ class ProgressWindow(tk.Toplevel):
     def on_row(self, e=None):
         sel = self.tree.selection()
         if sel:
-            self.status.configure(text="faction key: %s" % sel[0])
+            if self.v_pic.get() == "drawn" and sel[0] != self.selected:
+                self.selected = sel[0]
+                self._pic_size = None
+                self.show_picture()
+            self.status.configure(text="faction key: %s   %s" % (sel[0], self._drawn_text if self.v_pic.get() == "drawn" else ""))

@@ -18,7 +18,7 @@ $data = @(
 	"tools\post_key.ps1;tools", "tools\post_click.ps1;tools", "tools\game_shot.ps1;tools", "tools\skip_intro.ps1;tools",
 	"tools\crashsig.py;tools", "scripts\faction_report.lua;scripts", "scripts\progress_stats.lua;scripts", "pack\build\@rome2_bridge.pack;pack\build",
 	"extras\build\@@0_PAW_legio_invicta.pack;extras\build",
-	"rome2bridge\factions;rome2bridge\factions"
+	"rome2bridge\factions;rome2bridge\factions", "rome2bridge\maps;rome2bridge\maps"
 )
 # version from rome2bridge\__init__.py -> the exe's file properties (Details tab)
 $ver = (Select-String -Path "rome2bridge\__init__.py" -Pattern '__version__ = "([\d.]+)"').Matches[0].Groups[1].Value

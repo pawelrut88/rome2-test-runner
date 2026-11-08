@@ -1,6 +1,6 @@
 -- progress_stats.lua (rome2-bridge). READ-ONLY: changes nothing in the game.
--- Returns {turn = <game turn>, factions = {{name, human, treasury, regions, forces, armies, navies, units, food,
--- food_shortage}, ...}} for every faction that has a region or a military force (or is human). Used by the Test
+-- Returns {turn = <game turn>, factions = {{name, human, treasury, regions, region_keys, forces, armies, navies,
+-- units, food, food_shortage}, ...}} for every faction that has a region or a military force (or is human). Used by the Test
 -- Runner on the map-screenshot turns (turn<N>_stats.json) for the Progress window. Every value is read in a pcall:
 -- a method missing in some game version gives nil, never an error.
 local game = ROME2_BRIDGE and ROME2_BRIDGE.game and ROME2_BRIDGE.game()
@@ -19,6 +19,10 @@ for _, f in ipairs(items(world:faction_list())) do
 	pcall(function() r.human = f:is_human() end)
 	pcall(function() r.treasury = f:treasury() end)
 	pcall(function() r.regions = f:region_list():num_items() end)
+	-- region keys, for the Progress window's drawn map (who owns what)
+	local keys = {}
+	for _, reg in ipairs(items(f:region_list())) do pcall(function() keys[#keys + 1] = reg:name() end) end
+	if #keys > 0 then r.region_keys = keys end
 	pcall(function() r.food = f:total_food() end)
 	pcall(function() r.food_shortage = f:has_food_shortage() end)
 	local forces, armies, navies, units = 0, 0, 0, 0

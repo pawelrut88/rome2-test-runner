@@ -477,8 +477,8 @@ class App:
         run = getattr(self.runner, "run_dir", None) if self.busy == "test run" else None
         run = run or latest_run(self.runner.results_dir)
         if not run:
-            messagebox.showinfo("Progress", "No test run yet. Start one (set Map screenshot every N turns to get "
-                                "world maps; faction stats are taken on those turns, turn 1 and the last turn).")
+            messagebox.showinfo("Progress", "No test run yet. Start one: faction numbers and region owners are taken "
+                                "every turn (Map screenshot every N turns adds the game's world map screenshots).")
             return
         ProgressWindow(self.root, run, self.runner.results_dir, live=lambda: self.busy == "test run")
 

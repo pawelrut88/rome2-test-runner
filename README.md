@@ -33,8 +33,10 @@ the left, see the map and every faction's numbers (change since the last map tur
 - **Pause / Continue / Stop** a run; the game stays open while paused.
 - **Save every N turns** (copied from the autosave to its own file, never Quick Save).
 - **World map screenshot without fog of war every N turns** (the fog comes back right after).
-- **Progress window:** each turn's world map next to a table of every faction (regions, armies, navies, units,
-  treasury, food), with the change since the previous turn. Updates live during a run.
+- **Progress window:** each turn's map of who owns what next to a table of every faction (regions, armies, navies,
+  units, treasury, food), with the change since the previous turn. Updates live during a run. The map is drawn from
+  the region owners on the game's own strategic map (read from your game files, faction colours from the game), so
+  it shows the whole map for every faction and campaign; the world map screenshots are there too.
 - **Game over:** if your faction is wiped out (it only ends turns, so in DeI it can be), the run notices it at once,
   notes "destroyed on turn N" and goes on with the next game.
 - **Legio Invicta:** an option that makes your faction's soldiers and ships 1000 times stronger, so it survives

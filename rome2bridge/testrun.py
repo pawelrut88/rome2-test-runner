@@ -498,8 +498,8 @@ class Runner:
                 snap = map_every and (t + 1) % map_every == 0
                 if snap:
                     self.world_map(d, "turn%d_map.png" % gt)
-                if snap or t + 1 == turns:  # stats on the map turns and on the last turn
-                    self.stats(d, gt)
+                # stats every turn (one read-only Lua call, ~1 s): the Progress window's numbers and drawn map
+                self.stats(d, gt)
                 if save_every and (t + 1) % save_every == 0:
                     sv = self.save(faction, e["heartbeat"]["turn"])
                     r.setdefault("saves", []).append(sv)

@@ -116,13 +116,19 @@ normal games). For a run it backs your file up, writes its own with: the Test Ru
 
 PROGRESS WINDOW
 ---------------
-Shows how a game went, turn by turn: the world map without fog of war next to a table of every faction.
-Example: play Rome in the Grand Campaign for 50 turns with Map screenshot every 5 turns. The run then takes a world
-map and the faction numbers at turn 1, every 5 turns and at the last turn.
+Shows how a game went, turn by turn: a map of who owns what next to a table of every faction. The faction numbers
+and region owners are taken every turn.
 - Press "Progress..." during a run (it updates by itself as turns come in) or afterwards (it opens the latest
   run). "Open run..." opens any earlier run folder; "Game" picks the campaign/faction when a run had several.
 - Turns on the left ("map" = world map taken, "stats" = faction numbers taken). Prev / Next, or the arrow keys.
-- Picture: "World map (no fog)" or "Campaign view" (the screenshot after every turn).
+- Picture:
+  "Drawn map" (the default): the game's own strategic map, read from your game files, with every region in its
+  owner's colour (the faction colours of the game, DeI's with DeI). Your faction has a white outline; click a
+  faction in the table to outline it in yellow. It shows the whole map for every faction and campaign, every turn,
+  and needs no screenshot. Runs made with 0.7.0 have no region owners: the window shows their screenshots instead.
+  "World map (no fog)": the game's world map screenshot (Map screenshot turns). It opens around the camera, so for a
+  faction far from the middle (Ebdani, Lusitani) part of the map is cut off.
+  "Campaign view": the screenshot after every turn.
 - Table: Regions, Armies and Navies (forces led by a general; city garrisons don't count), Units (all units,
   garrisons too), Treasury, Food, Food shortage.
   (+n / -n) is the change since the previous turn with numbers. Your faction is blue, factions that are gone are
@@ -138,7 +144,7 @@ Documents\rome2bridge_runs\<date>_<mods>\
   <campaign>__<faction>\
     turn1.png, turn2.png, ...     the campaign map after each turn
     turnN_map.png                 world map without fog (if Map screenshot is on; also turn 1)
-    turnN_stats.json              faction numbers for the Progress window (turn 1, map turns, last turn)
+    turnN_stats.json              faction numbers and region owners for the Progress window (every turn)
     t1_report_*.txt               faction report at the start (factions, armies, garrisons, food, positions)
     bridge_log.txt                log of the game-side script
     stalled.png, stalled_ui.txt   only when a turn got stuck: what was on screen

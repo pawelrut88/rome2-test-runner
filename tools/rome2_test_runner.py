@@ -14,7 +14,7 @@ def selftest(out):
     r = {"frozen": FROZEN, "root": ROOT, "user_dir": USER_DIR, "files": {}}
     for p in ("tools\\post_key.ps1", "tools\\post_click.ps1", "tools\\game_shot.ps1", "tools\\crashsig.py",
               "scripts\\faction_report.lua", "scripts\\progress_stats.lua", "pack\\build\\@rome2_bridge.pack",
-              "extras\\build\\@@0_PAW_legio_invicta.pack"):
+              "extras\\build\\@@0_PAW_legio_invicta.pack", "rome2bridge\\maps\\map_data.json"):
         r["files"][p] = os.path.isfile(os.path.join(ROOT, p))
     try:
         cfg = load_config(); r["config"] = cfg.as_dict()
