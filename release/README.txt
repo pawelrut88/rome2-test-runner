@@ -1,4 +1,4 @@
-Rome II Test Runner  -  version 0.7.0
+Rome II Test Runner  -  version 0.7.1
 =====================================
 
 Starts Total War: Rome II by itself, plays a new campaign as the faction you pick for the number of turns you set,

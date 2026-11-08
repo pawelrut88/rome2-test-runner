@@ -13,15 +13,16 @@ one `.exe`.
 
 ## Screenshots
 
-**Progress window:** DeI, Rome in the Grand Campaign with Legio Invicta, world map every 5 turns. Pick a turn on
-the left, see the map and every faction's numbers (change since the last map turn in brackets).
+**Progress window:** DeI, Ebdani (Ireland) in the Grand Campaign with Legio Invicta. Pick any turn on the left: the
+map of who owns what (your faction outlined in white, the faction clicked in the table in yellow, here Rome) and
+every faction's numbers (change since the turn before in brackets).
 
 ![Progress window](docs/images/progress_window.png)
 
 <details>
-<summary>World map without fog of war (turn 16)</summary>
+<summary>The drawn map at full size (turn 5)</summary>
 
-![World map without fog of war](docs/images/world_map_no_fog.png)
+![Drawn map](docs/images/drawn_map.png)
 
 </details>
 

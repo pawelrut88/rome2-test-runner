@@ -2,6 +2,7 @@
 build/
 dist/
 dist_new/
+dist_rel/
 pack/build/
 release/*.zip
 release/twc_post/
