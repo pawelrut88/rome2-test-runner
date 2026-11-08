@@ -17,6 +17,13 @@ def out(v):
 
 
 def main(argv=None):
+    # game text (names, Lua results) can hold characters the Windows console code page (cp1252) can't print:
+    # print UTF-8 instead of crashing with UnicodeEncodeError
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     p = argparse.ArgumentParser(prog="python -m rome2bridge", description="Control and read a running Total War: Rome II.")
     p.add_argument("--config", help="config file (default: $ROME2BRIDGE_CONFIG, rome2bridge.json, %%APPDATA%%\\rome2bridge)")
     sub = p.add_subparsers(dest="cmd", required=True)

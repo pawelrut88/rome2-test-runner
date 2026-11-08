@@ -84,6 +84,8 @@ python -m rome2bridge screenshot shot.png --full
 - `lua` (and `lua -f file.lua`) runs in the game's global scope with the helpers in `B` (= `ROME2_BRIDGE`):
   `B.find(id, ctx)`, `B.info(c)`, `B.U(c)` (turns a UI address into a component), `B.click`, `B.tree`,
   `B.factions()`, `B.turn()`. The bridge's own local functions (such as `U`) can't be seen from there: use `B.U`.
+  The game's Lua differs from standard Lua 5.1 here: `s:sub(-400)` on a shorter string gave garbage once and `""`
+  after that (seen 2026-11-08, DeI). Keep the start at 1 or more: `s:sub(math.max(1, #s - 399))`.
 - `click`, `info` and `tree` take the parent component only as `--ctx <id>`, not as a second word.
 - `screenshot` saves the game window 968 px wide by default and prints both sizes
   (`window 1936x1119 saved 968x559`). `--full` keeps the window's own size; `--crop LEFT TOP WIDTH HEIGHT` saves a
