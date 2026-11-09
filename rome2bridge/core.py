@@ -44,6 +44,16 @@ class BridgeError(RuntimeError):
     pass
 
 
+# Calls that break the game's Lua state or stop the bridge timer for good (the game keeps running, the bridge is dead
+# until a restart). Tested in game, vanilla main_rome, 2026-11-08/09 (NOTES.md). lua() refuses code that names them.
+UNSAFE_LUA = {
+    "SetImageColour": "(UIComponent) breaks the game's Lua state: every value read after it is wrong (a function) and "
+                      "the bridge stops ticking. Tested with 3 and 4 numbers, 2026-11-09.",
+    "scroll_camera(": "stops the bridge timer for good (scroll_camera_with_direction is harmless but does nothing).",
+    "render_campaign_to_file": "stops the bridge timer for good and writes no file.",
+}
+
+
 def lua_str(s):
     """Lua string literal (or nil)."""
     return "nil" if s is None else json.dumps(str(s))
@@ -299,6 +309,9 @@ class Bridge:
     # ---- commands ---------------------------------------------------------------------------------------------------
     def lua(self, code, timeout=30):
         """Run Lua in the game's campaign state; returns the decoded `return` value. Raises BridgeError on failure."""
+        for name, why in UNSAFE_LUA.items():
+            if name in code:
+                raise BridgeError("not sent: %s %s" % (name, why))
         if not self.running():
             raise BridgeError("game is not running")
         hb = self.heartbeat()

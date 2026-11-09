@@ -91,6 +91,9 @@ python -m rome2bridge screenshot shot.png --full
   `B.factions()`, `B.turn()`. The bridge's own local functions (such as `U`) can't be seen from there: use `B.U`.
   The game's Lua differs from standard Lua 5.1 here: `s:sub(-400)` on a shorter string gave garbage once and `""`
   after that (seen 2026-11-08, DeI). Keep the start at 1 or more: `s:sub(math.max(1, #s - 399))`.
+- Some game calls break the bridge until the game is restarted, so `lua` refuses code that names them:
+  `SetImageColour` on a UI component (every value read after it is wrong and the bridge stops), `scroll_camera(` and
+  `render_campaign_to_file` (the bridge's timer stops). `Resize`, `MoveTo`, `Position` and `Dimensions` are fine.
 - `click`, `info` and `tree` take the parent component only as `--ctx <id>`, not as a second word.
 - `screenshot` saves the game window 968 px wide by default and prints both sizes
   (`window 1936x1119 saved 968x559`). `--full` keeps the window's own size; `--crop LEFT TOP WIDTH HEIGHT` saves a
