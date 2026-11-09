@@ -92,7 +92,14 @@ local function write_atomic(name, text)
 	local f = io.open(tmp, "w"); if not f then return false end
 	f:write(text); f:close()
 	os.remove(name)
-	return os.rename(tmp, name)
+	if os.rename(tmp, name) then return true end
+	-- Windows: while the reader has the old file open it can be neither removed nor renamed over, and the reply was
+	-- lost (popsupply, 2026-11-09: "no answer in 30s ... command read"). Write it in place instead; a reader that
+	-- catches it half-written gets bad JSON and reads it again on its next poll.
+	local g = io.open(name, "w"); if not g then return false end
+	g:write(text); g:close()
+	os.remove(tmp)
+	return true
 end
 
 -- UI --------------------------------------------------------------------------------------------------------------
