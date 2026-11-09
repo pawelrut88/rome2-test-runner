@@ -464,6 +464,23 @@ class Bridge:
             out[btn] = camp
         return out
 
+    def shown_ids(self, contains="", prefix=("rom_", "emp_", "gaul_", "pun_", "pel_", "inv_", "3c_", "pro_")):
+        """Ids of shown UI components containing `contains` (with "" : faction-like keys by prefix). For error messages."""
+        try:
+            return self.lua(
+                "local B = ROME2_BRIDGE; local out, seen = {}, {}; local want, pre = %s, {%s}"
+                # no plain flag: string.find(s, x, 1, true) crashes Rome II at the main menu (SHARED_KNOWLEDGE.md);
+                # `contains` is matched as a pattern, so pass only letters, digits and "_"
+                " local function hit(id) if want ~= '' then return id:find(want) ~= nil end"
+                " for _, p in ipairs(pre) do if id:sub(1, #p) == p then return true end end return false end"
+                " local function walk(c, d) if d > 16 then return end local id = tostring(c:Id())"
+                " if hit(id) and B.shown(c) and not seen[id] then seen[id] = true; out[#out + 1] = id end"
+                " for i = 0, c:ChildCount() - 1 do pcall(walk, B.U(c:Find(i)), d + 1) end end"
+                " pcall(walk, B.root(), 0) table.sort(out) return out"
+                % (lua_str(contains), ", ".join(lua_str(p) for p in prefix)), 30) or []
+        except BridgeError:
+            return []
+
     def start_faction(self, button, group, faction, timeout=420, check_steam=True):
         """Start the game into the main menu, then a new campaign (`button`) as `faction` (in culture `group`).
         Waits for the bridge on the campaign map. Returns the wait result plus the human factions found there."""
@@ -488,7 +505,11 @@ class Bridge:
                             " return c ~= nil and row ~= nil and not ROME2_BRIDGE.shown(row)" % lua_str(faction)):
                     continue
             if not self.wait_shown(id, 30):
-                return {"alive": False, "step": "%s not shown after 30 s" % id}
+                r = {"alive": False, "ok": False, "step": "%s not shown after 30 s" % id}
+                if id in (group, faction):  # a wrong key is the usual cause (DeI's groups differ from vanilla's)
+                    r["shown_here"] = self.shown_ids("_faction_group_" if id == group else "")
+                    r["step"] += " (shown on this screen: %s)" % ", ".join(r["shown_here"] or ["none"])
+                return r
             time.sleep(1)
             if id == "button_start_campaign":
                 t_click = time.time()
