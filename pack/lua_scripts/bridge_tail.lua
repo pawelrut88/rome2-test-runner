@@ -9,7 +9,11 @@ end
 
 -- Consul Scriptum, if its pack is loaded (its module ships in its pack as consul/consul.lua)
 do
-	package.path = package.path .. ";consul/?.lua"
+	-- add it once only: this file can run more than once in the same Lua state, and Consul's own file adds it too
+	-- (GooBad, 2026-11-09). Escaped pattern, not the plain flag: string.find(..., 1, true) crashes Rome II.
+	if not string.find(package.path, ";consul/%?%.lua") then
+		package.path = package.path .. ";consul/?.lua"
+	end
 	local ok, result = pcall(require, "consul")
 	if not ok or type(consul) ~= "table" then
 		__bridge_log("Consul not loaded (fine without Consul): " .. (tostring(result):match("^[^\n]*") or ""))
