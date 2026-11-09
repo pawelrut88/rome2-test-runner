@@ -236,16 +236,34 @@ class ProgressWindow(tk.Toplevel):
             if not mk:
                 return None, None, "these regions are on no known campaign map"
             m = mapdraw.load_map(load_config().game_dir, mk)
-            img = mapdraw.tk_picture(self, m, mapdraw.overlay_png(m, owners, human, self.selected, self.is_dei()))
+            forces = mapdraw.forces_from_stats(self.stats[st])
+            calib = mapdraw.calibrate(m, self.regions_at()) if forces else None
+            img = mapdraw.tk_picture(self, m, mapdraw.overlay_png(m, owners, human, self.selected, self.is_dei(),
+                                                                  forces, calib))
         except Exception as e:  # missing game files, unknown pack layout: say why, show a screenshot instead
             return None, None, "can't draw the map: %s" % e
-        text = "Drawn map, turn %d%s: regions in their owner's colour, white = your faction%s. Map: %s" % (
+        text = "Drawn map, turn %d%s: regions in their owner's colour, %s outline = your faction%s. %sMap: %s" % (
             self.cur, "" if st == self.cur else " (owners from turn %d)" % st,
-            ", yellow = " + pretty(self.selected) if self.selected else " (click a faction in the table to mark it yellow)", mk)
+            "black" if mapdraw.human_edge(human, self.is_dei()) != (255, 255, 255) else "white",
+            ", yellow = " + pretty(self.selected) if self.selected else " (click a faction in the table to mark it yellow)",
+            "Dots = armies, squares = fleets. " if forces and calib else "", mk)
         if len(self._drawn) > 40:
             self._drawn.clear()
         self._drawn[key] = (img, key, text)
         return self._drawn[key]
+
+    def regions_at(self):
+        """City positions from this game's stats files (the same every turn; the first file that has them)."""
+        from . import mapdraw
+        if getattr(self, "_rat", (None,))[0] == self.game_dir:
+            return self._rat[1]
+        for t in sorted(self.data):
+            p = (self.data[t] or {}).get("stats")
+            found = mapdraw.regions_at_from_file(p) if p else None
+            if found:
+                self._rat = (self.game_dir, found)  # kept only when found: a live run may not have them yet
+                return found
+        return None
 
     def fit(self, img, aw, ah):
         f = min(1.0, aw / img.width(), ah / img.height())  # fit, never enlarge

@@ -32,6 +32,22 @@ OUR_PACK = "@rome2_bridge.pack"
 # every unit of the human faction 1000 times stronger, so a faction that only ends turns is not wiped out early
 SS_PACK = "@@0_PAW_legio_invicta.pack"
 
+
+def ss_times(super_soldiers):
+    """super_soldiers True = 1000 times; a number = that many times (tools\\build_legio_invicta.ps1 -Times N)."""
+    return 1000 if super_soldiers is True else int(super_soldiers or 0)
+
+
+def ss_name(super_soldiers):
+    n = ss_times(super_soldiers)
+    return SS_PACK if n in (0, 1000) else "@@0_PAW_legio_invicta_x%d.pack" % n
+
+
+def ss_is(pack):
+    """a Legio Invicta pack of any strength (only one may be loaded: they hold the same tables)"""
+    p = (pack or "").lower()
+    return p == SS_PACK.lower() or (p.startswith("@@0_paw_legio_invicta_x") and p.endswith(".pack"))
+
 # mod sets (user, 2026-11-08). Never both DeI sets in one run: the game crashes.
 MOD_SETS = {
     "Vanilla": {"mods": [], "workshop": []},
@@ -215,6 +231,7 @@ class Runner:
         """Mod packs on this PC that can be added: type "mod" packs in data\\ and in the Steam workshop folders,
         without our pack and the DeI sets' packs. [{"pack", "item", "path", "startpos": [...]}]"""
         skip = {OUR_PACK.lower(), SS_PACK.lower()} | {p.lower() for ms in MOD_SETS.values() for p in ms["mods"]}
+        skip |= {p.lower() for p in os.listdir(self.b.cfg.game("data")) if ss_is(p)}
         found = []
         dirs = [(self.b.cfg.game("data"), None)]
         ws = self.workshop_dir()
@@ -313,15 +330,18 @@ class Runner:
         if missing:
             raise BridgeError("%s: not found: %s" % (mod_set, ", ".join(missing)))
         ss_installed = False
+        ss_pack = ss_name(super_soldiers)
         if super_soldiers:
-            ss_src = os.path.join(ROOT, "extras", "build", SS_PACK)
-            if not os.path.isfile(b.cfg.game("data", SS_PACK)):
+            ss_src = os.path.join(ROOT, "extras", "build", ss_pack)
+            if not os.path.isfile(b.cfg.game("data", ss_pack)):
                 if not os.path.isfile(ss_src):
-                    raise BridgeError("%s not found (build it: tools\\build_legio_invicta.ps1)" % ss_src)
+                    raise BridgeError("%s not found (build it: tools\\build_legio_invicta.ps1%s)"
+                                      % (ss_src, "" if ss_pack == SS_PACK else " -Times %d" % ss_times(super_soldiers)))
                 b.install_pack(ss_src); ss_installed = True
-                self.log("installed " + SS_PACK + " (Legio Invicta)")
-            added = [{"pack": SS_PACK, "item": None}] + [m for m in added if m.get("pack") != SS_PACK]
-            self.log("Legio Invicta on: %s loaded first (your faction's soldiers 1000 times stronger)" % SS_PACK)
+                self.log("installed " + ss_pack + " (Legio Invicta)")
+            added = [{"pack": ss_pack, "item": None}] + [m for m in added if not ss_is(m.get("pack"))]
+            self.log("Legio Invicta on: %s loaded first (your faction's soldiers %d times stronger)"
+                     % (ss_pack, ss_times(super_soldiers)))
         bad = self.added_problems(added)
         if bad:
             raise BridgeError("added mods: " + "; ".join(bad))
@@ -349,7 +369,7 @@ class Runner:
         results = []
         info = {"tool": "Rome II Test Runner", "tool_version": __version__, "game_exe_version": self.game_exe_version(),
                 "mod_set": mod_set, "turns": turns, "save_every": save_every, "map_every": map_every,
-                "started": stamp, "targets": len(targets), "super_soldiers": bool(super_soldiers)}
+                "started": stamp, "targets": len(targets), "super_soldiers": ss_times(super_soldiers)}
         info_path = os.path.join(run_dir, "info.json")
         try:
             info["mod_lines"] = self.write_mod_set(mod_set, added)
@@ -385,7 +405,7 @@ class Runner:
             if installed_here:
                 b.uninstall_pack(OUR_PACK); self.log("removed " + OUR_PACK)
             if ss_installed:
-                b.uninstall_pack(SS_PACK); self.log("removed " + SS_PACK)
+                b.uninstall_pack(ss_pack); self.log("removed " + ss_pack)
         n_ok = sum(1 for r in results if r.get("ok"))
         n_def = sum(1 for r in results if r.get("defeated"))
         self.log("done: %d of %d ok%s%s" % (n_ok, len(results), (" (%d ended early: faction destroyed)" % n_def) if n_def

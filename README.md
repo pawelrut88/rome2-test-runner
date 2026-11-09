@@ -13,14 +13,14 @@ one `.exe`.
 
 ## Screenshots
 
-**Progress window:** DeI, Ebdani (Ireland) in the Grand Campaign with Legio Invicta. Pick any turn on the left: the
-map of who owns what (your faction outlined in white, the faction clicked in the table in yellow, here Rome) and
-every faction's numbers (change since the turn before in brackets).
+**Progress window:** DeI, Ebdani (Ireland) in the Grand Campaign with Legio Invicta, turn 31. Pick any turn on the
+left: the map of who owns what, with every army (dot) and fleet (square), your faction outlined in white, the faction
+clicked in the table in yellow (here Rome), and every faction's numbers (change since the turn before in brackets).
 
 ![Progress window](docs/images/progress_window.png)
 
 <details>
-<summary>The drawn map at full size (turn 5)</summary>
+<summary>The drawn map at full size (turn 31)</summary>
 
 ![Drawn map](docs/images/drawn_map.png)
 
@@ -36,12 +36,14 @@ every faction's numbers (change since the turn before in brackets).
 - **Progress window:** each turn's map of who owns what next to a table of every faction (regions, armies, navies,
   units, treasury, food), with the change since the previous turn. Updates live during a run. The map is drawn from
   the region owners on the game's own strategic map (read from your game files, faction colours from the game), so
-  it shows the whole map for every faction and campaign. You can check the map of every turn: pick a turn on the
+  it shows the whole map for every faction and campaign, with every faction's armies (dots) and fleets (squares). You can check the map of every turn: pick a turn on the
   left (or Prev / Next, arrow keys), during the run or after it.
 - **Game over:** if your faction is wiped out (it only ends turns, so in DeI it can be), the run notices it at once,
   notes "destroyed on turn N" and goes on with the next game.
-- **Legio Invicta:** an option that makes your faction's soldiers and ships 1000 times stronger, so it survives
-  long runs. A small mod (no script, no Consul) built in, copied into the game for the run and removed after.
+- **Legio Invicta:** an option that makes your faction's soldiers and ships 100 or 1000 times stronger, so it
+  survives long runs. A small mod (no script, no Consul) built in, copied into the game for the run and removed
+  after. Tested in DeI, Grand Campaign, Ebdani, 30 turns: wiped out on turn 24 without it, alive to the end with
+  either strength. `tools\build_legio_invicta.ps1 -Times N` builds any strength; `testrun --legio N` uses it.
 - **Crash report:** when the game crashes, a window tells you where (campaign, faction, which end turn), which mods
   were loaded, and the crash details from the game's crash file.
 - **Add your own mods** on top of vanilla or DeI. Mods that edit the startpos file are marked and warned about.

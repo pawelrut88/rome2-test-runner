@@ -76,6 +76,8 @@ def main(argv=None):
     tr.add_argument("--faction", help="faction key (default: all playable)")
     tr.add_argument("--turns", type=int, default=1); tr.add_argument("--save-every", type=int, default=0, help="save every N turns (0 = off)")
     tr.add_argument("--map-every", type=int, default=0, help="world map screenshot without fog every N turns (0 = off)")
+    tr.add_argument("--legio", type=int, default=0, help="Legio Invicta: your faction N times stronger (1000, or a pack "
+                    "built with tools\\build_legio_invicta.ps1 -Times N); 0 = off")
     rf = sub.add_parser("read-factions", help="read the playable factions of every campaign from the main menu")
     rf.add_argument("--mods", default="Vanilla")
     sub.add_parser("mods", help="mod list in user.script.txt")
@@ -151,7 +153,7 @@ def main(argv=None):
              for g, gd in c["groups"].items() for f in gd["factions"] if not args.faction or f == args.faction]
         if not t:
             raise BridgeError("nothing matches --campaign/--faction")
-        return out(r.run(args.mods, t, args.turns, args.save_every, args.map_every))
+        return out(r.run(args.mods, t, args.turns, args.save_every, args.map_every, super_soldiers=args.legio))
     if cmd == "mods":
         return out(b.mods())
     if cmd == "enable":

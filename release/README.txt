@@ -1,4 +1,4 @@
-Rome II Test Runner  -  version 0.7.1
+Rome II Test Runner  -  version 0.7.2
 =====================================
 
 Starts Total War: Rome II by itself, plays a new campaign as the faction you pick for the number of turns you set,
@@ -35,7 +35,7 @@ HOW TO USE
    Added mods      your own mods on top, see "ADD YOUR OWN MODS" below
    Turns           how many end turns per game
    Save            save the game every N turns (0 = no saves; 1 = every turn; 3 = every third turn)
-   Legio Invicta   your faction's soldiers and ships 1000 times stronger, so it isn't wiped out. See
+   Legio Invicta   Off, 100 or 1000 times stronger: your faction's soldiers and ships, so it isn't wiped out. See
                    "GAME OVER AND LEGIO INVICTA" below.
 4. Press "Start Test Run". Don't touch the game window while it runs (see USING THE PC DURING A RUN).
    Pause Test Run   the run waits after the current turn. The game stays open and dialogs are no longer
@@ -80,15 +80,20 @@ Defeat screen.
 - The program notices the defeat at once, ends that game, and writes "<faction> was destroyed on turn N (game
   over)" in the log and in result.json, with defeat.png. A game over is not an error: the game counts as ok
   (no crash, no stuck turn), it just ends early. The run goes on with the next game, if any.
-- To keep your faction alive for long runs, tick "Legio Invicta". It loads a small mod that makes every unit of
-  your faction (soldiers and ships) 1000 times stronger: +99900% to morale, attack, defence,
+- To keep your faction alive for long runs, pick "Legio Invicta" 100 or 1000 times stronger. It loads a small mod
+  that makes every unit of your faction (soldiers and ships) that many times stronger: +9900% (100 times) or
+  +99900% (1000 times) to morale, attack, defence,
   shield, damage, armour, charge, accuracy, reload, ammo, ship health, ram damage, experience, general's aura and
   fatigue resistance, and +50% battle speed and range. It works through the game's difficulty table, so it needs
   no script and no Consul, and it only affects the human player's faction.
-  The pack (@@0_PAW_legio_invicta.pack) is inside the program: it is copied into the game's data folder for the
-  run and removed afterwards. info.json says "super_soldiers": true for such a run.
+  The packs (@@0_PAW_legio_invicta.pack = 1000 times, @@0_PAW_legio_invicta_x100.pack = 100 times) are inside the
+  program: the one you pick is copied into the game's data folder for the run and removed afterwards (if you have
+  it in the data folder already, yours is used and left there). info.json says "super_soldiers": 100 or 1000.
+  Only one of them may be loaded at a time: they change the same tables.
   Tested: DeI, Grand Campaign, Rome, 25 turns. Without Legio Invicta Rome was destroyed on turn 14; with it
   Rome kept all 5 regions to the end, and no faction even attacked it (the AI sees how strong it is).
+  Also tested: DeI, Grand Campaign, Ebdani, 30 turns: without Legio Invicta Ebdani was destroyed on turn 24; with
+  100 times and with 1000 times it kept its region to the end, no crash in either.
   Keep in mind: with Legio Invicta on, the campaign goes differently than without it. For testing whether a mod
   crashes or a turn gets stuck that doesn't matter.
 
@@ -123,9 +128,12 @@ and region owners are taken every turn, so you can check the map of every turn o
   with 0.7.0). Prev / Next, or the arrow keys.
 - Picture:
   "Drawn map" (the default): the game's own strategic map, read from your game files, with every region in its
-  owner's colour (the faction colours of the game, DeI's with DeI). Your faction has a white outline; click a
-  faction in the table to outline it in yellow. It shows the whole map for every faction and campaign, every turn,
-  and needs no screenshot. Runs made with 0.7.0 have no region owners: the window shows their screenshots instead.
+  owner's colour (the faction colours of the game, DeI's with DeI: Carthage is white, as in the game). Every
+  faction's armies are dots and its fleets squares, where they stood at the end of that turn. Your faction has a
+  white outline and white-edged markers (black when your own colour is light, like Carthage's); click a faction in
+  the table to outline it and its markers in yellow. It shows the whole map for every faction and campaign, every
+  turn, and needs no screenshot. Runs made with 0.7.0 have no region owners: the window shows their screenshots
+  instead. Runs made with 0.7.1 have no armies or fleets on the map.
   "World map (no fog)": the game's world map screenshot, in runs made with 0.7.0 (its "Map screenshot" option is
   gone: the world map opens around the camera, so for a faction far from the middle, like Ebdani, part of the
   map was cut off).

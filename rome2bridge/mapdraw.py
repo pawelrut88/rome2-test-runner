@@ -137,19 +137,25 @@ def _rgb(hexs):
 
 
 def faction_colour(faction, dei=False):
-    """The faction's colour as the game has it (DeI's if DeI); a light one (it would vanish on the parchment) is
-    swapped for its second colour or darkened; an unknown faction gets a steady colour made from its key."""
+    """The faction's colour as the game draws it on its own map (primary colour, DeI's if DeI). Light colours stay
+    light (Carthage is cream-white in the game, user 2026-11-09). An unknown faction gets a steady colour made from
+    its key."""
     cols = data()["colours"]
     pair = (dei and cols["dei"].get(faction)) or cols["vanilla"].get(faction)
     c = _rgb(pair[0]) if pair else None
     if c is None:
         d = md5(faction.encode()).digest()
         return (60 + d[0] % 160, 60 + d[1] % 160, 60 + d[2] % 160)
-    lum = lambda x: 0.3 * x[0] + 0.59 * x[1] + 0.11 * x[2]
-    if lum(c) > 185:
-        c2 = _rgb(pair[1]) if len(pair) > 1 else None
-        c = c2 if c2 and lum(c2) <= 185 else tuple(int(v * 0.55) for v in c)
     return c
+
+
+def is_light(c):
+    return 0.3 * c[0] + 0.59 * c[1] + 0.11 * c[2] > 185
+
+
+def human_edge(factions, dei=False):
+    """the outline colour of the player's faction: white, or near-black when its own colour is light"""
+    return (20, 20, 20) if any(is_light(faction_colour(f, dei)) for f in factions) else (255, 255, 255)
 
 
 def _edges(mask, w, n):
@@ -164,8 +170,9 @@ def _edges(mask, w, n):
     return e.to_bytes(n, "big")
 
 
-def overlay_png(m, owners, human=(), selected=None, dei=False):
-    """The colour layer for one turn: owners {region key: faction}. Returns PNG bytes (RGBA, the drawn size)."""
+def overlay_png(m, owners, human=(), selected=None, dei=False, forces=None, calib=None):
+    """The colour layer for one turn: owners {region key: faction}; forces (forces_from_stats) are drawn when there
+    is a calibration (calibrate). Returns PNG bytes (RGBA, the drawn size)."""
     w, h, idx = m["w"], m["h"], m["idx"]
     n = w * h
     tr = [bytearray(256) for _ in range(4)]
@@ -183,7 +190,7 @@ def overlay_png(m, owners, human=(), selected=None, dei=False):
     px = bytearray(4 * n)
     for c in range(4):
         px[c::4] = idx.translate(bytes(tr[c]))
-    for mask, col in ((hum, (255, 255, 255)), (sel, (255, 220, 0))):
+    for mask, col in ((hum, human_edge(human, dei)), (sel, (255, 220, 0))):
         if not any(mask):
             continue
         e = _edges(idx.translate(bytes(mask)), w, n)
@@ -193,7 +200,157 @@ def overlay_png(m, owners, human=(), selected=None, dei=False):
         while p >= 0:
             px[4 * p:4 * p + 4] = bytes((col[0], col[1], col[2], 255))
             p = e.find(1, p + 1)
+    if forces and calib:
+        draw_forces(m, px, forces, calib, human, selected, dei)
     return png_rgba(w, h, px)
+
+
+def regions_at_from_file(path):
+    """The city positions ({region: [x, y]}) a stats file has (runs from 2026-11-09 on), or None."""
+    try:
+        d = json.load(open(path, encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    r = d.get("regions_at") if isinstance(d, dict) else None
+    return r if isinstance(r, dict) and r else None
+
+
+def _centroids(m):
+    """{palette index: (x, y)} middle of each region on the drawn-size lookup picture."""
+    if "centroids" in m:
+        return m["centroids"]
+    w, h, idx = m["w"], m["h"], m["idx"]
+    sx, sy, n = [0.0] * 256, [0.0] * 256, [0] * 256
+    for y in range(h):
+        row = idx[y * w:(y + 1) * w]
+        x0 = 0
+        while x0 < w:
+            v = row[x0]
+            x1 = x0 + 1
+            while x1 < w and row[x1] == v:
+                x1 += 1
+            k = x1 - x0
+            sx[v] += (x0 + x1 - 1) * k / 2.0; sy[v] += y * k; n[v] += k
+            x0 = x1
+    m["centroids"] = {i: (sx[i] / n[i], sy[i] / n[i]) for i in m["region_of"] if n[i]}
+    return m["centroids"]
+
+
+def calibrate(m, regions_at):
+    """Game (logical) position -> drawn-map pixel for this map: px = ax*x + bx, py = ay*y + by.
+    regions_at: {region: [x, y]} city positions from the stats. A straight-line fit of the cities to the middles of
+    their regions, then a small search that puts as many cities as possible inside their own region (checked
+    2026-11-08 on 4 maps: 185/186 GC DeI, 171/173 GC vanilla, 52/52 Gaul with the fit alone).
+    Returns (ax, bx, ay, by, cities inside, cities) or None."""
+    if not regions_at:
+        return None
+    key = ("calib", m["key"])
+    if key in m:
+        return m[key]
+    inv = {r: i for i, r in m["region_of"].items()}
+    c = _centroids(m)
+    pts = []
+    for r, xy in regions_at.items():
+        i = inv.get(r)
+        try:
+            x, y = float(xy[0]), float(xy[1])
+        except (TypeError, ValueError, IndexError, KeyError):
+            continue
+        if i is not None and i in c:
+            pts.append((x, y, i))
+    if len(pts) < 4:
+        return None
+
+    def fit(a, b):
+        k = len(a); ma, mb = sum(a) / k, sum(b) / k
+        d = sum((x - ma) ** 2 for x in a)
+        s = sum((x - ma) * (y - mb) for x, y in zip(a, b)) / d if d else 1.0
+        return s, mb - s * ma
+    ax, bx = fit([p[0] for p in pts], [c[p[2]][0] for p in pts])
+    ay, by = fit([p[1] for p in pts], [c[p[2]][1] for p in pts])
+    w, h, idx = m["w"], m["h"], m["idx"]
+
+    def score(ax, bx, ay, by):
+        s = 0
+        for x, y, i in pts:
+            X, Y = int(ax * x + bx), int(ay * y + by)
+            if 0 <= X < w and 0 <= Y < h and idx[Y * w + X] == i:
+                s += 1
+        return s
+    best = (score(ax, bx, ay, by), ax, bx, ay, by)
+    # refine: scale steps of 1%, then offsets of 2 px, x and y apart (they don't depend on each other much)
+    for _ in range(3):
+        _, ax, bx, ay, by = best
+        for sx in (0.97, 0.98, 0.99, 1.0, 1.01, 1.02, 1.03):
+            for dx in range(-12, 13, 2):
+                nax = ax * sx
+                nbx = bx + dx + (1 - sx) * ax * (sum(p[0] for p in pts) / len(pts))  # keep the middle in place
+                s = score(nax, nbx, ay, by)
+                if s > best[0]:
+                    best = (s, nax, nbx, ay, by)
+        _, ax, bx, ay, by = best
+        for sy in (0.97, 0.98, 0.99, 1.0, 1.01, 1.02, 1.03):
+            for dy in range(-12, 13, 2):
+                nay = ay * sy
+                nby = by + dy + (1 - sy) * ay * (sum(p[1] for p in pts) / len(pts))
+                s = score(ax, bx, nay, nby)
+                if s > best[0]:
+                    best = (s, ax, bx, nay, nby)
+    s, ax, bx, ay, by = best
+    m[key] = (ax, bx, ay, by, s, len(pts))
+    return m[key]
+
+
+def forces_from_stats(stats):
+    """[(faction, x, y, units, navy)] from the stats rows' forces_at (runs from 2026-11-09 on), or []."""
+    out = []
+    for name, f in (stats or {}).items():
+        at = f.get("forces_at") or []
+        if isinstance(at, dict):
+            at = list(at.values())
+        for a in at:
+            if isinstance(a, dict):
+                a = [a.get(k) for k in sorted(a, key=lambda k: int(k) if str(k).isdigit() else 0)]
+            try:
+                out.append((name, float(a[0]), float(a[1]), int(a[2] or 0), bool(a[3]) if len(a) > 3 else False))
+            except (TypeError, ValueError, IndexError):
+                pass
+    return out
+
+
+def _marker(px, w, h, cx, cy, r, fill, edge, square):
+    """A filled circle (army) or square (fleet) with an edge, written into the RGBA buffer."""
+    r2o, r2i = (r + 1.5) ** 2, (r - 0.5) ** 2
+    for y in range(int(cy - r - 2), int(cy + r + 3)):
+        if not 0 <= y < h:
+            continue
+        for x in range(int(cx - r - 2), int(cx + r + 3)):
+            if not 0 <= x < w:
+                continue
+            if square:
+                d = max(abs(x - cx), abs(y - cy))
+                inner, outer = d <= r - 0.5, d <= r + 1.5
+            else:
+                d2 = (x - cx) ** 2 + (y - cy) ** 2
+                inner, outer = d2 <= r2i, d2 <= r2o
+            if outer:
+                col = fill if inner else edge
+                px[4 * (y * w + x):4 * (y * w + x) + 4] = bytes((col[0], col[1], col[2], 255))
+
+
+def draw_forces(m, px, forces, calib, human=(), selected=None, dei=False):
+    """Armies (circles) and fleets (squares) in their owner's colour; yours bigger with a white edge, the picked
+    faction's with a yellow edge, the rest dark."""
+    ax, bx, ay, by = calib[:4]
+    w, h = m["w"], m["h"]
+    # yours and the picked faction's last, so they are drawn on top
+    order = sorted(forces, key=lambda f: (f[0] in human, f[0] == selected))
+    for fac, x, y, n, navy in order:
+        cx, cy = ax * x + bx, ay * y + by
+        mine, sel = fac in human, fac == selected
+        r = 5 if mine else 4 if sel else 3
+        edge = human_edge((fac,), dei) if mine else (255, 220, 0) if sel else (25, 25, 25)
+        _marker(px, w, h, cx, cy, r, faction_colour(fac, dei), edge, navy)
 
 
 def owners_from_stats(stats):

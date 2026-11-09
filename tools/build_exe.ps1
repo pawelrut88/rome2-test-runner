@@ -14,10 +14,11 @@ if (-not (Test-Path "$Venv\Scripts\python.exe")) {
 }
 if (-not (Test-Path "pack\build\@rome2_bridge.pack")) { throw "pack\build\@rome2_bridge.pack missing: run tools\build_pack.ps1 first" }
 if (-not (Test-Path "extras\build\@@0_PAW_legio_invicta.pack")) { throw "extras\build\@@0_PAW_legio_invicta.pack missing: run tools\build_legio_invicta.ps1 first" }
+if (-not (Test-Path "extras\build\@@0_PAW_legio_invicta_x100.pack")) { throw "extras\build\@@0_PAW_legio_invicta_x100.pack missing: run tools\build_legio_invicta.ps1 -Times 100 first" }
 $data = @(
 	"tools\post_key.ps1;tools", "tools\post_click.ps1;tools", "tools\game_shot.ps1;tools", "tools\skip_intro.ps1;tools",
 	"tools\crashsig.py;tools", "scripts\faction_report.lua;scripts", "scripts\progress_stats.lua;scripts", "pack\build\@rome2_bridge.pack;pack\build",
-	"extras\build\@@0_PAW_legio_invicta.pack;extras\build",
+	"extras\build\@@0_PAW_legio_invicta.pack;extras\build", "extras\build\@@0_PAW_legio_invicta_x100.pack;extras\build",
 	"rome2bridge\factions;rome2bridge\factions", "rome2bridge\maps;rome2bridge\maps"
 )
 # version from rome2bridge\__init__.py -> the exe's file properties (Details tab)

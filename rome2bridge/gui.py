@@ -13,6 +13,10 @@ from tkinter import filedialog, messagebox, ttk
 from tkinter.scrolledtext import ScrolledText
 
 from . import __version__
+
+# Legio Invicta strengths (user 2026-11-09: 100 times added; both ran 30 turns, DeI GC Ebdani, no crash)
+LEGIO_TIMES = {"Off": 0, "100 times stronger": 100, "1000 times stronger": 1000}
+LEGIO_CHOICES = list(LEGIO_TIMES)
 from .core import Bridge, BridgeError
 from .progress import ProgressWindow
 from .testrun import (ROOT, Runner, faction_label, latest_run, load_added, load_factions, make_bug_report,
@@ -94,10 +98,12 @@ class App:
         # region owners; the world map screenshot was cut off for factions far from the middle. CLI: --map-every.)
         # Legio Invicta: the user's super soldiers mod (our pack folder extras), your faction's units 1000x stronger, so
         # a faction that only ends turns is not wiped out early (DeI GC Rome fell on turn 19 without it)
-        self.v_legio = tk.BooleanVar(value=False)
+        self.v_legio = tk.StringVar(value="Off")
         ttk.Label(tr, text="Legio Invicta").grid(row=6, column=0, sticky="w")
-        ttk.Checkbutton(tr, variable=self.v_legio, text="your faction's soldiers and ships 1000 times stronger, so it "
-                        "isn't wiped out (the test faction only ends turns)").grid(row=6, column=1, columnspan=3, sticky="w", padx=6, pady=3)
+        lg = ttk.Frame(tr); lg.grid(row=6, column=1, columnspan=3, sticky="w", padx=6, pady=3)
+        ttk.Combobox(lg, textvariable=self.v_legio, values=LEGIO_CHOICES, state="readonly", width=18).pack(side="left")
+        ttk.Label(lg, text="your faction's soldiers and ships stronger, so it isn't wiped out (the test faction only "
+                  "ends turns)").pack(side="left", padx=(6, 0))
         ttk.Label(tr, text="Made for vanilla Rome II and DeI. Mods that edit the startpos file (startpos.esf) are not "
                            "supported and may crash. Runs use their own user.script.txt; yours is put back after.", foreground="#b23b3b").grid(row=7, column=0, columnspan=4, sticky="w", pady=(4, 0))
         row2 = ttk.Frame(tr); row2.grid(row=8, column=0, columnspan=4, sticky="w", pady=(8, 0))
@@ -293,9 +299,9 @@ class App:
         if bad:
             messagebox.showwarning("Rome II Test Runner", "Fix the added mods first (Remove):\n\n" + "\n".join(bad)); return
         extra = ("\nAdded mods: " + ", ".join(m["pack"] for m in added)) if added else ""
-        legio = bool(self.v_legio.get())
+        legio = LEGIO_TIMES.get(self.v_legio.get(), 0)
         if legio:
-            extra += "\nLegio Invicta: on (your faction's soldiers 1000 times stronger)"
+            extra += "\nLegio Invicta: on (your faction's soldiers %d times stronger)" % legio
         sp = self.runner.startpos_mods(added)
         if sp:
             extra += ("\n\nWARNING: %s edit%s the startpos file. Not supported: the game or the run may crash."

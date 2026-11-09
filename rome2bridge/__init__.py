@@ -15,4 +15,4 @@ from .config import Config, load_config, find_game_dir
 from .core import Bridge, BridgeError, PRESETS, lua_str
 
 __all__ = ["Bridge", "BridgeError", "Config", "load_config", "find_game_dir", "PRESETS", "lua_str"]
-__version__ = "0.7.1"
+__version__ = "0.7.2"

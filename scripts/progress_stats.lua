@@ -1,6 +1,6 @@
 -- progress_stats.lua (rome2-bridge). READ-ONLY: changes nothing in the game.
 -- Returns {turn = <game turn>, factions = {{name, human, treasury, regions, region_keys, forces, armies, navies,
--- units, food, food_shortage}, ...}} for every faction that has a region or a military force (or is human). Used by the Test
+-- forces_at = {{x, y, units, navy}, ...}, units, food, food_shortage}, ...}, regions_at = {region = {x, y}}} for every faction that has a region or a military force (or is human). Used by the Test
 -- Runner on the map-screenshot turns (turn<N>_stats.json) for the Progress window. Every value is read in a pcall:
 -- a method missing in some game version gives nil, never an error.
 local game = ROME2_BRIDGE and ROME2_BRIDGE.game and ROME2_BRIDGE.game()
@@ -25,7 +25,7 @@ for _, f in ipairs(items(world:faction_list())) do
 	if #keys > 0 then r.region_keys = keys end
 	pcall(function() r.food = f:total_food() end)
 	pcall(function() r.food_shortage = f:has_food_shortage() end)
-	local forces, armies, navies, units = 0, 0, 0, 0
+	local forces, armies, navies, units, at = 0, 0, 0, 0, {}
 	for _, m in ipairs(items(f:military_force_list())) do
 		forces = forces + 1
 		pcall(function() units = units + m:unit_list():num_items() end)
@@ -41,9 +41,25 @@ for _, f in ipairs(items(world:faction_list())) do
 			local navy = false
 			pcall(function() navy = m:is_navy() end)
 			if navy then navies = navies + 1 else armies = armies + 1 end
+			-- where it stands, for the drawn map: {x, y, units, navy} (logical position of its general)
+			pcall(function()
+				local c = m:general_character()
+				local n = 0
+				pcall(function() n = m:unit_list():num_items() end)
+				at[#at + 1] = {c:logical_position_x(), c:logical_position_y(), n, navy}
+			end)
 		end
 	end
 	r.forces, r.armies, r.navies, r.units = forces, armies, navies, units
+	if #at > 0 then r.forces_at = at end
 	if r.name and ((r.regions or 0) > 0 or forces > 0 or r.human) then out.factions[#out.factions + 1] = r end
 end
+-- every region's city position (logical): the drawn map matches game positions to map pixels with these
+local rat = {}
+pcall(function()
+	for _, reg in ipairs(items(world:region_manager():region_list())) do
+		pcall(function() local s = reg:settlement(); rat[reg:name()] = {s:logical_position_x(), s:logical_position_y()} end)
+	end
+end)
+if next(rat) then out.regions_at = rat end
 return out
