@@ -95,6 +95,8 @@ python -m rome2bridge screenshot shot.png --full
   `SetImageColour` on a UI component (every value read after it is wrong and the bridge stops), `scroll_camera(` and
   `render_campaign_to_file` (the bridge's timer stops). `Resize`, `MoveTo`, `Position` and `Dimensions` are fine.
 - `click`, `info` and `tree` take the parent component only as `--ctx <id>`, not as a second word.
+- `hover <id> [--ctx X] [--wait S]` moves the real mouse cursor over a UI component and waits, so its tooltip shows
+  in the next `screenshot`. Unlike everything else it uses your mouse and brings the game window to the front.
 - `screenshot` saves the game window 968 px wide by default and prints both sizes
   (`window 1936x1119 saved 968x559`). `--full` keeps the window's own size; `--crop LEFT TOP WIDTH HEIGHT` saves a
   part of it at full size, in window pixels (the window's top-left corner, title bar included, is 0 0: the same

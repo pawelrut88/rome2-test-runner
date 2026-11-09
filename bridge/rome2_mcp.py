@@ -83,6 +83,7 @@ def t_screenshot(a):
 
 
 def t_post_click(a): return B().post_click(a["x"], a["y"], a.get("wait", 1)) or "clicked"
+def t_hover(a): return B().hover(a["id"], a.get("ctx"), float(a.get("wait", 2.5)))
 def t_key(a): return B().post_key(int(str(a.get("vk", "0x1B")), 0), a.get("wait", 1)) or "key sent"
 def t_skip_intro(a): return as_text({"esc_presses": B().skip_intro(int(a.get("max", 10)), float(a.get("delay", 5)))})
 def t_quit(a): return "game stopped; " + B().quit()
@@ -116,6 +117,8 @@ TOOLS = [
      S(full=BOOL, crop={"type": "array", "items": {"type": "integer"}, "minItems": 4, "maxItems": 4}), t_screenshot),
     ("post_click", "Fallback: posted mouse click at client pixel x,y (window 1920x1080).",
      {"type": "object", "properties": {"x": NUM, "y": NUM}, "required": ["x", "y"]}, t_post_click),
+    ("hover", "Move the REAL mouse cursor over a UI component (centre) and wait, so its tooltip shows in a screenshot. Brings the game window to the front.",
+     {"type": "object", "properties": {"id": STR, "ctx": STR, "wait": NUM}, "required": ["id"]}, t_hover),
     ("key", "Post a key to the game window (virtual key code, default 0x1B = Esc).", S(vk=STR), t_key),
     ("quit_game", "Kill the game and remove any startup line from user.script.txt.", S(), t_quit),
 ]

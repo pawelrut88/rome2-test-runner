@@ -67,6 +67,8 @@ def main(argv=None):
     k = sub.add_parser("key", help="post a key to the game window"); k.add_argument("vk", nargs="?", default="0x1B",
                                                                                    help="virtual key code, default Esc")
     pc = sub.add_parser("post-click", help="posted click at client pixel x y"); pc.add_argument("x", type=int); pc.add_argument("y", type=int)
+    hv = sub.add_parser("hover", help="move the real mouse over a UI component and wait (tooltips for a screenshot)")
+    hv.add_argument("id"); hv.add_argument("--ctx"); hv.add_argument("--wait", type=float, default=2.5)
     si = sub.add_parser("skip-intro", help="press Esc while the campaign intro shows")
     si.add_argument("--max", type=int, default=10); si.add_argument("--delay", type=float, default=5)
     sub.add_parser("gui", help="open the desktop window")
@@ -135,6 +137,8 @@ def main(argv=None):
         return out(b.post_key(int(args.vk, 0)))
     if cmd == "post-click":
         return out(b.post_click(args.x, args.y))
+    if cmd == "hover":
+        return out(b.hover(args.id, args.ctx, args.wait))
     if cmd == "skip-intro":
         return out({"esc_presses": b.skip_intro(args.max, args.delay)})
     if cmd == "gui":

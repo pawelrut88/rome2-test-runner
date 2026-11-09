@@ -513,6 +513,42 @@ class Bridge:
     def post_key(self, vk=0x1B, wait=1):
         return self._ps("post_key.ps1", "-Vk", vk, "-Wait", wait)
 
+    def hover(self, id, ctx=None, wait=2.5):
+        """Move the REAL mouse cursor over a UI component (its centre) and wait, so its tooltip shows for a screenshot.
+        Brings the game window to the front. The game's UI coordinates are scaled to the window's client pixels
+        (they differ, e.g. a 2182x1227 UI in a 1920x1080 window). Returns where the cursor went."""
+        import ctypes
+        from ctypes import wintypes as wt
+        r = self.lua("local B = ROME2_BRIDGE; local c = B.find(%s, %s); if not c then return nil end; "
+                     "local x, y = c:Position(); local w, h = c:Dimensions(); local rw, rh = B.root():Dimensions(); "
+                     "return {x, y, w, h, rw, rh}" % (lua_str(id), lua_str(ctx)))
+        if not r:
+            raise BridgeError("component not found: %s" % id)
+        x, y, w, h, rw, rh = r
+        u32 = ctypes.windll.user32
+        hwnd = u32.FindWindowW(None, "Total War: ROME 2")
+        if not hwnd:
+            raise BridgeError("game window not found")
+        rc = wt.RECT()
+        u32.GetClientRect(hwnd, ctypes.byref(rc))
+        sx, sy = rc.right / float(rw or rc.right), rc.bottom / float(rh or rc.bottom)
+        pt = wt.POINT(int((x + w / 2.0) * sx), int((y + h / 2.0) * sy))
+        cx, cy = pt.x, pt.y
+        u32.ClientToScreen(hwnd, ctypes.byref(pt))
+        u32.SetForegroundWindow(hwnd)
+        # first off the window (its title bar), so the game closes an open tooltip: hovering the same spot again kept
+        # the old tooltip text after it changed (popsupply, 2026-11-09)
+        off = wt.POINT(rc.right // 2, 0)
+        u32.ClientToScreen(hwnd, ctypes.byref(off))
+        u32.SetCursorPos(off.x, max(0, off.y - 10))
+        time.sleep(0.5)
+        u32.SetCursorPos(pt.x, pt.y)
+        time.sleep(0.3)
+        u32.SetCursorPos(pt.x + 1, pt.y)  # a second move: the game reacts to mouse movement, not position
+        time.sleep(wait)
+        return "hover %s: ui %d,%d %dx%d (ui %dx%d, client %dx%d) -> client %d,%d, screen %d,%d" % (
+            id, x, y, w, h, rw, rh, rc.right, rc.bottom, cx, cy, pt.x, pt.y)
+
     def post_click(self, x, y, wait=1):
         return self._ps("post_click.ps1", "-X", int(x), "-Y", int(y), "-Wait", wait)
 
