@@ -655,10 +655,26 @@ class Bridge:
     def post_click(self, x, y, wait=1):
         return self._ps("post_click.ps1", "-X", int(x), "-Y", int(y), "-Wait", wait)
 
+    def restore_window(self, wait=1.5):
+        """If the game window is minimized, show it again at its last size WITHOUT activating it (no focus taken from
+        the player's window). A minimized window screenshots as 160x28 (consul-work 2026-11-11: windowed, but
+        minimized after start). Returns "restored", "not minimized" or "no window"."""
+        import ctypes
+        u32 = ctypes.windll.user32
+        hwnd = u32.FindWindowW(None, "Total War: ROME 2")
+        if not hwnd:
+            return "no window"
+        if not u32.IsIconic(hwnd):
+            return "not minimized"
+        u32.ShowWindow(hwnd, 4)  # SW_SHOWNOACTIVATE
+        time.sleep(wait)  # let the game draw again before a screenshot
+        return "restored" if not u32.IsIconic(hwnd) else "still minimized"
+
     def screenshot(self, out, full=False, crop=None):
         """PNG of the game window: 968 px wide by default, the window's own size if full, or crop=(left, top, width,
         height) in window pixels (top-left corner of the window, title bar included, is 0,0) at full size.
         Returns e.g. "printwindow=True window 1936x1119 saved 968x559"."""
+        self.restore_window()
         args = ["-Out", out]
         if crop:
             left, top, width, height = map(int, crop)

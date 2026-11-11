@@ -67,7 +67,7 @@ def main(argv=None):
     sh.add_argument("--crop", type=int, nargs=4, metavar=("LEFT", "TOP", "WIDTH", "HEIGHT"),
                     help="a part of the window at full size, window pixels (title bar included)")
     k = sub.add_parser("key", help="post a key to the game window"); k.add_argument("vk", nargs="?", default="0x1B",
-                                                                                   help="virtual key code, default Esc")
+                                                                                   help="virtual key code, default Esc (on the map with no popup open, Esc opens the game menu)")
     pc = sub.add_parser("post-click", help="posted click at client pixel x y"); pc.add_argument("x", type=int); pc.add_argument("y", type=int)
     hv = sub.add_parser("hover", help="move the real mouse over a UI component and wait (tooltips for a screenshot)")
     hv.add_argument("id"); hv.add_argument("--ctx"); hv.add_argument("--wait", type=float, default=2.5)
@@ -104,6 +104,8 @@ def main(argv=None):
         r = {"launched": line, "display": b.display}
         if not args.no_wait and not args.menu:
             r.update(b.wait_bridge(args.timeout, min_ticks=1))
+            if r.get("alive"):
+                r["window"] = b.restore_window()
             if args.skip_intro and r.get("alive"):
                 r["intro_esc"] = b.skip_intro()
         b.wait_restore()  # take the startup line out of user.script.txt before this process ends
