@@ -121,6 +121,9 @@ The game and settings folders are found by themselves (Steam's library list). If
 
 ## Building
 
+Windows blocks scripts by default ("running scripts is disabled"), so run each build script as
+`powershell -ExecutionPolicy Bypass -File tools\<script>.ps1 ...`.
+
 - The pack: `tools\build_pack.ps1` (needs [RPFM](https://github.com/Frodo45127/rpfm)'s `rpfm_cli.exe`; set
   `RPFM_CLI` and `ROME2_GAME_DIR` if they are not found).
 - Legio Invicta: `tools\build_legio_invicta.ps1` (RPFM plus its Rome II schema `schema_rom2.ron`; set

@@ -207,7 +207,8 @@ class Bridge:
     def set_pack_enabled(self, pack, enabled=True):
         """Add (as the first mod line) or remove `mod "<pack>";` in user.script.txt. Backs the file up first."""
         text, enc = self._read_us()
-        shutil.copyfile(self.cfg.user_script, self.cfg.user_script + ".bak_rome2bridge")
+        if os.path.exists(self.cfg.user_script):  # a game never started has none: _write_us creates it (UTF-16)
+            shutil.copyfile(self.cfg.user_script, self.cfg.user_script + ".bak_rome2bridge")
         lines = [l for l in text.splitlines() if l.strip() != 'mod "%s";' % pack]
         if enabled:
             i = next((n for n, l in enumerate(lines) if l.strip().startswith("mod ")), None)
