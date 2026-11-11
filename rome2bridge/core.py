@@ -116,14 +116,20 @@ class Bridge:
         return out
 
     # ---- state ----------------------------------------------------------------------------------------------------
-    def heartbeat(self):
-        try:
-            with open(self.ALIVE, encoding="utf-8") as f:
-                hb = json.load(f)
-            hb["age_s"] = round(time.time() - os.path.getmtime(self.ALIVE), 1)
-            return hb
-        except (OSError, ValueError):
-            return None
+    def heartbeat(self, tries=5):
+        # The bridge rewrites this file every second: for a moment it can be missing (between its remove and rename)
+        # or half-written (written in place while we had it open), so a failed read is tried again a few times before
+        # it counts as "no heartbeat" (popsupply 2026-11-11: "bridge not alive (heartbeat None)" in a healthy game).
+        for i in range(tries):
+            try:
+                with open(self.ALIVE, encoding="utf-8") as f:
+                    hb = json.load(f)
+                hb["age_s"] = round(time.time() - os.path.getmtime(self.ALIVE), 1)
+                return hb
+            except (OSError, ValueError):
+                if i + 1 < tries:
+                    time.sleep(0.05)
+        return None
 
     def alive(self, max_age=10):
         hb = self.heartbeat()
