@@ -309,12 +309,7 @@ class Runner:
         return [l for l in lines if l.startswith(("mod ", "add_working_directory"))]
 
     def set_windowed(self):
-        t = open(self.prefs, encoding="utf-8", errors="replace").read()
-        for k, v in (("gfx_fullscreen", "false"), ("x_res", "1920"), ("y_res", "1080")):
-            t, n = re.subn(r"(?m)^%s [^;\r\n]*;" % k, "%s %s;" % (k, v), t)
-            if n == 0:
-                t = t.rstrip("\r\n") + "\n%s %s;\n" % (k, v)
-        open(self.prefs, "w", encoding="utf-8", newline="").write(t)
+        self.b.set_windowed()
 
     # ---- one run -------------------------------------------------------------------------------------------------
     def run(self, mod_set, targets, turns=1, save_every=0, map_every=0, added=None, super_soldiers=False):

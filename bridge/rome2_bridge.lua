@@ -337,7 +337,11 @@ local function run_command()
 	if not chunk then
 		res.ok = false; res.error = "compile: " .. tostring(err)
 	else
+		-- while the command runs this file names it: if the game closes during it, Python can say so (consul-work
+		-- 2026-11-11: "game exited while waiting", no dump, no way to tell whether the command killed it)
+		local m = io.open("rome2_bridge_running.txt", "w"); if m then m:write(id); m:close() end
 		local packed = { pcall(chunk) }
+		os.remove("rome2_bridge_running.txt")
 		res.ok = packed[1]
 		if packed[1] then
 			if #packed <= 2 then res.result = packed[2] else table.remove(packed, 1); res.result = packed end

@@ -39,8 +39,10 @@ def main(argv=None):
     s.add_argument("--timeout", type=float, default=300)
     s.add_argument("--skip-intro", action="store_true", help="press Esc while the campaign intro shows")
     s.add_argument("--no-steam-check", action="store_true")
+    s.add_argument("--keep-display", action="store_true",
+                   help="launch with your own display settings (default: windowed 1920x1080, yours back on quit)")
     w = sub.add_parser("wait", help="wait until the bridge ticks"); w.add_argument("--timeout", type=float, default=300)
-    sub.add_parser("quit", help="kill the game and remove any startup line from user.script.txt")
+    sub.add_parser("quit", help="kill the game, remove any startup line from user.script.txt, put back the display settings start changed")
     l = sub.add_parser("lua", help="run Lua in the game; 'return x' prints x")
     l.add_argument("code", nargs="?", help="Lua code (or use -f)"); l.add_argument("-f", "--file")
     l.add_argument("--timeout", type=float, default=30)
@@ -97,8 +99,9 @@ def main(argv=None):
     if cmd == "status":
         return out(b.status())
     if cmd == "start":
-        line = b.start(campaign=args.campaign, save=args.save, check_steam=not args.no_steam_check, menu=args.menu)
-        r = {"launched": line}
+        line = b.start(campaign=args.campaign, save=args.save, check_steam=not args.no_steam_check, menu=args.menu,
+                       windowed=not args.keep_display)
+        r = {"launched": line, "display": b.display}
         if not args.no_wait and not args.menu:
             r.update(b.wait_bridge(args.timeout, min_ticks=1))
             if args.skip_intro and r.get("alive"):

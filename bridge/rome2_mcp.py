@@ -37,8 +37,8 @@ def t_status(a):
 def t_start(a):
     b = B()
     line = b.start(campaign=a.get("campaign") or (None if a.get("save") else "main_rome"), save=a.get("save") or None)
-    return ("launched with %s; user.script.txt goes back to normal in %d s. A new campaign plays its first faction. "
-            "Loading takes ~1-3 min: then call wait_bridge." % (line, b.cfg.startup_restore_s))
+    return ("launched with %s (%s); user.script.txt goes back to normal in %d s. A new campaign plays its first "
+            "faction. Loading takes ~1-3 min: then call wait_bridge." % (line, b.display, b.cfg.startup_restore_s))
 
 
 def t_wait_bridge(a):

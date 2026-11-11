@@ -10,6 +10,7 @@ Windows only for now (process checks, posted keys/clicks and screenshots).
 """
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -255,19 +256,20 @@ class Bridge:
             raise BridgeError("registry last_game_version did not stick")
         return "registry set"
 
-    def start(self, campaign=None, save=None, check_steam=True, menu=False):
+    def start(self, campaign=None, save=None, check_steam=True, menu=False, windowed=True):
         """Kill the game and start it straight into a new campaign (the campaign's first faction) or a save, or
         (menu=True) into the main menu.
 
         Writes `game_startup_mode ...;` into user.script.txt, launches Rome2.exe, and removes the line again after
         cfg.startup_restore_s seconds (the game reads the file at startup only). Does not touch the mod list.
+        windowed: launch windowed 1920x1080 (preferences.script.txt backed up first; quit() puts it back).
         """
         if not campaign and not save and not menu:
             raise BridgeError("give a campaign key or a save name (or menu=True)")
         if check_steam and not self.steam_running():
             raise BridgeError("Steam is not running: start Steam first (the game crashes while loading without it)")
         self.kill()
-        for p in (self.CMD, self.OUT, self.ALIVE):
+        for p in (self.CMD, self.OUT, self.ALIVE, self.cfg.game("rome2_bridge_running.txt")):
             if os.path.exists(p):
                 os.remove(p)
         self.strip_startup_lines()
@@ -278,6 +280,7 @@ class Bridge:
             line = ('game_startup_mode campaign_load "%s";' % save) if save else ("game_startup_mode campaign %s;" % campaign)
             self._write_us(text.rstrip() + "\r\n" + line + "\r\n", enc)
         self.ensure_mod_version()
+        self.display = self.windowed_for_start() if windowed else "display settings as they are"
         self.launched = time.time(); self.launch_line = line
         subprocess.Popen([self.cfg.game("Rome2.exe")], cwd=self.cfg.game_dir)
 
@@ -288,13 +291,67 @@ class Bridge:
         self._restore_thread.start()
         return line
 
+    # ---- windowed 1920x1080 for start, the player's own display settings back on quit -------------------------------
+    @property
+    def prefs(self):
+        return self.cfg.app("scripts", "preferences.script.txt")
+
+    @property
+    def prefs_backup(self):
+        return self.prefs + ".rome2bridge_backup"
+
+    def set_windowed(self):
+        """Write windowed 1920x1080 into preferences.script.txt (fullscreen ignores posted clicks and can minimize).
+        Returns True if the file changed. Every other line stays as it was."""
+        if not os.path.exists(self.prefs):
+            return False
+        t0 = open(self.prefs, encoding="utf-8", errors="replace").read()
+        t = t0
+        for k, v in (("gfx_fullscreen", "false"), ("x_res", "1920"), ("y_res", "1080")):
+            t, n = re.subn(r"(?m)^%s [^;\r\n]*;" % k, "%s %s;" % (k, v), t)
+            if n == 0:
+                t = t.rstrip("\r\n") + "\n%s %s;\n" % (k, v)
+        if t == t0:
+            return False
+        open(self.prefs, "w", encoding="utf-8", newline="").write(t)
+        return True
+
+    def windowed_for_start(self):
+        # back up the player's file once: a backup left by a start without quit is still the player's own file
+        if not os.path.exists(self.prefs):
+            return "no preferences.script.txt"
+        if self.is_windowed():
+            return "already windowed 1920x1080"
+        if not os.path.exists(self.prefs_backup):
+            shutil.copy2(self.prefs, self.prefs_backup)
+        self.set_windowed()
+        return "windowed 1920x1080 (your settings back on quit)"
+
+    def restore_prefs(self):
+        """Put the player's preferences.script.txt back (from start's backup), after the game has exited: the game
+        rewrites the file when it closes."""
+        if not os.path.exists(self.prefs_backup):
+            return "preferences not changed"
+        if os.path.exists(self.prefs) and not self.is_windowed():
+            # not what start wrote: the player changed the display settings since, keep theirs
+            os.remove(self.prefs_backup)
+            return "preferences changed by the player since start: kept"
+        os.replace(self.prefs_backup, self.prefs)
+        return "preferences put back"
+
+    def is_windowed(self):
+        t = open(self.prefs, encoding="utf-8", errors="replace").read()
+        return all(re.search(r"(?m)^%s;" % kv, t) for kv in ("gfx_fullscreen false", "x_res 1920", "y_res 1080"))
+
     def wait_restore(self):
         if self._restore_thread:
             self._restore_thread.join()
 
     def quit(self):
         self.kill()
-        return self.strip_startup_lines()
+        if self.running():
+            return self.strip_startup_lines() + "; game still running, preferences not put back"
+        return self.strip_startup_lines() + "; " + self.restore_prefs()
 
     def wait_bridge(self, timeout=300, min_ticks=1, screen=None, since=None):
         """Wait until the bridge ticks (heartbeat fresh and tick >= min_ticks) after the last start (or `since`), on
@@ -311,6 +368,25 @@ class Bridge:
                 return {"alive": False, "running": False, "crashes": c}
             time.sleep(1)
         return {"alive": False, "running": self.running(), "waited_s": timeout, "heartbeat": self.heartbeat()}
+
+    def _exit_cause(self, cid, since):
+        """After the game exited during lua(cid): was the command running (rome2_bridge_running.txt names it while it
+        runs), never read, or done? Plus any new crash dump."""
+        running = self.cfg.game("rome2_bridge_running.txt")
+        try:
+            in_cmd = open(running, encoding="utf-8").read().strip() == cid
+        except OSError:
+            in_cmd = False
+        if in_cmd:
+            what = "it closed WHILE this command ran (the command may have crashed it, or the game was closed then)"
+        elif os.path.exists(self.CMD):
+            what = "the command was never read"
+        else:
+            what = "the command was read, but not running when the game closed"
+        d = self.cfg.crash_dir
+        dumps = sorted(os.path.join(d, n) for n in (os.listdir(d) if os.path.isdir(d) else [])
+                       if n.lower().endswith(".mdmp") and os.path.getmtime(os.path.join(d, n)) > since - 5)
+        return what + ("; crash dump: %s" % dumps[-1] if dumps else "; no crash dump")
 
     # ---- commands ---------------------------------------------------------------------------------------------------
     def lua(self, code, timeout=30):
@@ -343,7 +419,7 @@ class Bridge:
                         raise BridgeError("Lua error: %s" % res.get("error"))
                     return res.get("result")
                 if not self.running():
-                    raise BridgeError("game exited while waiting")
+                    raise BridgeError("game exited while waiting: %s" % self._exit_cause(cid, t0))
             # say what the bridge was doing, so a bug report shows whether the game's timer stopped or the command hung
             hb = self.heartbeat() or {}
             raise BridgeError("no answer in %ss (loading or AI turn? the command stays queued; heartbeat %ss old, "
