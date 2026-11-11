@@ -11,7 +11,27 @@ import os
 import re
 import sys
 
-APP_ID = "214950"
+# The games the bridge knows. All three load lua_scripts/all_scripted.lua (the bridge pack's entry), as Consul's own
+# packs do. Rome II is the tested one; Attila and Thrones of Britannia added 2026-11-12 for consul-work.
+GAMES = {
+    "rome2": {"app_id": "214950", "dir": "Total War Rome II", "exe": "Rome2.exe", "app": "Rome2",
+              "title": "Total War: ROME 2", "rpfm": "rome_2", "reg": "Rome2", "campaign": "main_rome"},
+    "attila": {"app_id": "325610", "dir": "Total War Attila", "exe": "Attila.exe", "app": "Attila",
+               "title": "Total War: ATTILA", "rpfm": "attila", "reg": None, "campaign": "main_attila"},
+    "tob": {"app_id": "712100", "dir": "Total War Saga Thrones of Britannia", "exe": "thrones.exe",
+            "app": "ThronesofBritannia", "title": "A Total War Saga: Thrones of Britannia", "rpfm": "thrones_of_britannia",
+            "reg": None, "campaign": "vik_attila"},
+}
+ALIASES = {"rome2": "rome2", "rome": "rome2", "rome_2": "rome2", "attila": "attila", "att": "attila",
+           "tob": "tob", "thrones": "tob", "thrones_of_britannia": "tob"}
+APP_ID = GAMES["rome2"]["app_id"]
+
+
+def game_key(name):
+    k = ALIASES.get(str(name or "rome2").lower())
+    if not k:
+        raise ValueError("unknown game %r (rome2, attila, tob)" % name)
+    return k
 HERE = os.path.dirname(os.path.abspath(__file__))
 # inside rome2bridge.exe (PyInstaller) the bundled files (tools, scripts, pack, factions) are unpacked to sys._MEIPASS
 FROZEN = bool(getattr(sys, "frozen", False))
@@ -33,8 +53,10 @@ def _steam_path():
         return None
 
 
-def find_game_dir():
-    """Rome II install folder from Steam's libraryfolders.vdf (the library that lists app 214950)."""
+def find_game_dir(game="rome2"):
+    """The game's install folder from Steam's libraryfolders.vdf (the library that lists its app id)."""
+    prof = GAMES[game]
+    app_id = prof["app_id"]
     steam = _steam_path()
     if not steam:
         return None
@@ -45,15 +67,15 @@ def find_game_dir():
         # each library block: "path" "<dir>" ... "apps" { "<appid>" "<size>" ... }
         for m in re.finditer(r'"path"\s+"([^"]+)"(.*?)"apps"\s*\{([^}]*)\}', text, re.S):
             path = m.group(1).replace("\\\\", "\\")
-            if re.search(r'"%s"' % APP_ID, m.group(3)):
+            if re.search(r'"%s"' % app_id, m.group(3)):
                 libs.insert(0, path)
             else:
                 libs.append(path)
     except OSError:
         pass
     for lib in libs:
-        acf = os.path.join(lib, "steamapps", "appmanifest_%s.acf" % APP_ID)
-        name = "Total War Rome II"
+        acf = os.path.join(lib, "steamapps", "appmanifest_%s.acf" % app_id)
+        name = prof["dir"]
         try:
             m = re.search(r'"installdir"\s+"([^"]+)"', open(acf, encoding="utf-8", errors="replace").read())
             if m:
@@ -61,7 +83,7 @@ def find_game_dir():
         except OSError:
             pass
         d = os.path.join(lib, "steamapps", "common", name)
-        if os.path.exists(os.path.join(d, "Rome2.exe")):
+        if os.path.exists(os.path.join(d, prof["exe"])):
             return d
     return None
 
@@ -77,12 +99,15 @@ def config_file():
 
 
 class Config:
-    def __init__(self, game_dir=None, app_dir=None, tools_dir=None, window_title="Total War: ROME 2",
-                 startup_restore_s=30, source=None):
+    def __init__(self, game_dir=None, app_dir=None, tools_dir=None, window_title=None,
+                 startup_restore_s=30, source=None, game="rome2"):
+        self.game_key = game_key(game)
+        self.profile = GAMES[self.game_key]
         self.game_dir = game_dir
         self.app_dir = app_dir
         self.tools_dir = tools_dir or os.path.join(ROOT, "tools")
-        self.window_title = window_title
+        # "" = any visible main window of the game's process (Attila's and ToB's titles not checked yet)
+        self.window_title = self.profile["title"] if window_title is None else window_title
         self.startup_restore_s = startup_restore_s
         self.source = source or {}
 
@@ -96,8 +121,13 @@ class Config:
     @property
     def save_dir(self): return self.app("save_games")
 
+    @property
+    def exe(self): return self.profile["exe"]
+    @property
+    def process(self): return os.path.splitext(self.profile["exe"])[0]
+
     def as_dict(self):
-        return {"game_dir": self.game_dir, "app_dir": self.app_dir, "tools_dir": self.tools_dir,
+        return {"game": self.game_key, "game_dir": self.game_dir, "app_dir": self.app_dir, "tools_dir": self.tools_dir,
                 "window_title": self.window_title, "startup_restore_s": self.startup_restore_s, "source": self.source}
 
 
@@ -107,14 +137,22 @@ def load_config(path=None):
     if path:
         with open(path, encoding="utf-8") as f:
             data = json.load(f)
-    cfg = Config(window_title=data.get("window_title", "Total War: ROME 2"),
+    # which game: $ROME2BRIDGE_GAME (the CLI's --game sets it), else the config file's "game", else Rome II. The
+    # folder settings (config file, ROME2_GAME_DIR / ROME2_APP_DIR) are Rome II's: for another game they are only
+    # used when the config file names that game.
+    game = game_key(os.environ.get("ROME2BRIDGE_GAME") or data.get("game") or "rome2")
+    if game != game_key(data.get("game") or "rome2"):
+        data = {k: v for k, v in data.items() if k not in ("game_dir", "app_dir", "window_title")}
+    cfg = Config(window_title=data.get("window_title"), game=game,
                  startup_restore_s=int(data.get("startup_restore_s", 30)), tools_dir=data.get("tools_dir"))
-    for key, env, auto in (("game_dir", "ROME2_GAME_DIR", find_game_dir),
-                           ("app_dir", "ROME2_APP_DIR",
-                            lambda: os.path.join(os.environ.get("APPDATA", ""), "The Creative Assembly", "Rome2"))):
+    envs = ("ROME2_GAME_DIR", "ROME2_APP_DIR") if game == "rome2" else ("", "")
+    for key, env, auto in (("game_dir", envs[0], lambda: find_game_dir(game)),
+                           ("app_dir", envs[1],
+                            lambda: os.path.join(os.environ.get("APPDATA", ""), "The Creative Assembly",
+                                                 GAMES[game]["app"]))):
         if data.get(key):
             setattr(cfg, key, data[key]); src[key] = "config " + path
-        elif os.environ.get(env):
+        elif env and os.environ.get(env):
             setattr(cfg, key, os.environ[env]); src[key] = "env " + env
         else:
             setattr(cfg, key, auto()); src[key] = "autodetect"

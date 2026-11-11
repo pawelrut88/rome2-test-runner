@@ -318,6 +318,8 @@ class Runner:
         into the data folder for the run, like our pack) above the added mods. Returns the results list (also in result.json)."""
         b = self.b
         added = added or []
+        if b.cfg.game_key != "rome2":
+            raise BridgeError("test runs are Rome II only (game here: %s)" % b.cfg.game_key)
         if not b.steam_running():
             raise BridgeError("Steam is not running: start Steam first")
         mod_set = self.resolve(mod_set)

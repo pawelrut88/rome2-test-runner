@@ -108,6 +108,14 @@ python -m rome2bridge screenshot shot.png --full
   part of it at full size, in window pixels (the window's top-left corner, title bar included, is 0 0: the same
   pixels as a `--full` picture).
 
+**Attila and Thrones of Britannia** (2026-11-12, for Consul testing): `--game attila` / `--game tob` (or
+`ROME2BRIDGE_GAME`; MCP server: set it in the server's environment). Build their pack with
+`tools\build_pack.ps1 -Game attila` / `-Game thrones_of_britannia` (into `pack\build\<game>\`), copy it into that
+game's `data` folder and put `mod "@rome2_bridge.pack";` in its `user.script.txt`. Tested in both: start
+(`--campaign main_attila` / `vik_attila`), lua, click, panels, end-turn, screenshot, hover, quit, windowed start. ToB
+plays a movie after its New Campaign screen (`click button_continue`): the bridge doesn't tick during it, `key` (Esc)
+skips it. The test runner (`testrun`, the window) is Rome II only.
+
 The game and settings folders are found by themselves (Steam's library list). If not, set `ROME2_GAME_DIR` /
 `ROME2_APP_DIR`, or copy `rome2bridge.example.json` to `rome2bridge.json`.
 

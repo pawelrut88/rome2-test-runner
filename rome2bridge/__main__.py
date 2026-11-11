@@ -4,6 +4,7 @@ Prints JSON (or plain text for text results). Exit code 1 on an error.
 """
 import argparse
 import json
+import os
 import sys
 
 from . import Bridge, BridgeError, PRESETS, load_config
@@ -26,6 +27,8 @@ def main(argv=None):
             pass
     p = argparse.ArgumentParser(prog="python -m rome2bridge", description="Control and read a running Total War: Rome II.")
     p.add_argument("--config", help="config file (default: $ROME2BRIDGE_CONFIG, rome2bridge.json, %%APPDATA%%\\rome2bridge)")
+    p.add_argument("--game", help="rome2 (default), attila or tob (Thrones of Britannia); also $ROME2BRIDGE_GAME. "
+                   "Attila and ToB: start, quit, lua, click, hover, end-turn, screenshot (testrun is Rome II only)")
     sub = p.add_subparsers(dest="cmd", required=True)
 
     sub.add_parser("config", help="show the paths in use and where they came from")
@@ -91,6 +94,9 @@ def main(argv=None):
     un = sub.add_parser("uninstall", help="delete a pack from the data folder"); un.add_argument("name", nargs="?", default="@rome2_bridge.pack")
 
     args = p.parse_args(argv)
+    if args.game:
+        from .config import game_key
+        os.environ["ROME2BRIDGE_GAME"] = game_key(args.game)
     cfg = load_config(args.config)
     if args.cmd == "config":
         return out(cfg.as_dict())

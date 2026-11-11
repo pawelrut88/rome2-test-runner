@@ -84,14 +84,14 @@ class Bridge:
         return image.lower() in r.stdout.lower()
 
     def running(self):
-        return self._tasklist("Rome2.exe")
+        return self._tasklist(self.cfg.exe)
 
     def game_start_time(self):
-        """Start time (epoch s) of the running Rome2.exe, or None (a new process, e.g. the CLI, didn't launch it)."""
+        """Start time (epoch s) of the running game process, or None (a new process, e.g. the CLI, didn't launch it)."""
         try:
             r = subprocess.run(["powershell", "-NoProfile", "-Command",
-                                "(Get-Process Rome2 -ErrorAction Stop | Select-Object -First 1).StartTime.ToUniversalTime()"
-                                ".Subtract([datetime]'1970-01-01').TotalSeconds"], capture_output=True, text=True, timeout=30,
+                                "(Get-Process %s -ErrorAction Stop | Select-Object -First 1).StartTime.ToUniversalTime()"
+                                ".Subtract([datetime]'1970-01-01').TotalSeconds" % self.cfg.process], capture_output=True, text=True, timeout=30,
                                creationflags=NO_WINDOW)
             return float(r.stdout.strip().replace(",", "."))
         except (ValueError, subprocess.SubprocessError):
@@ -101,7 +101,7 @@ class Bridge:
         return self._tasklist("steam.exe")
 
     def kill(self):
-        subprocess.run(["taskkill", "/F", "/IM", "Rome2.exe"], capture_output=True, creationflags=NO_WINDOW)
+        subprocess.run(["taskkill", "/F", "/IM", self.cfg.exe], capture_output=True, creationflags=NO_WINDOW)
         for _ in range(20):
             if not self.running():
                 return
@@ -176,12 +176,15 @@ class Bridge:
 
     # ---- user.script.txt (UTF-16 LE as the game/launcher writes it) ---------------------------------------------------
     def _read_us(self):
+        if not os.path.exists(self.cfg.user_script):
+            return "", "utf-16"  # a game never started on this PC has none yet (Attila, ToB: 2026-11-12)
         b = open(self.cfg.user_script, "rb").read()
         if b[:2] == b"\xff\xfe":
             return b.decode("utf-16"), "utf-16"
         return b.decode("utf-8-sig", errors="replace"), "utf-8"
 
     def _write_us(self, text, enc):
+        os.makedirs(os.path.dirname(self.cfg.user_script), exist_ok=True)
         with open(self.cfg.user_script, "wb") as f:
             f.write(text.encode("utf-16") if enc == "utf-16" else text.encode("utf-8"))
 
@@ -231,9 +234,11 @@ class Bridge:
     MOD_VERSION = 0x00020004  # registry last_game_version; without it the "out-of-date mods" dialog stops the launch
 
     def mod_version_ok(self):
+        if not self.cfg.profile.get("reg"):
+            return True  # Rome II only (Attila's / ToB's out-of-date mods dialog not seen yet)
         try:
             import winreg
-            k = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"SOFTWARE\The Creative Assembly\Rome2")
+            k = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"SOFTWARE\The Creative Assembly" + "\\" + self.cfg.profile["reg"])
             v, _ = winreg.QueryValueEx(k, "last_game_version")
             winreg.CloseKey(k)
             return v == self.MOD_VERSION
@@ -243,11 +248,13 @@ class Bridge:
     def ensure_mod_version(self):
         """Set HKCU\\SOFTWARE\\The Creative Assembly\\Rome2 last_game_version before every launch (the game removes it
         again, and without it the out-of-date mods dialog stops the start). Checked by reading it back."""
+        if not self.cfg.profile.get("reg"):
+            return "no registry step for this game"
         if self.mod_version_ok():
             return "registry ok"
         try:
             import winreg
-            k = winreg.CreateKey(winreg.HKEY_CURRENT_USER, r"SOFTWARE\The Creative Assembly\Rome2")
+            k = winreg.CreateKey(winreg.HKEY_CURRENT_USER, r"SOFTWARE\The Creative Assembly" + "\\" + self.cfg.profile["reg"])
             winreg.SetValueEx(k, "last_game_version", 0, winreg.REG_DWORD, self.MOD_VERSION)
             winreg.CloseKey(k)
         except OSError as e:
@@ -260,7 +267,7 @@ class Bridge:
         """Kill the game and start it straight into a new campaign (the campaign's first faction) or a save, or
         (menu=True) into the main menu.
 
-        Writes `game_startup_mode ...;` into user.script.txt, launches Rome2.exe, and removes the line again after
+        Writes `game_startup_mode ...;` into user.script.txt, launches the game's exe, and removes the line again after
         cfg.startup_restore_s seconds (the game reads the file at startup only). Does not touch the mod list.
         windowed: launch windowed 1920x1080 (preferences.script.txt backed up first; quit() puts it back).
         """
@@ -282,7 +289,7 @@ class Bridge:
         self.ensure_mod_version()
         self.display = self.windowed_for_start() if windowed else "display settings as they are"
         self.launched = time.time(); self.launch_line = line
-        subprocess.Popen([self.cfg.game("Rome2.exe")], cwd=self.cfg.game_dir)
+        subprocess.Popen([self.cfg.game(self.cfg.exe)], cwd=self.cfg.game_dir)
 
         def restore():
             time.sleep(self.cfg.startup_restore_s)
@@ -319,7 +326,15 @@ class Bridge:
     def windowed_for_start(self):
         # back up the player's file once: a backup left by a start without quit is still the player's own file
         if not os.path.exists(self.prefs):
-            return "no preferences.script.txt"
+            # a game never closed normally on this PC has none (Attila 2026-11-12: the first launch was fullscreen):
+            # write just these three lines; an EMPTY backup means "there was no file", so quit deletes it again
+            if not os.path.isdir(os.path.dirname(self.prefs)):
+                return "no scripts folder"
+            if not os.path.exists(self.prefs_backup):
+                open(self.prefs_backup, "wb").close()
+            open(self.prefs, "w", encoding="utf-8", newline="").write(
+                "gfx_fullscreen false;\nx_res 1920;\ny_res 1080;\n")
+            return "windowed 1920x1080 (new preferences.script.txt, removed on quit)"
         if self.is_windowed():
             return "already windowed 1920x1080"
         if not os.path.exists(self.prefs_backup):
@@ -336,6 +351,12 @@ class Bridge:
             # not what start wrote: the player changed the display settings since, keep theirs
             os.remove(self.prefs_backup)
             return "preferences changed by the player since start: kept"
+        if os.path.getsize(self.prefs_backup) == 0:
+            # there was no file before start
+            if os.path.exists(self.prefs):
+                os.remove(self.prefs)
+            os.remove(self.prefs_backup)
+            return "preferences removed again (there was none before start)"
         os.replace(self.prefs_backup, self.prefs)
         return "preferences put back"
 
@@ -614,7 +635,8 @@ class Bridge:
 
     # ---- window: keys, clicks, screenshots (PowerShell helpers in tools\) -----------------------------------------
     def post_key(self, vk=0x1B, wait=1):
-        return self._ps("post_key.ps1", "-Vk", vk, "-Wait", wait)
+        return self._ps("post_key.ps1", "-Vk", vk, "-Wait", wait, "-Process", self.cfg.process,
+                        "-Title", self.cfg.window_title or "*")
 
     def hover(self, id, ctx=None, wait=2.5):
         """Move the REAL mouse cursor over a UI component (its centre) and wait, so its tooltip shows for a screenshot.
@@ -629,7 +651,7 @@ class Bridge:
             raise BridgeError("component not found: %s" % id)
         x, y, w, h, rw, rh = r
         u32 = ctypes.windll.user32
-        hwnd = u32.FindWindowW(None, "Total War: ROME 2")
+        hwnd = self.game_hwnd()
         if not hwnd:
             raise BridgeError("game window not found")
         rc = wt.RECT()
@@ -653,7 +675,34 @@ class Bridge:
             id, x, y, w, h, rw, rh, rc.right, rc.bottom, cx, cy, pt.x, pt.y)
 
     def post_click(self, x, y, wait=1):
-        return self._ps("post_click.ps1", "-X", int(x), "-Y", int(y), "-Wait", wait)
+        return self._ps("post_click.ps1", "-X", int(x), "-Y", int(y), "-Wait", wait, "-Process", self.cfg.process,
+                        "-Title", self.cfg.window_title or "*")
+
+    def game_hwnd(self):
+        """The game's main window: by title if the profile has one, else the largest visible top-level window of the
+        game's process (Attila's and ToB's titles not checked yet). 0 if none."""
+        import ctypes
+        from ctypes import wintypes as wt
+        u32 = ctypes.windll.user32
+        if self.cfg.window_title:
+            return u32.FindWindowW(None, self.cfg.window_title) or 0
+        r = subprocess.run(["tasklist", "/FI", "IMAGENAME eq %s" % self.cfg.exe, "/FO", "CSV", "/NH"],
+                           capture_output=True, text=True, creationflags=NO_WINDOW)
+        pids = {int(l.split('","')[1]) for l in r.stdout.splitlines() if l.lower().startswith('"%s"' % self.cfg.exe.lower())}
+        best = [0, 0]
+
+        @ctypes.WINFUNCTYPE(ctypes.c_bool, wt.HWND, wt.LPARAM)
+        def cb(h, _):
+            pid = wt.DWORD(); u32.GetWindowThreadProcessId(h, ctypes.byref(pid))
+            if pid.value in pids and u32.IsWindowVisible(h) and not u32.GetWindow(h, 4):  # GW_OWNER: top level only
+                rc = wt.RECT(); u32.GetWindowRect(h, ctypes.byref(rc))
+                area = max(1, (rc.right - rc.left) * (rc.bottom - rc.top))
+                if area > best[1]:
+                    best[0], best[1] = h, area
+            return True
+        if pids:
+            u32.EnumWindows(cb, 0)
+        return best[0] or 0
 
     def restore_window(self, wait=1.5):
         """If the game window is minimized, show it again at its last size WITHOUT activating it (no focus taken from
@@ -661,7 +710,7 @@ class Bridge:
         minimized after start). Returns "restored", "not minimized" or "no window"."""
         import ctypes
         u32 = ctypes.windll.user32
-        hwnd = u32.FindWindowW(None, "Total War: ROME 2")
+        hwnd = self.game_hwnd()
         if not hwnd:
             return "no window"
         if not u32.IsIconic(hwnd):
@@ -681,7 +730,7 @@ class Bridge:
             args += ["-Left", left, "-Top", top, "-Width", width, "-Height", height]
         elif full:
             args.append("-Full")
-        return self._ps("game_shot.ps1", *args)
+        return self._ps("game_shot.ps1", *args, "-Process", self.cfg.process)
 
     def intro_shown(self):
         return bool(self.lua('return ROME2_BRIDGE.find_shown("cinematic_bars") ~= nil'))
