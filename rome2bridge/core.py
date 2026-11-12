@@ -101,6 +101,26 @@ class Bridge:
         except (ValueError, subprocess.SubprocessError):
             return None
 
+    def run_start(self):
+        """Start time of the current (or last) game run: our own launch, else the running game's process start, else
+        the one remembered in rome2_bridge_game_start.txt. Every start time seen is written there, so a later process
+        still knows it after the game has crashed (IA 2026-11-12: game started by a script, crashed in end-turn;
+        end-turn and status listed no dump, since the process was gone and nothing else knew the start)."""
+        t = self.launched or self.game_start_time()
+        f = self.cfg.game("rome2_bridge_game_start.txt")
+        if t:
+            try:
+                if not os.path.exists(f) or abs(float(open(f).read().strip() or 0) - t) > 1:
+                    with open(f, "w") as g:
+                        g.write("%.3f" % t)
+            except (OSError, ValueError):
+                pass
+            return t
+        try:
+            return float(open(f).read().strip())
+        except (OSError, ValueError):
+            return None
+
     def steam_running(self):
         return self._tasklist("steam.exe")
 
@@ -146,7 +166,7 @@ class Bridge:
             return []
         # only dumps since this game run: our launch, else the running game's start; unknown -> none (a "last hour"
         # guess listed old dumps and made game_status run the slow crash analysis, seen 2026-11-08)
-        since = self.launched or self.game_start_time()
+        since = self.run_start()
         if not since:
             return []
         return sorted(os.path.join(d, n) for n in os.listdir(d)
@@ -337,6 +357,7 @@ class Bridge:
         self.display =self.windowed_for_start() if windowed else "display settings as they are"
         self.save_note = self.backup_autosave() if backup_save else "autosave not backed up (caller does it)"
         self.launched = time.time(); self.launch_line = line
+        self.run_start()  # remembered for later processes (status/end-turn after a crash)
         subprocess.Popen([self.cfg.game(self.cfg.exe)], cwd=self.cfg.game_dir)
 
         def restore():
@@ -565,6 +586,7 @@ class Bridge:
         Returns {"ended": True, ...}, or {"stalled": True, "panels": [...]} when one faction's turn (or our pending
         end turn) takes longer than `stall` seconds (usually a dialog waiting for the player), or {"game_exited": True}.
         """
+        self.run_start()  # note the game's start now, while it runs: needed to find a crash dump afterwards
         hb0 = self.heartbeat()
         start_n = hb0["turn_starts"] if hb0 else 0
         if send:
