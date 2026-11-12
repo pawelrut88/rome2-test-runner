@@ -209,11 +209,12 @@ class Bridge:
 
     def set_pack_enabled(self, pack, enabled=True):
         """Add (as the first mod line) or remove `mod "<pack>";` in user.script.txt. Backs the file up first.
-        A pack already in the list keeps its place (load order)."""
+        A pack already in the list keeps its place (load order), except the bridge pack: it always goes first, since its
+        lua_scripts/all_scripted.lua must win over Consul's (the earlier mod line wins, NOTES 2026-11-08)."""
         text, enc = self._read_us()
         lines = text.splitlines()
         line = 'mod "%s";' % pack
-        if enabled and any(l.strip() == line for l in lines):
+        if enabled and pack != BRIDGE_PACK and any(l.strip() == line for l in lines):
             return self.mods()  # already there: leave the file alone (IA 2026-11-12: it was moved to the top)
         if os.path.exists(self.cfg.user_script):  # a game never started has none: _write_us creates it (UTF-16)
             shutil.copyfile(self.cfg.user_script, self.cfg.user_script + ".bak_rome2bridge")
@@ -244,8 +245,14 @@ class Bridge:
         """Why the bridge would not run in the next start, or [] : the pack is not in the mod list, not in data, or
         not the current build in pack\\build (IA 2026-11-12: start waited 400 s with no word why)."""
         out = []
-        if BRIDGE_PACK not in self.mods():
+        mods = self.mods()
+        if BRIDGE_PACK not in mods:
             out.append('%s is not in the mod list (user.script.txt): add it with `enable`' % BRIDGE_PACK)
+        else:
+            before = [m for m in mods[:mods.index(BRIDGE_PACK)] if "consul" in m.lower()]
+            if before:
+                out.append("%s comes after %s in the mod list, so Consul's all_scripted.lua wins: `enable` puts "
+                           "it first" % (BRIDGE_PACK, before[0]))
         dst = self.cfg.game("data", BRIDGE_PACK)
         rp = self.cfg.profile.get("rpfm", "rome_2")
         src = os.path.join(ROOT, "pack", "build", *(() if rp == "rome_2" else (rp,)), BRIDGE_PACK)

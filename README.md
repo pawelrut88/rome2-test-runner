@@ -105,7 +105,8 @@ python -m rome2bridge screenshot shot.png --full
 - `start` does not change the mod list or copy the pack. If `@rome2_bridge.pack` is missing from the mod list or
   from `data`, or the one in `data` is not the current build in `pack\build`, it says so at once (`warning`, and
   `why` when the wait runs out). `install` / `enable` fix it.
-- `enable <pack>` adds a pack as the first mod line; one already in the list keeps its place.
+- `enable <pack>` adds a pack as the first mod line; one already in the list keeps its place, except
+  `@rome2_bridge.pack`, which always goes first (its `all_scripted.lua` must come before Consul's).
   `replace <old> <new>` puts `new` in `old`'s place (same load order).
 - `click`, `info` and `tree` take the parent component only as `--ctx <id>`, not as a second word.
 - `screenshot` takes the file as `screenshot shot.png` or `screenshot -o shot.png`.
