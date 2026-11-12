@@ -750,20 +750,24 @@ class Bridge:
     def _tob_start_screen(self, timeout=120):
         """Thrones of Britannia (2026-11-12): a new campaign first shows a "New Campaign" screen (continue_campaign,
         button Start Campaign = button_continue), then a movie during which the game's Lua doesn't tick. Click the
-        button, then press Esc while the heartbeat is stopped (the movie). Returns the number of Esc presses."""
-        try:
-            shown = self.lua('return ROME2_BRIDGE.find_shown("button_continue", "continue_campaign") ~= nil')
-        except BridgeError:
-            shown = False
-        if not shown:
-            return 0
-        self.click("button_continue", "continue_campaign")
-        t0 = time.time()
-        while time.time() - t0 < 20:  # the movie starts a few seconds later: the heartbeat stops
-            time.sleep(1)
-            hb = self.heartbeat()
-            if not hb or hb["age_s"] > 2.5:
-                break
+        button, then press Esc while the heartbeat is stopped (the movie). Returns the number of Esc presses.
+        Also when the button was already clicked by hand and the movie plays (heartbeat stopped: consul-work
+        2026-11-12, skip-intro then said "bridge not alive")."""
+        hb = self.heartbeat()
+        if not (hb and hb["age_s"] > 2.5):
+            try:
+                shown = self.lua('return ROME2_BRIDGE.find_shown("button_continue", "continue_campaign") ~= nil')
+            except BridgeError:
+                shown = False
+            if not shown:
+                return 0
+            self.click("button_continue", "continue_campaign")
+            t0 = time.time()
+            while time.time() - t0 < 20:  # the movie starts a few seconds later: the heartbeat stops
+                time.sleep(1)
+                hb = self.heartbeat()
+                if not hb or hb["age_s"] > 2.5:
+                    break
         n, t0 = 0, time.time()
         while time.time() - t0 < timeout and self.running():
             hb = self.heartbeat()
@@ -779,6 +783,10 @@ class Bridge:
         """While the campaign intro shows (cinematic_bars), wait `delay` s and press Esc; never presses Esc on the map
         (that would open the game menu). Returns the number of presses."""
         movie = self._tob_start_screen() if self.cfg.game_key == "tob" else 0
+        # the bridge may not tick yet (loading after a movie): wait for it instead of failing
+        hb = self.heartbeat()
+        if self.running() and not (hb and hb["age_s"] < 5):
+            self.wait_bridge(120, since=0)
         n = 0
         while n < max_presses and self._intro_shown_retry():
             time.sleep(delay)
