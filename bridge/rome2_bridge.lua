@@ -41,7 +41,7 @@ function B.game()
 	end
 	local c = C()
 	if c and c._game then local ok, g = pcall(c._game); if ok and g then return g end end
-	return nil
+	return B._own_game  -- made at NewSession when the campaign has no script (see the events below)
 end
 
 function B.turn()
@@ -489,6 +489,25 @@ if not B.registered then
 	end)
 	if events.FirstTickAfterWorldCreated then
 		table.insert(events.FirstTickAfterWorldCreated, function() ROME2_BRIDGE.guess_human(); ROME2_BRIDGE.arm("first tick") end)
+	end
+	-- a campaign without campaigns/<key>/scripting.lua never loads EpisodicScripting, so nobody makes the game
+	-- interface and the bridge can't tick (IA 2026-11-12, key main_ia2). EpisodicScripting makes it at NewSession with
+	-- GAME(context); do the same, but only when no campaign script has loaded it.
+	if type(events.NewSession) == "table" then
+		if type(events.UIDestroyed) == "table" then
+			table.insert(events.UIDestroyed, function() ROME2_BRIDGE._own_game = nil end)  -- campaign left
+		end
+		table.insert(events.NewSession, function(ctx)
+			ROME2_BRIDGE._own_game = nil
+			local loaded = false
+			for _, k in ipairs({ "lua_scripts.EpisodicScripting", "lua_scripts.episodicscripting", "data.lua_scripts.episodicscripting" }) do
+				if package.loaded[k] then loaded = true end
+			end
+			if loaded or (scripting and scripting.game_interface) then return end
+			local ok, g = pcall(function() return GAME(ctx) end)
+			if ok and g then ROME2_BRIDGE._own_game = g end
+			pcall(ROME2_BRIDGE.log, "NewSession without campaign script: own game interface " .. (ok and g and "made" or ("failed: " .. tostring(g))))
+		end)
 	end
 	-- watchdog: should the timer ever stop, UI activity (the player's mouse, panels, messages) re-arms it; arm() does
 	-- nothing while the timer ticks. (Tested 2026-11-08 with the timer stopped on purpose: mouse moves and Esc posted
