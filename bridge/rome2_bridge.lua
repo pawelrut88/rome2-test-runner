@@ -504,16 +504,7 @@ if not B.registered then
 				if package.loaded[k] then loaded = true end
 			end
 			if loaded or (scripting and scripting.game_interface) then return end
-			-- GAME is no global here (IA 2026-11-12: "attempt to call global 'GAME'"); the engine keeps the class in the
-			-- Lua registry: debug.getregistry().GAME is the userdata's metatable; its __index / __metatable table holds
-			-- the methods, among them new (seen in a Rome II campaign 2026-11-12)
-			local ok, g = pcall(function()
-				local G = rawget(_G, "GAME")
-				if G then return G(ctx) end
-				local mt = debug.getregistry().GAME
-				local methods = (type(mt.__index) == "table" and mt.__index.new and mt.__index) or mt.__metatable
-				return methods.new(ctx)
-			end)
+			local ok, g = pcall(function() return GAME(ctx) end)
 			if ok and g then ROME2_BRIDGE._own_game = g end
 			pcall(ROME2_BRIDGE.log, "NewSession without campaign script: own game interface " .. (ok and g and "made" or ("failed: " .. tostring(g))))
 		end)
