@@ -87,7 +87,9 @@ def t_screenshot(a):
 def t_post_click(a): return B().post_click(a["x"], a["y"], a.get("wait", 1)) or "clicked"
 def t_hover(a): return B().hover(a["id"], a.get("ctx"), float(a.get("wait", 2.5)))
 def t_key(a): return B().post_key(int(str(a.get("vk", "0x1B")), 0), a.get("wait", 1)) or "key sent"
-def t_skip_intro(a): return as_text({"esc_presses": B().skip_intro(int(a.get("max", 10)), float(a.get("delay", 5)))})
+def t_skip_intro(a):
+    n = B().skip_intro(int(a.get("max", 10)), float(a.get("delay", 5)))
+    return as_text({"esc_presses": n, "story_screen": B().story})
 def t_quit(a): return "game stopped; " + B().quit()
 
 
@@ -114,7 +116,7 @@ TOOLS = [
     ("factions", "Factions with land (or one by name): human, treasury, regions, forces, units, food.", S(name=STR), t_factions),
     ("auto_click", "Set auto-click rules, one per line '<context id> <button id>' ('-' = anywhere), one click per second while shown; or a preset name (%s: autoresolve battles, decline diplomacy offers, accept war declarations, decline an ally's call to war, dilemma option 1, accept objectives). Empty clears." % ", ".join(PRESETS),
      S(rules=STR), t_auto_click),
-    ("skip_intro", "While the campaign intro shows, wait `delay` s and press Esc (never on the map).", S(max=NUM, delay=NUM), t_skip_intro),
+    ("skip_intro", "Close a 'Press any key to continue' story screen (DeI Alexander), then, while the campaign intro shows, wait `delay` s and press Esc (never on the map).", S(max=NUM, delay=NUM), t_skip_intro),
     ("screenshot", "Screenshot of the game window: 968 px wide by default (the reply gives the window size and the saved size); full=true for the window's own size; crop=[left, top, width, height] for a part at full size, in window pixels (title bar included, same pixels as a full picture).",
      S(full=BOOL, crop={"type": "array", "items": {"type": "integer"}, "minItems": 4, "maxItems": 4}), t_screenshot),
     ("post_click", "Fallback: posted mouse click at client pixel x,y (window 1920x1080).",

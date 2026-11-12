@@ -124,6 +124,10 @@ def main(argv=None):
                 r["window"] = b.restore_window()
             if args.skip_intro and r.get("alive"):
                 r["intro_esc"] = b.skip_intro()
+                if b.story:
+                    r["story_screen"] = "closed (%s)" % b.story
+            elif r.get("alive") and any(b.lua('return ROME2_BRIDGE.find_shown("%s") ~= nil' % p) for p in b.STORY_PANELS):
+                r["story_screen"] = "shown: the map waits for a click (skip-intro closes it)"
         b.wait_restore()  # take the startup line out of user.script.txt before this process ends
         return out(r)
     if cmd == "wait":

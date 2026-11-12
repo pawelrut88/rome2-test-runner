@@ -73,6 +73,7 @@ class Bridge:
         self.launched = 0.0
         self.launch_line = ""
         self.pack_problems = []  # bridge_pack_problems() at the last start
+        self.story = None  # story screen closed by the last skip_intro
         # command ids must differ across processes too (two CLI calls in the same second got the same id and the
         # second read the first one's answer, seen 2026-11-08): pid + counter
         self.seq = 0
@@ -860,14 +861,35 @@ class Bridge:
             time.sleep(3)
         return n
 
-    def skip_intro(self,max_presses=10, delay=5):
-        """While the campaign intro shows (cinematic_bars), wait `delay` s and press Esc; never presses Esc on the map
-        (that would open the game menu). Returns the number of presses."""
+    STORY_PANELS = ("prologue",)
+
+    def story_screen(self, timeout=20):
+        """Close a "Press any key to continue" story screen (DeI Alexander = prologue_01, 2026-11-12: top panel
+        `prologue`, interactive; keys and Esc do nothing there, a SimulateClick on the panel closes it). The bridge
+        already ticks and the heartbeat says "campaign" behind it. Returns the panel's id if one was closed, else None.
+        Raises if it is still shown after `timeout` s."""
+        for pid in self.STORY_PANELS:
+            if not self.lua('return ROME2_BRIDGE.find_shown("%s") ~= nil' % pid):
+                continue
+            self.click(pid)
+            t0 = time.time()
+            while time.time() - t0 < timeout:
+                time.sleep(1)
+                if not self.lua('return ROME2_BRIDGE.find_shown("%s") ~= nil' % pid):
+                    return pid
+            raise BridgeError("the story screen %s is still shown %d s after clicking it" % (pid, timeout))
+        return None
+
+    def skip_intro(self, max_presses=10, delay=5):
+        """Close a story screen ("Press any key to continue", see story_screen), then, while the campaign intro shows
+        (cinematic_bars), wait `delay` s and press Esc; never presses Esc on the map (that would open the game menu).
+        Returns the number of presses."""
         movie = self._tob_start_screen() if self.cfg.game_key == "tob" else 0
         # the bridge may not tick yet (loading after a movie): wait for it instead of failing
         hb = self.heartbeat()
         if self.running() and not (hb and hb["age_s"] < 5):
             self.wait_bridge(120, since=0)
+        self.story = self.story_screen()  # before the Esc loop: cinematic_bars is shown behind it too
         n = 0
         while n < max_presses and self._intro_shown_retry():
             time.sleep(delay)
