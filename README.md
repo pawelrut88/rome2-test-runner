@@ -102,7 +102,13 @@ python -m rome2bridge screenshot shot.png --full
   in between). `--keep-display` launches with your own settings. `start` also copies your `save_games\auto_save.save`
   aside (the game rewrites it at every end turn) and `quit` puts it back. Close the game with `quit`, not by hand, or
   the copy stays as `auto_save.save.rome2bridge_backup` (the next `start` keeps it under a dated name).
+- `start` does not change the mod list or copy the pack. If `@rome2_bridge.pack` is missing from the mod list or
+  from `data`, or the one in `data` is not the current build in `pack\build`, it says so at once (`warning`, and
+  `why` when the wait runs out). `install` / `enable` fix it.
+- `enable <pack>` adds a pack as the first mod line; one already in the list keeps its place.
+  `replace <old> <new>` puts `new` in `old`'s place (same load order).
 - `click`, `info` and `tree` take the parent component only as `--ctx <id>`, not as a second word.
+- `screenshot` takes the file as `screenshot shot.png` or `screenshot -o shot.png`.
 - `hover <id> [--ctx X] [--wait S]` moves the real mouse cursor over a UI component and waits, so its tooltip shows
   in the next `screenshot`. Unlike everything else it uses your mouse and brings the game window to the front.
 - `screenshot` saves the game window 968 px wide by default and prints both sizes

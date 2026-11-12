@@ -17,7 +17,9 @@ import sys
 import threading
 import time
 
-from .config import FROZEN, NO_WINDOW, load_config
+from .config import FROZEN, NO_WINDOW, ROOT, load_config
+
+BRIDGE_PACK = "@rome2_bridge.pack"
 
 # rules for unattended end-turn tests (rome2-bridge project, 2026-11-07): decline AI diplomacy offers and then press
 # the end-diplomacy button, accept war declarations (only an OK button), decline an ally's call to war, take the first
@@ -70,6 +72,7 @@ class Bridge:
         self.CLICK, self.LOG = g("rome2_bridge_click.txt"), g("rome2_bridge_log.txt")
         self.launched = 0.0
         self.launch_line = ""
+        self.pack_problems = []  # bridge_pack_problems() at the last start
         # command ids must differ across processes too (two CLI calls in the same second got the same id and the
         # second read the first one's answer, seen 2026-11-08): pid + counter
         self.seq = 0
@@ -205,18 +208,52 @@ class Bridge:
         return [l.strip()[5:].strip().rstrip(";").strip().strip('"') for l in text.splitlines() if l.strip().startswith("mod ")]
 
     def set_pack_enabled(self, pack, enabled=True):
-        """Add (as the first mod line) or remove `mod "<pack>";` in user.script.txt. Backs the file up first."""
+        """Add (as the first mod line) or remove `mod "<pack>";` in user.script.txt. Backs the file up first.
+        A pack already in the list keeps its place (load order)."""
         text, enc = self._read_us()
+        lines = text.splitlines()
+        line = 'mod "%s";' % pack
+        if enabled and any(l.strip() == line for l in lines):
+            return self.mods()  # already there: leave the file alone (IA 2026-11-12: it was moved to the top)
         if os.path.exists(self.cfg.user_script):  # a game never started has none: _write_us creates it (UTF-16)
             shutil.copyfile(self.cfg.user_script, self.cfg.user_script + ".bak_rome2bridge")
-        lines = [l for l in text.splitlines() if l.strip() != 'mod "%s";' % pack]
+        lines = [l for l in lines if l.strip() != line]
         if enabled:
             i = next((n for n, l in enumerate(lines) if l.strip().startswith("mod ")), None)
             if i is None:
                 i = next((n + 1 for n, l in enumerate(lines) if l.strip().startswith("add_working_directory")), 0)
-            lines.insert(i, 'mod "%s";' % pack)
+            lines.insert(i, line)
         self._write_us("\r\n".join(lines).rstrip() + "\r\n", enc)
         return self.mods()
+
+    def replace_pack(self, old, new):
+        """Put `mod "<new>";` where `mod "<old>";` is in user.script.txt (same load order), removing old. Backs the
+        file up first. Fails if old is not in the list."""
+        text, enc = self._read_us()
+        lines = text.splitlines()
+        i = next((n for n, l in enumerate(lines) if l.strip() == 'mod "%s";' % old), None)
+        if i is None:
+            raise BridgeError("%s is not in the mod list: %s" % (old, ", ".join(self.mods()) or "(empty)"))
+        shutil.copyfile(self.cfg.user_script, self.cfg.user_script + ".bak_rome2bridge")
+        lines[i] = 'mod "%s";' % new
+        lines = [l for n, l in enumerate(lines) if n == i or l.strip() != 'mod "%s";' % new]
+        self._write_us("\r\n".join(lines).rstrip() + "\r\n", enc)
+        return self.mods()
+
+    def bridge_pack_problems(self):
+        """Why the bridge would not run in the next start, or [] : the pack is not in the mod list, not in data, or
+        not the current build in pack\\build (IA 2026-11-12: start waited 400 s with no word why)."""
+        out = []
+        if BRIDGE_PACK not in self.mods():
+            out.append('%s is not in the mod list (user.script.txt): add it with `enable`' % BRIDGE_PACK)
+        dst = self.cfg.game("data", BRIDGE_PACK)
+        rp = self.cfg.profile.get("rpfm", "rome_2")
+        src = os.path.join(ROOT, "pack", "build", *(() if rp == "rome_2" else (rp,)), BRIDGE_PACK)
+        if not os.path.exists(dst):
+            out.append("%s is not in the game's data folder: copy it there with `install %s`" % (BRIDGE_PACK, src))
+        elif os.path.exists(src) and open(src, "rb").read() != open(dst, "rb").read():
+            out.append("the %s in data is not the current build (%s): `install` it again" % (BRIDGE_PACK, src))
+        return out
 
     # ---- pack ------------------------------------------------------------------------------------------------------
     def install_pack(self, src):
@@ -288,7 +325,8 @@ class Bridge:
             line = ('game_startup_mode campaign_load "%s";' % save) if save else ("game_startup_mode campaign %s;" % campaign)
             self._write_us(text.rstrip() + "\r\n" + line + "\r\n", enc)
         self.ensure_mod_version()
-        self.display = self.windowed_for_start() if windowed else "display settings as they are"
+        self.pack_problems = self.bridge_pack_problems()  # reported, not fixed: the mod list is the player's
+        self.display =self.windowed_for_start() if windowed else "display settings as they are"
         self.save_note = self.backup_autosave() if backup_save else "autosave not backed up (caller does it)"
         self.launched = time.time(); self.launch_line = line
         subprocess.Popen([self.cfg.game(self.cfg.exe)], cwd=self.cfg.game_dir)
@@ -418,7 +456,11 @@ class Bridge:
                 c = self.new_crashes()
                 return {"alive": False, "running": False, "crashes": c}
             time.sleep(1)
-        return {"alive": False, "running": self.running(), "waited_s": timeout, "heartbeat": self.heartbeat()}
+        r = {"alive": False, "running": self.running(), "waited_s": timeout, "heartbeat": self.heartbeat()}
+        why = self.pack_problems if self.launched else self.bridge_pack_problems()  # `wait` from another process
+        if why:
+            r["why"] = why
+        return r
 
     def _exit_cause(self, cid, since):
         """After the game exited during lua(cid): was the command running (rome2_bridge_running.txt names it while it

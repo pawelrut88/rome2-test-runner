@@ -67,7 +67,8 @@ def main(argv=None):
     wt = sub.add_parser("wait-turn", help="wait for the next player turn without ending the turn")
     wt.add_argument("--timeout", type=float, default=900); wt.add_argument("--stall", type=float, default=90)
     sh = sub.add_parser("screenshot", help="PNG of the game window (968 px wide unless --full or --crop)")
-    sh.add_argument("out"); sh.add_argument("--full", action="store_true", help="the window's own size")
+    sh.add_argument("out", nargs="?"); sh.add_argument("-o", "--out", dest="out_opt", metavar="OUT", help="same as the first argument")
+    sh.add_argument("--full", action="store_true", help="the window's own size")
     sh.add_argument("--crop", type=int, nargs=4, metavar=("LEFT", "TOP", "WIDTH", "HEIGHT"),
                     help="a part of the window at full size, window pixels (title bar included)")
     k = sub.add_parser("key", help="post a key to the game window"); k.add_argument("vk", nargs="?", default="0x1B",
@@ -89,10 +90,13 @@ def main(argv=None):
     rf = sub.add_parser("read-factions", help="read the playable factions of every campaign from the main menu")
     rf.add_argument("--mods", default="Vanilla")
     sub.add_parser("mods", help="mod list in user.script.txt")
-    for name, h in (("enable", "add a pack to the mod list (first line). The file before it is copied to "
-                               "user.script.txt.bak_rome2bridge; quit does not undo it: use disable"),
+    for name, h in (("enable", "add a pack to the mod list (first line; one already there keeps its place). The "
+                               "file before it is copied to user.script.txt.bak_rome2bridge; quit does not undo it: use disable"),
                     ("disable", "remove a pack from the mod list (copy of the file before it: user.script.txt.bak_rome2bridge)")):
         x = sub.add_parser(name, help=h); x.add_argument("pack", nargs="?", default="@rome2_bridge.pack")
+    rp = sub.add_parser("replace", help="put a pack in another one's place in the mod list (same load order); copy "
+                                        "of the file before it: user.script.txt.bak_rome2bridge")
+    rp.add_argument("old"); rp.add_argument("new")
     ins = sub.add_parser("install", help="copy a pack into the game's data folder"); ins.add_argument("path")
     un = sub.add_parser("uninstall", help="delete a pack from the data folder"); un.add_argument("name", nargs="?", default="@rome2_bridge.pack")
 
@@ -111,6 +115,9 @@ def main(argv=None):
         line = b.start(campaign=args.campaign, save=args.save, check_steam=not args.no_steam_check, menu=args.menu,
                        windowed=not args.keep_display)
         r = {"launched": line, "display": b.display, "autosave": b.save_note}
+        if b.pack_problems:
+            r["warning"] = "the bridge will not run: " + "; ".join(b.pack_problems)
+            print("WARNING: " + r["warning"], file=sys.stderr, flush=True)  # at once, not after the whole wait
         if not args.no_wait and not args.menu:
             r.update(b.wait_bridge(args.timeout, min_ticks=1))
             if r.get("alive"):
@@ -146,7 +153,10 @@ def main(argv=None):
     if cmd == "wait-turn":
         return out(b.wait_turn(args.timeout, args.stall))
     if cmd == "screenshot":
-        return out(b.screenshot(args.out, full=args.full, crop=args.crop))
+        path = args.out_opt or args.out
+        if not path:
+            raise BridgeError("give the output file: screenshot shot.png (or -o shot.png)")
+        return out(b.screenshot(path, full=args.full, crop=args.crop))
     if cmd == "key":
         return out(b.post_key(int(args.vk, 0)))
     if cmd == "post-click":
@@ -178,6 +188,8 @@ def main(argv=None):
         return out(b.set_pack_enabled(args.pack, True))
     if cmd == "disable":
         return out(b.set_pack_enabled(args.pack, False))
+    if cmd == "replace":
+        return out(b.replace_pack(args.old, args.new))
     if cmd == "install":
         return out(b.install_pack(args.path))
     if cmd == "uninstall":
