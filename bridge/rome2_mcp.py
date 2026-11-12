@@ -38,7 +38,8 @@ def t_start(a):
     b = B()
     line = b.start(campaign=a.get("campaign") or (None if a.get("save") else "main_rome"), save=a.get("save") or None)
     return ("launched with %s (%s); user.script.txt goes back to normal in %d s. A new campaign plays its first "
-            "faction. Loading takes ~1-3 min: then call wait_bridge." % (line, b.display, b.cfg.startup_restore_s))
+            "faction. Loading takes ~1-3 min: then call wait_bridge. %s; quit_game puts it back."
+            % (line, b.display, b.cfg.startup_restore_s, b.save_note))
 
 
 def t_wait_bridge(a):
@@ -120,7 +121,8 @@ TOOLS = [
     ("hover", "Move the REAL mouse cursor over a UI component (centre) and wait, so its tooltip shows in a screenshot. Brings the game window to the front.",
      {"type": "object", "properties": {"id": STR, "ctx": STR, "wait": NUM}, "required": ["id"]}, t_hover),
     ("key", "Post a key to the game window (virtual key code, default 0x1B = Esc).", S(vk=STR), t_key),
-    ("quit_game", "Kill the game and remove any startup line from user.script.txt.", S(), t_quit),
+    ("quit_game", "Kill the game, remove any startup line from user.script.txt, put back the display settings and "
+                  "the auto_save.save that start_game backed up.", S(), t_quit),
 ]
 BY_NAME = {t[0]: t for t in TOOLS}
 send_lock = threading.Lock()

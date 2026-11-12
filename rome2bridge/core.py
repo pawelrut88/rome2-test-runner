@@ -264,7 +264,7 @@ class Bridge:
             raise BridgeError("registry last_game_version did not stick")
         return "registry set"
 
-    def start(self, campaign=None, save=None, check_steam=True, menu=False, windowed=True):
+    def start(self, campaign=None, save=None, check_steam=True, menu=False, windowed=True, backup_save=True):
         """Kill the game and start it straight into a new campaign (the campaign's first faction) or a save, or
         (menu=True) into the main menu.
 
@@ -289,6 +289,7 @@ class Bridge:
             self._write_us(text.rstrip() + "\r\n" + line + "\r\n", enc)
         self.ensure_mod_version()
         self.display = self.windowed_for_start() if windowed else "display settings as they are"
+        self.save_note = self.backup_autosave() if backup_save else "autosave not backed up (caller does it)"
         self.launched = time.time(); self.launch_line = line
         subprocess.Popen([self.cfg.game(self.cfg.exe)], cwd=self.cfg.game_dir)
 
@@ -361,6 +362,34 @@ class Bridge:
         os.replace(self.prefs_backup, self.prefs)
         return "preferences put back"
 
+    # ---- the player's autosave: the game rewrites save_games/auto_save.save at every end turn -----------------------
+    @property
+    def autosave(self):
+        return os.path.join(self.cfg.save_dir, "auto_save.save")
+
+    @property
+    def autosave_backup(self):
+        return self.autosave + ".rome2bridge_backup"
+
+    def backup_autosave(self):
+        """Copy the player's auto_save.save aside before a start (dei-population-rules 2026-11-12: a CLI end-turn
+        overwrote it). A backup left by a start without quit is never overwritten or thrown away: it is kept under a
+        dated name first, since nobody can tell any more which file is the player's."""
+        if os.path.exists(self.autosave_backup):
+            old = "%s_%s" % (self.autosave_backup, time.strftime("%Y%m%d_%H%M%S",
+                                                                time.localtime(os.path.getmtime(self.autosave_backup))))
+            os.replace(self.autosave_backup, old)
+        if not os.path.exists(self.autosave):
+            return "no autosave"
+        shutil.copy2(self.autosave, self.autosave_backup)
+        return "autosave backed up"
+
+    def restore_autosave(self):
+        if not os.path.exists(self.autosave_backup):
+            return "autosave not backed up"
+        os.replace(self.autosave_backup, self.autosave)
+        return "autosave put back"
+
     def is_windowed(self):
         t = open(self.prefs, encoding="utf-8", errors="replace").read()
         return all(re.search(r"(?m)^%s;" % kv, t) for kv in ("gfx_fullscreen false", "x_res 1920", "y_res 1080"))
@@ -372,8 +401,8 @@ class Bridge:
     def quit(self):
         self.kill()
         if self.running():
-            return self.strip_startup_lines() + "; game still running, preferences not put back"
-        return self.strip_startup_lines() + "; " + self.restore_prefs()
+            return self.strip_startup_lines() + "; game still running, preferences and autosave not put back"
+        return self.strip_startup_lines() + "; " + self.restore_prefs() + "; " + self.restore_autosave()
 
     def wait_bridge(self, timeout=300, min_ticks=1, screen=None, since=None):
         """Wait until the bridge ticks (heartbeat fresh and tick >= min_ticks) after the last start (or `since`), on

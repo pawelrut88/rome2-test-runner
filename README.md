@@ -99,7 +99,9 @@ python -m rome2bridge screenshot shot.png --full
   `render_campaign_to_file` (the bridge's timer stops). `Resize`, `MoveTo`, `Position` and `Dimensions` are fine.
 - `start` launches the game windowed at 1920x1080 (fullscreen ignores the runner's clicks and can minimize):
   your `preferences.script.txt` is backed up first and `quit` puts it back (unless you changed the display settings
-  in between). `--keep-display` launches with your own settings.
+  in between). `--keep-display` launches with your own settings. `start` also copies your `save_games\auto_save.save`
+  aside (the game rewrites it at every end turn) and `quit` puts it back. Close the game with `quit`, not by hand, or
+  the copy stays as `auto_save.save.rome2bridge_backup` (the next `start` keeps it under a dated name).
 - `click`, `info` and `tree` take the parent component only as `--ctx <id>`, not as a second word.
 - `hover <id> [--ctx X] [--wait S]` moves the real mouse cursor over a UI component and waits, so its tooltip shows
   in the next `screenshot`. Unlike everything else it uses your mouse and brings the game window to the front.

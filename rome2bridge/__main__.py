@@ -45,7 +45,8 @@ def main(argv=None):
     s.add_argument("--keep-display", action="store_true",
                    help="launch with your own display settings (default: windowed 1920x1080, yours back on quit)")
     w = sub.add_parser("wait", help="wait until the bridge ticks"); w.add_argument("--timeout", type=float, default=300)
-    sub.add_parser("quit", help="kill the game, remove any startup line from user.script.txt, put back the display settings start changed")
+    sub.add_parser("quit", help="kill the game, remove any startup line from user.script.txt, put back the display "
+                                "settings and the auto_save.save that start backed up (not the mod list: see disable)")
     l = sub.add_parser("lua", help="run Lua in the game; 'return x' prints x")
     l.add_argument("code", nargs="?", help="Lua code (or use -f)"); l.add_argument("-f", "--file")
     l.add_argument("--timeout", type=float, default=30)
@@ -88,7 +89,9 @@ def main(argv=None):
     rf = sub.add_parser("read-factions", help="read the playable factions of every campaign from the main menu")
     rf.add_argument("--mods", default="Vanilla")
     sub.add_parser("mods", help="mod list in user.script.txt")
-    for name, h in (("enable", "add a pack to the mod list (first line)"), ("disable", "remove a pack from the mod list")):
+    for name, h in (("enable", "add a pack to the mod list (first line). The file before it is copied to "
+                               "user.script.txt.bak_rome2bridge; quit does not undo it: use disable"),
+                    ("disable", "remove a pack from the mod list (copy of the file before it: user.script.txt.bak_rome2bridge)")):
         x = sub.add_parser(name, help=h); x.add_argument("pack", nargs="?", default="@rome2_bridge.pack")
     ins = sub.add_parser("install", help="copy a pack into the game's data folder"); ins.add_argument("path")
     un = sub.add_parser("uninstall", help="delete a pack from the data folder"); un.add_argument("name", nargs="?", default="@rome2_bridge.pack")
@@ -107,7 +110,7 @@ def main(argv=None):
     if cmd == "start":
         line = b.start(campaign=args.campaign, save=args.save, check_steam=not args.no_steam_check, menu=args.menu,
                        windowed=not args.keep_display)
-        r = {"launched": line, "display": b.display}
+        r = {"launched": line, "display": b.display, "autosave": b.save_note}
         if not args.no_wait and not args.menu:
             r.update(b.wait_bridge(args.timeout, min_ticks=1))
             if r.get("alive"):

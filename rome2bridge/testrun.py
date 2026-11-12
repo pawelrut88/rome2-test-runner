@@ -707,7 +707,7 @@ class Runner:
         try:
             self.write_mod_set(mod_set)
             self.set_windowed()
-            b.start(menu=True)
+            b.start(menu=True, backup_save=False)  # the run backs up and restores auto_save.save itself
             w = b.wait_bridge(240, screen="menu")
             if not w.get("alive"):
                 raise BridgeError("no bridge in the main menu: %s" % w)
