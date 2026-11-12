@@ -323,6 +323,10 @@ local function heartbeat()
 	s.has_game = B.game() ~= nil
 	s.has_root = B.root() ~= nil
 	s.screen = s.has_game and "campaign" or "menu"
+	-- flagged only while nothing has ticked since that turn start (a later menu or campaign ticks again)
+	if not s.has_game and B.no_game_at and (not B.last_tick or B.last_tick < B.no_game_at) then
+		s.screen = "campaign without game interface"; s.no_game = true
+	end
 	write_atomic("rome2_bridge_alive.json", B.json(s))
 end
 
@@ -410,6 +414,14 @@ B.on_turn = function(ctx)
 	if not okh then return end
 	if human then pcall(function() B.human_key = ctx:faction():name() end); B.human_turn = true; B.want_end = false; B.turn_starts = B.turn_starts + 1; B.log("human turn start " .. B.turn())
 	else B.human_turn = false; B.want_end = false end
+	-- a campaign turn without a game interface: the campaign has no campaigns/<key>/scripting.lua (that file loads
+	-- EpisodicScripting, which makes the interface), so the timer can't run. Say so in the heartbeat (IA 2026-11-12;
+	-- making an interface ourselves failed and once crashed the game: don't try that again).
+	if not B.game() then
+		if not B.no_game_at then B.log("campaign without a game interface (no campaigns/<key>/scripting.lua?): the bridge can't run here") end
+		B.no_game_at = now()
+		pcall(heartbeat)
+	end
 end
 
 -- (re)arm the timer: after a load the old trigger is gone, and a trigger set during loading may never fire. Called on

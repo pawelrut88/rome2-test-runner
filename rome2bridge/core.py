@@ -448,6 +448,9 @@ class Bridge:
         if not self.running():
             raise BridgeError("game is not running")
         hb = self.heartbeat()
+        if hb and hb.get("no_game") and not hb.get("has_game"):
+            raise BridgeError("this campaign has no game interface (no campaigns/<key>/scripting.lua: that file loads "
+                              "EpisodicScripting, which makes it), so the bridge can't run commands here")
         if not hb or hb["age_s"] > 10:
             raise BridgeError("bridge not alive (heartbeat %s)" % (hb and ("%ss old" % hb["age_s"])))
         with self.lock:
