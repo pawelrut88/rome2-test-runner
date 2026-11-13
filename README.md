@@ -96,7 +96,11 @@ python -m rome2bridge screenshot shot.png --full
   after that (seen 2026-11-08, DeI). Keep the start at 1 or more: `s:sub(math.max(1, #s - 399))`.
 - Some game calls break the bridge until the game is restarted, so `lua` refuses code that names them:
   `SetImageColour` on a UI component (every value read after it is wrong and the bridge stops), `scroll_camera(` and
-  `render_campaign_to_file` (the bridge's timer stops). `Resize`, `MoveTo`, `Position` and `Dimensions` are fine.
+  `render_campaign_to_file` (the bridge's timer stops), and
+  `cai_strategic_stance_manager_force_stance_update_between_factions` (stops every script timer; reported from DeI
+  tests). `Resize`, `MoveTo`, `Position` and `Dimensions` are fine.
+- Whose turn it is: `return B.current_faction` (and `B.human_turn`), or `current` / `human_turn` /
+  `current_for_s` in `status`'s heartbeat. Rome II's world has no `whose_turn_is_it()`.
 - `start` launches the game windowed at 1920x1080 (fullscreen ignores the runner's clicks and can minimize):
   your `preferences.script.txt` is backed up first and `quit` puts it back (unless you changed the display settings
   in between). `--keep-display` launches with your own settings. `start` also copies your `save_games\auto_save.save`

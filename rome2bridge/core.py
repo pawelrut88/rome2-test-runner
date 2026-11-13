@@ -54,6 +54,10 @@ UNSAFE_LUA = {
                       "the bridge stops ticking. Tested with 3 and 4 numbers, 2026-11-09.",
     "scroll_camera(": "stops the bridge timer for good (scroll_camera_with_direction is harmless but does nothing).",
     "render_campaign_to_file": "stops the bridge timer for good and writes no file.",
+    "cai_strategic_stance_manager_force_stance_update_between_factions":
+        "stops every add_time_trigger timer (the bridge stops answering; turn_number reads back as a function). "
+        "Reported by IA 2026-11-13 (DeI, FT diplomacy tests), not reproduced by the bridge project. "
+        "promote_specified_stance and block_all_stances_but_that_specified were fine there.",
 }
 
 
