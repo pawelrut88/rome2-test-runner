@@ -22,7 +22,7 @@ from .config import FROZEN, NO_WINDOW, ROOT, load_config
 BRIDGE_PACK = "@rome2_bridge.pack"
 
 # rules for unattended end-turn tests (rome2-bridge project, 2026-11-07): decline AI diplomacy offers and then press
-# the end-diplomacy button, accept war declarations (only an OK button), decline an ally's call to war, take the first
+# the end-diplomacy button, accept war declarations (only an OK button), decline an ally's call to war (or join it when a mod hides decline), take the first
 # dilemma option, accept objective popups. The offer screen itself is button_set2: never accept there.
 PRESETS = {
     "test": "\n".join([
@@ -37,6 +37,9 @@ PRESETS = {
         "diplomacy_dropdown button_ok_war_declared",
         "button_set3 button_accept",
         "events decline_button",
+        # an ally's call to war whose decline button a mod hides (IA 2026-11-13: event_ally_attacked shows only
+        # assist_button1): join. Rules go in order and the first shown one is clicked, so decline wins when shown
+        "events assist_button1",
         "dilemma1_window dilemma_button",
         "events button_accept",
     ]),
