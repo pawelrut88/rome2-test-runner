@@ -203,7 +203,8 @@ class Bridge:
         c = self.new_crashes()
         return {"running": self.running(), "steam": self.steam_running(), "heartbeat": self.heartbeat(),
                 "launched": time.strftime("%H:%M:%S", time.localtime(self.launched)) if self.launched else None,
-                "launch": self.launch_line, "new_crash_dumps": c, "registry_mod_version_ok": self.mod_version_ok()}
+                "launch": self.launch_line, "new_crash_dumps": c, "registry_mod_version_ok": self.mod_version_ok(),
+                "auto_click_rules": len(self.auto_click_rules())}
 
     # ---- user.script.txt (UTF-16 LE as the game/launcher writes it) ---------------------------------------------------
     def _read_us(self):
@@ -349,7 +350,9 @@ class Bridge:
         if check_steam and not self.steam_running():
             raise BridgeError("Steam is not running: start Steam first (the game crashes while loading without it)")
         self.kill()
-        for p in (self.CMD, self.OUT, self.ALIVE, self.cfg.game("rome2_bridge_running.txt")):
+        # the auto-click rules too: left from the last game they silently closed every popup in the next one (IA
+        # 2026-11-13); set them again after start (the test runner does)
+        for p in (self.CMD, self.OUT, self.ALIVE, self.CLICK, self.cfg.game("rome2_bridge_running.txt")):
             if os.path.exists(p):
                 os.remove(p)
         self.strip_startup_lines()
@@ -476,7 +479,9 @@ class Bridge:
         self.kill()
         if self.running():
             return self.strip_startup_lines() + "; game still running, preferences and autosave not put back"
-        return self.strip_startup_lines() + "; " + self.restore_prefs() + "; " + self.restore_autosave()
+        rules = "auto-click rules cleared" if self.auto_click_rules() else ""
+        self.auto_click("")
+        return "; ".join(x for x in (self.strip_startup_lines(), self.restore_prefs(), self.restore_autosave(), rules) if x)
 
     def wait_bridge(self, timeout=300, min_ticks=1, screen=None, since=None):
         """Wait until the bridge ticks (heartbeat fresh and tick >= min_ticks) after the last start (or `since`), on
@@ -586,6 +591,13 @@ class Bridge:
         with open(self.CLICK, "w", encoding="utf-8", newline="\n") as f:
             f.write(rules + "\n")
         return len(rules.splitlines())
+
+    def auto_click_rules(self):
+        """The auto-click rules in force (lines of rome2_bridge_click.txt), [] if none."""
+        try:
+            return [l.strip() for l in open(self.CLICK, encoding="utf-8") if l.strip() and not l.strip().startswith("#")]
+        except OSError:
+            return []
 
     def end_turn(self, wait=True, timeout=900, stall=90, send=True):
         """End the turn (the bridge retries every 15 s while a dialog blocks it) and wait for the next player turn.
