@@ -30,7 +30,7 @@ clicked in the table in yellow (here Rome), and every faction's numbers (change 
 
 - **Test runs:** one campaign or all of them, one faction or all playable ones, N end turns each. Dialogs are
   answered by themselves (diplomacy declined, war accepted, dilemma option 1, battles autoresolved, captives
-  released, intro skipped).
+  released, a new general appointed when an army lost its own, intro skipped).
 - **Pause / Continue / Stop** a run; the game stays open while paused.
 - **Save every N turns** (copied from the autosave to its own file, never Quick Save).
 - **Progress window:** each turn's map of who owns what next to a table of every faction (regions, armies, navies,

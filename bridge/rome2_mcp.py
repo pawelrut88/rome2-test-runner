@@ -114,7 +114,7 @@ TOOLS = [
      S(wait=BOOL, timeout=NUM, stall=NUM), t_end_turn),
     ("wait_turn", "Wait for the next player turn without sending end turn (after clearing a stalled end_turn).", S(timeout=NUM, stall=NUM), t_wait_turn),
     ("factions", "Factions with land (or one by name): human, treasury, regions, forces, units, food.", S(name=STR), t_factions),
-    ("auto_click", "Set auto-click rules, one per line '<context id> <button id>' ('-' = anywhere), one click per second while shown; or a preset name (%s: autoresolve battles, decline diplomacy offers, accept war declarations, decline an ally's call to war (join it if a mod hides the decline button), dilemma option 1, accept objectives). Empty clears." % ", ".join(PRESETS),
+    ("auto_click", "Set auto-click rules, one per line '<context id> <button id>' ('-' = anywhere), one click per second while shown; or a preset name (%s: autoresolve battles, decline diplomacy offers, accept war declarations, decline an ally's call to war (join it if a mod hides the decline button), dilemma option 1, accept objectives, appoint the general offered when an army lost its own). Empty clears." % ", ".join(PRESETS),
      S(rules=STR), t_auto_click),
     ("skip_intro", "Close a 'Press any key to continue' story screen (DeI Alexander), then, while the campaign intro shows, wait `delay` s and press Esc (never on the map).", S(max=NUM, delay=NUM), t_skip_intro),
     ("screenshot", "Screenshot of the game window: 968 px wide by default (the reply gives the window size and the saved size); full=true for the window's own size; crop=[left, top, width, height] for a part at full size, in window pixels (title bar included, same pixels as a full picture).",

@@ -42,6 +42,9 @@ PRESETS = {
         "events assist_button1",
         "dilemma1_window dilemma_button",
         "events button_accept",
+        # "Duty Calls" (an army lost its general): the tick appoints the general shown. IA 2026-11-16: panels lists
+        # events ['button_hire'] and clicking it closed the dialog; a posted click on the tick did nothing
+        "events button_hire",
     ]),
 }
 
