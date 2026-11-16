@@ -634,8 +634,13 @@ class Bridge:
                     panels = self.panels()
                 except BridgeError as e:
                     panels = str(e)
-                return {"ended": False, "stalled": True, "seconds": round(time.time() - t0), "heartbeat": hb,
-                        "panels": panels}
+                r = {"ended": False, "stalled": True, "seconds": round(time.time() - t0), "heartbeat": hb,
+                     "panels": panels}
+                if not self.auto_click_rules():
+                    # IA 2026-11-16: AI offers and dilemmas stopped every turn; no rules were set (start clears them)
+                    r["hint"] = ("no auto-click rules are set (start and quit clear them): `autoclick test` answers "
+                                 "AI offers, war declarations, dilemmas and battles")
+                return r
         return {"ended": False, "waited_s": timeout, "heartbeat": self.heartbeat()}
 
     def wait_turn(self, timeout=900, stall=90):

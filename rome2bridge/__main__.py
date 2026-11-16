@@ -114,7 +114,8 @@ def main(argv=None):
     if cmd == "start":
         line = b.start(campaign=args.campaign, save=args.save, check_steam=not args.no_steam_check, menu=args.menu,
                        windowed=not args.keep_display)
-        r = {"launched": line, "display": b.display, "autosave": b.save_note}
+        r = {"launched": line, "display": b.display, "autosave": b.save_note,
+             "auto_click": "cleared; for unattended end turns set them now: autoclick test"}
         if b.pack_problems:
             r["warning"] = "the bridge will not run: " + "; ".join(b.pack_problems)
             print("WARNING: " + r["warning"], file=sys.stderr, flush=True)  # at once, not after the whole wait

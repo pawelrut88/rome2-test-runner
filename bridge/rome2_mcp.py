@@ -66,7 +66,7 @@ def t_auto_click(a):
 
 def t_end_turn(a):
     r = B().end_turn(wait=a.get("wait", True), timeout=float(a.get("timeout", 900)), stall=float(a.get("stall", 90)))
-    if r.get("stalled"):
+    if r.get("stalled") and not r.get("hint"):
         r["hint"] = "click the dialog's button (click/auto_click), then call wait_turn"
     if r.get("game_exited") and r.get("crashes"):
         r["crash"] = B().crash_sig()
