@@ -118,7 +118,12 @@ local function uic()
 	if c and c.ui and c.ui._UIComponent then return c.ui._UIComponent end
 	return nil
 end
-local function U(c) return uic()(c) end
+-- an address (from Find) -> a component. Given a component (B.find already returns one), return it as it is:
+-- UIComponent(component) gives a wrong component, and using that crashed the game (IA 2026-11-14, bridge 2026-11-16)
+local function U(c)
+	if type(c) == "userdata" and tostring(c):sub(1, 12) == "UIComponent " then return c end
+	return uic()(c)
+end
 B.U = U
 
 -- ids of the children of component id (inside ctx); shown ones only unless all
