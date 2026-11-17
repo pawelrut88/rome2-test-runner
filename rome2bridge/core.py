@@ -14,6 +14,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 import threading
 import time
 
@@ -698,20 +699,70 @@ class Bridge:
             if hb and hb["age_s"] > max(180, 2 * stall) and time.time() - t0 > max(180, 2 * stall):
                 # the game is open but its scripts stopped (a full-screen panel such as the Defeat screen)
                 return {"ended": False, "stalled": True, "no_heartbeat": True, "seconds": round(time.time() - t0),
-                        "heartbeat": hb, "panels": "the game stopped running scripts (heartbeat %ss old)" % hb["age_s"]}
+                        "heartbeat": hb, "panels": "the game stopped running scripts (heartbeat %ss old)" % hb["age_s"],
+                        "evidence": self.stall_evidence(hb)}
             if hb and (hb.get("current_for_s") or 0) > stall and time.time() - t0 > stall:
                 try:
                     panels = self.panels()
                 except BridgeError as e:
                     panels = str(e)
                 r = {"ended": False, "stalled": True, "seconds": round(time.time() - t0), "heartbeat": hb,
-                     "panels": panels}
+                     "panels": panels, "evidence": self.stall_evidence(hb)}
                 if not self.auto_click_rules():
                     # IA 2026-11-16: AI offers and dilemmas stopped every turn; no rules were set (start clears them)
                     r["hint"] = ("no auto-click rules are set (start and quit clear them): `autoclick test` answers "
                                  "AI offers, war declarations, dilemmas and battles")
                 return r
         return {"ended": False, "waited_s": timeout, "heartbeat": self.heartbeat()}
+
+    def stall_evidence(self, hb=None):
+        """What can be seen of the game at a stall, saved to a new folder (IA 2026-11-17: a long run stalled with the
+        heartbeat stopped and nothing to tell why). Works without the bridge: a screenshot, whether Windows calls the
+        window hung, the game's CPU use over 3 s (busy = still computing, ~0 = waiting or frozen), the bridge log's
+        last lines; and, while the bridge still answers, the shown panels. Returns a summary with the folder."""
+        import ctypes
+        from ctypes import wintypes as wt
+        d = os.path.join(tempfile.gettempdir(), "rome2bridge_stalls", time.strftime("%Y%m%d_%H%M%S"))
+        os.makedirs(d, exist_ok=True)
+        r = {"folder": d}
+        try:
+            self.screenshot(os.path.join(d, "screen.png"), full=True)
+            r["screenshot"] = os.path.join(d, "screen.png")
+        except Exception as e:
+            r["screenshot"] = "failed: %s" % e
+        try:
+            u32, k32 = ctypes.windll.user32, ctypes.windll.kernel32
+            hwnd = self.game_hwnd()
+            if hwnd:
+                r["window_hung"] = bool(u32.IsHungAppWindow(hwnd))
+                pid = wt.DWORD()
+                u32.GetWindowThreadProcessId(hwnd, ctypes.byref(pid))
+                h = k32.OpenProcess(0x1000, False, pid.value)  # PROCESS_QUERY_LIMITED_INFORMATION
+                if h:
+                    def cpu():
+                        c, e, kt, ut = wt.FILETIME(), wt.FILETIME(), wt.FILETIME(), wt.FILETIME()
+                        k32.GetProcessTimes(h, ctypes.byref(c), ctypes.byref(e), ctypes.byref(kt), ctypes.byref(ut))
+                        return ((kt.dwHighDateTime << 32 | kt.dwLowDateTime) + (ut.dwHighDateTime << 32 | ut.dwLowDateTime)) / 1e7
+                    c0 = cpu(); time.sleep(3); c1 = cpu()
+                    k32.CloseHandle(h)
+                    r["cpu_cores_busy"] = round((c1 - c0) / 3.0, 2)
+        except Exception as e:
+            r["window"] = "failed: %s" % e
+        try:
+            lines = open(self.cfg.game("rome2_bridge_log.txt"), encoding="utf-8", errors="replace").read().splitlines()
+            r["log_tail"] = lines[-15:]
+            open(os.path.join(d, "bridge_log_tail.txt"), "w", encoding="utf-8").write("\n".join(lines[-200:]))
+        except OSError:
+            r["log_tail"] = []
+        hb = hb or self.heartbeat()
+        if hb and hb.get("age_s", 99) < 10:
+            try:
+                r["panels"] = self.panels()
+            except BridgeError as e:
+                r["panels"] = str(e)
+        json.dump(dict(r, heartbeat=hb), open(os.path.join(d, "stall.json"), "w", encoding="utf-8"), indent=1,
+                  ensure_ascii=False)
+        return r
 
     def wait_turn(self, timeout=900, stall=90):
         hb0 = self.heartbeat()

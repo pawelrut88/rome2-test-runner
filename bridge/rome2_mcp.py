@@ -119,7 +119,7 @@ TOOLS = [
     ("click", "SimulateClick a UI component by id (first shown one), searched inside ctx if given. Only if shown, unless force.",
      {"type": "object", "properties": {"id": STR, "ctx": STR, "force": BOOL}, "required": ["id"]}, t_click),
     ("panels", "Shown top-level panels and their buttons (what is on screen).", S(), t_panels),
-    ("end_turn", "End the turn (retried every 15 s while a dialog blocks it) and by default wait for the next player turn. Returns stalled + panels if a dialog waits; reports crashes.",
+    ("end_turn", "End the turn (retried every 15 s while a dialog blocks it) and by default wait for the next player turn. Returns stalled + panels if a dialog waits, with evidence (a folder with a screenshot, window hung?, the game's CPU use, the bridge log's last lines); reports crashes.",
      S(wait=BOOL, timeout=NUM, stall=NUM), t_end_turn),
     ("wait_turn", "Wait for the next player turn without sending end turn (after clearing a stalled end_turn).", S(timeout=NUM, stall=NUM), t_wait_turn),
     ("factions", "Factions with land (or one by name): human, treasury, regions, forces, units, food.", S(name=STR), t_factions),
