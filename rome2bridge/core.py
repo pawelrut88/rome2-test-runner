@@ -566,13 +566,26 @@ class Bridge:
                 return r
             if self.launched and not self.running():
                 c = self.new_crashes()
-                return {"alive": False, "running": False, "crashes": c}
+                return {"alive": False, "running": False, "crashes": c, "put_back": self.put_back_after_exit()}
             time.sleep(1)
         r = {"alive": False, "running": self.running(), "waited_s": timeout, "heartbeat": self.heartbeat()}
         why = self.pack_problems if self.launched else self.bridge_pack_problems()  # `wait` from another process
         if why:
             r["why"] = why
         return r
+
+    def put_back_after_exit(self):
+        """The game exited on its own (crash, closed by hand): put back what start changed, as quit does, so a script
+        that never reaches quit leaves no 1920x1080 preferences behind (IA 2026-11-17). The test's autosave is kept as
+        auto_save.save.rome2bridge_after_exit (overwritten each time) before the player's comes back."""
+        if self.running():
+            return "game still running: nothing put back"
+        try:
+            if os.path.exists(self.autosave_backup) and os.path.exists(self.autosave):
+                shutil.copy2(self.autosave, self.autosave + ".rome2bridge_after_exit")
+        except OSError:
+            pass
+        return self.quit()
 
     def _exit_cause(self, cid, since):
         """After the game exited during lua(cid): was the command running (rome2_bridge_running.txt names it while it
@@ -627,7 +640,8 @@ class Bridge:
                         raise BridgeError("Lua error: %s" % res.get("error"))
                     return res.get("result")
                 if not self.running():
-                    raise BridgeError("game exited while waiting: %s" % self._exit_cause(cid, t0))
+                    cause = self._exit_cause(cid, t0)
+                    raise BridgeError("game exited while waiting: %s; put back: %s" % (cause, self.put_back_after_exit()))
             # say what the bridge was doing, so a bug report shows whether the game's timer stopped or the command hung
             hb = self.heartbeat() or {}
             raise BridgeError("no answer in %ss (loading or AI turn? the command stays queued; heartbeat %ss old, "
@@ -689,7 +703,8 @@ class Bridge:
         while time.time() - t0 < timeout:
             time.sleep(2)
             if not self.running():
-                return {"ended": False, "game_exited": True, "crashes": self.new_crashes()}
+                c = self.new_crashes()  # before the put-back: quit clears nothing it needs, but keep the order clear
+                return {"ended": False, "game_exited": True, "crashes": c, "put_back": self.put_back_after_exit()}
             hb = self.heartbeat()
             if hb and hb.get("defeated"):
                 # game over: the player's faction was destroyed; the game shows its Defeat screen (scripts stop)
