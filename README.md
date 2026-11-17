@@ -92,6 +92,9 @@ python -m rome2bridge screenshot shot.png --full
   `B.find(id, ctx)` (and `click`/`info`/`tree --ctx`) takes the first component named `ctx` anywhere in the UI,
   hidden panels included, then the first `id` inside it, so a name used by several panels can give the wrong one:
   pick a `ctx` whose name is unique, or use `B.find_shown(id, ctx)`, which only finds shown components.
+  `ctx` must be an ancestor of `id`: the map's lists are not inside `layout`. Example: a character row in the
+  units list (`character_row_<cqi>`, cqi = the character's command_queue_index) is under `units_dropdown`, so
+  `click character_row_9 --ctx units_dropdown` (or no `--ctx`), not `--ctx layout` (IA 2026-11-17).
   The game's Lua differs from standard Lua 5.1 here: `s:sub(-400)` on a shorter string gave garbage once and `""`
   after that (seen 2026-11-08, DeI). Keep the start at 1 or more: `s:sub(math.max(1, #s - 399))`.
 - Some game calls break the bridge until the game is restarted, so `lua` refuses code that names them:
