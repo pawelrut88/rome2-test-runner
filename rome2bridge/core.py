@@ -376,6 +376,7 @@ class Bridge:
         self.pack_problems = self.bridge_pack_problems()  # reported, not fixed: the mod list is the player's
         self.display = self.windowed_for_start() if windowed else "display settings as they are"
         self.difficulty_note = self.set_difficulty(difficulty) if difficulty is not None else ""
+        self.requested_difficulty = None if difficulty is None or save else int(difficulty)
         self.save_note = self.backup_autosave() if backup_save else "autosave not backed up (caller does it)"
         self.launched = time.time(); self.launch_line = line
         self.run_start()  # remembered for later processes (status/end-turn after a crash)
@@ -528,6 +529,11 @@ class Bridge:
                 r = {"alive": True, "heartbeat": hb}
                 if hb.get("has_game"):
                     r["difficulty"] = hb.get("difficulty")
+                    want = getattr(self, "requested_difficulty", None)
+                    if want is not None and hb.get("difficulty") is not None and hb["difficulty"] != want:
+                        # IA 2026-11-17: DeI prologue_03 loads at 0 whatever the setting (main_emperor follows it)
+                        r["difficulty_warning"] = "asked for %d, the campaign uses %d (it overrides the setting)" % (
+                            want, hb["difficulty"])
                     # "campaign" also shows behind a "Press any key" story screen (DeI: a campaign, or a loading-screen
                     # row, IA 2026-11-17): say so, skip_intro closes it
                     try:
