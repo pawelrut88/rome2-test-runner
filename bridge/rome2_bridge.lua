@@ -326,6 +326,8 @@ local function heartbeat()
 		current_for_s = B.current_since and math.floor(now() - B.current_since) or nil }
 	pcall(function() s.mode = consul.env.mode end)
 	s.has_game = B.game() ~= nil
+	-- the campaign's difficulty as the game uses it (IA 2026-11-17: the New Campaign screen's label can differ)
+	if s.has_game then pcall(function() s.difficulty = B.game():model():difficulty_level() end) end
 	s.has_root = B.root() ~= nil
 	s.screen = s.has_game and "campaign" or "menu"
 	-- flagged only while nothing has ticked since that turn start (a later menu or campaign ticks again)

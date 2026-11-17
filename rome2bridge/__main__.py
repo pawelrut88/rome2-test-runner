@@ -42,6 +42,9 @@ def main(argv=None):
     s.add_argument("--timeout", type=float, default=300)
     s.add_argument("--skip-intro", action="store_true", help="press Esc while the campaign intro shows")
     s.add_argument("--no-steam-check", action="store_true")
+    s.add_argument("--difficulty", type=int, choices=range(-3, 2), metavar="{1,0,-1,-2,-3}",
+                   help="campaign difficulty of a new campaign: 1 easy, 0 normal, -1 hard, -2 very hard, -3 legendary "
+                        "(in preferences.script.txt; yours back on quit). The game reports it as \"difficulty\" in wait/status")
     s.add_argument("--keep-display", action="store_true",
                    help="launch with your own display settings (default: windowed 1920x1080, yours back on quit)")
     w = sub.add_parser("wait", help="wait until the bridge ticks"); w.add_argument("--timeout", type=float, default=300)
@@ -113,9 +116,11 @@ def main(argv=None):
         return out(b.status())
     if cmd == "start":
         line = b.start(campaign=args.campaign, save=args.save, check_steam=not args.no_steam_check, menu=args.menu,
-                       windowed=not args.keep_display)
+                       windowed=not args.keep_display, difficulty=args.difficulty)
         r = {"launched": line, "display": b.display, "autosave": b.save_note,
              "auto_click": "cleared; for unattended end turns set them now: autoclick test"}
+        if b.difficulty_note:
+            r["difficulty_set"] = b.difficulty_note
         if b.pack_problems:
             r["warning"] = "the bridge will not run: " + "; ".join(b.pack_problems)
             print("WARNING: " + r["warning"], file=sys.stderr, flush=True)  # at once, not after the whole wait
@@ -123,12 +128,10 @@ def main(argv=None):
             r.update(b.wait_bridge(args.timeout, min_ticks=1))
             if r.get("alive"):
                 r["window"] = b.restore_window()
-            if args.skip_intro and r.get("alive"):
+            if args.skip_intro and r.get("alive"):  # wait_bridge says story_screen "shown"; skip_intro closes it
                 r["intro_esc"] = b.skip_intro()
                 if b.story:
                     r["story_screen"] = "closed (%s)" % b.story
-            elif r.get("alive") and any(b.lua('return ROME2_BRIDGE.find_shown("%s") ~= nil' % p) for p in b.STORY_PANELS):
-                r["story_screen"] = "shown: the map waits for a click (skip-intro closes it)"
         b.wait_restore()  # take the startup line out of user.script.txt before this process ends
         return out(r)
     if cmd == "wait":

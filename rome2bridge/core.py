@@ -84,6 +84,7 @@ class Bridge:
         self.launch_line = ""
         self.pack_problems = []  # bridge_pack_problems() at the last start
         self.story = None  # story screen closed by the last skip_intro
+        self.difficulty_note = ""  # what start's difficulty= did
         # command ids must differ across processes too (two CLI calls in the same second got the same id and the
         # second read the first one's answer, seen 2026-11-08): pid + counter
         self.seq = 0
@@ -340,16 +341,22 @@ class Bridge:
             raise BridgeError("registry last_game_version did not stick")
         return "registry set"
 
-    def start(self, campaign=None, save=None, check_steam=True, menu=False, windowed=True, backup_save=True):
+    def start(self, campaign=None, save=None, check_steam=True, menu=False, windowed=True, backup_save=True,
+              difficulty=None):
         """Kill the game and start it straight into a new campaign (the campaign's first faction) or a save, or
         (menu=True) into the main menu.
 
         Writes `game_startup_mode ...;` into user.script.txt, launches the game's exe, and removes the line again after
         cfg.startup_restore_s seconds (the game reads the file at startup only). Does not touch the mod list.
         windowed: launch windowed 1920x1080 (preferences.script.txt backed up first; quit() puts it back).
+        difficulty: campaign difficulty for a new campaign (1 easy, 0 normal, -1 hard, -2 very hard, -3 legendary),
+        written as campaign_difficulty into preferences.script.txt (backed up; quit() puts it back). A direct start
+        uses it (tested 2026-11-17: 1 and -1 read back by model():difficulty_level()); a save keeps its own.
         """
         if not campaign and not save and not menu:
             raise BridgeError("give a campaign key or a save name (or menu=True)")
+        if difficulty is not None and int(difficulty) not in range(-3, 2):
+            raise BridgeError("difficulty must be 1 (easy), 0 (normal), -1 (hard), -2 (very hard) or -3 (legendary)")
         if check_steam and not self.steam_running():
             raise BridgeError("Steam is not running: start Steam first (the game crashes while loading without it)")
         self.kill()
@@ -367,7 +374,8 @@ class Bridge:
             self._write_us(text.rstrip() + "\r\n" + line + "\r\n", enc)
         self.ensure_mod_version()
         self.pack_problems = self.bridge_pack_problems()  # reported, not fixed: the mod list is the player's
-        self.display =self.windowed_for_start() if windowed else "display settings as they are"
+        self.display = self.windowed_for_start() if windowed else "display settings as they are"
+        self.difficulty_note = self.set_difficulty(difficulty) if difficulty is not None else ""
         self.save_note = self.backup_autosave() if backup_save else "autosave not backed up (caller does it)"
         self.launched = time.time(); self.launch_line = line
         self.run_start()  # remembered for later processes (status/end-turn after a crash)
@@ -424,13 +432,35 @@ class Bridge:
         self.set_windowed()
         return "windowed 1920x1080 (your settings back on quit)"
 
+    def set_difficulty(self, d):
+        """Write campaign_difficulty `d` into preferences.script.txt (backed up first, like the window settings)."""
+        d = int(d)
+        if not os.path.exists(self.prefs):
+            return "no preferences.script.txt: difficulty not set"
+        if not os.path.exists(self.prefs_backup):
+            shutil.copy2(self.prefs, self.prefs_backup)
+        t = open(self.prefs, encoding="utf-8", errors="replace").read()
+        t, n = re.subn(r"(?m)^campaign_difficulty [^;\r\n]*;", "campaign_difficulty %d;" % d, t)
+        if n == 0:
+            t = t.rstrip("\r\n") + "\ncampaign_difficulty %d;\n" % d
+        open(self.prefs, "w", encoding="utf-8", newline="").write(t)
+        return "campaign difficulty %d (yours back on quit)" % d
+
     def restore_prefs(self):
         """Put the player's preferences.script.txt back (from start's backup), after the game has exited: the game
         rewrites the file when it closes."""
         if not os.path.exists(self.prefs_backup):
             return "preferences not changed"
         if os.path.exists(self.prefs) and not self.is_windowed():
-            # not what start wrote: the player changed the display settings since, keep theirs
+            # not what start wrote: the player changed the display settings since, keep theirs, but put their
+            # campaign_difficulty back (start may have set it)
+            m = re.search(r"(?m)^campaign_difficulty [^;\r\n]*;",
+                          open(self.prefs_backup, encoding="utf-8", errors="replace").read())
+            t = open(self.prefs, encoding="utf-8", errors="replace").read()
+            if m:
+                t2 = re.sub(r"(?m)^campaign_difficulty [^;\r\n]*;", lambda _: m.group(0), t)
+                if t2 != t:
+                    open(self.prefs, "w", encoding="utf-8", newline="").write(t2)
             os.remove(self.prefs_backup)
             return "preferences changed by the player since start: kept"
         if os.path.getsize(self.prefs_backup) == 0:
@@ -495,7 +525,17 @@ class Bridge:
             hb = self.heartbeat()
             if hb and hb["age_s"] < 5 and (hb.get("tick") or 0) >= min_ticks and \
                     os.path.getmtime(self.ALIVE) >= since and (screen is None or hb.get("screen", "campaign") == screen):
-                return {"alive": True, "heartbeat": hb}
+                r = {"alive": True, "heartbeat": hb}
+                if hb.get("has_game"):
+                    r["difficulty"] = hb.get("difficulty")
+                    # "campaign" also shows behind a "Press any key" story screen (DeI: a campaign, or a loading-screen
+                    # row, IA 2026-11-17): say so, skip_intro closes it
+                    try:
+                        if any(self.lua('return ROME2_BRIDGE.find_shown("%s") ~= nil' % p, 10) for p in self.STORY_PANELS):
+                            r["story_screen"] = "shown: the map is not up yet; skip_intro closes it"
+                    except BridgeError:
+                        pass
+                return r
             if self.launched and not self.running():
                 c = self.new_crashes()
                 return {"alive": False, "running": False, "crashes": c}
@@ -716,10 +756,11 @@ class Bridge:
         except BridgeError:
             return []
 
-    def start_faction(self, button, group, faction, timeout=420, check_steam=True):
+    def start_faction(self, button, group, faction, timeout=420, check_steam=True, difficulty=None):
         """Start the game into the main menu, then a new campaign (`button`) as `faction` (in culture `group`).
-        Waits for the bridge on the campaign map. Returns the wait result plus the human factions found there."""
-        self.start(menu=True, check_steam=check_steam)
+        Waits for the bridge on the campaign map. Returns the wait result (with the campaign's "difficulty") plus the
+        human factions found there."""
+        self.start(menu=True, check_steam=check_steam, difficulty=difficulty)
         r = self.wait_bridge(240, screen="menu")
         if not r.get("alive"):
             return dict(r, step="main menu")

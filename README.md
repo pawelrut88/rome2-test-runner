@@ -106,6 +106,10 @@ python -m rome2bridge screenshot shot.png --full
   in between). `--keep-display` launches with your own settings. `start` also copies your `save_games\auto_save.save`
   aside (the game rewrites it at every end turn) and `quit` puts it back. Close the game with `quit`, not by hand, or
   the copy stays as `auto_save.save.rome2bridge_backup` (the next `start` keeps it under a dated name).
+- `start --difficulty N` sets the campaign difficulty of a new campaign (1 easy, 0 normal, -1 hard, -2 very hard,
+  -3 legendary) as `campaign_difficulty` in `preferences.script.txt`; `quit` puts yours back. A start from the main
+  menu uses it too. `wait` and `status` report the difficulty the loaded campaign really uses (`difficulty`), and
+  `wait` says `story_screen` while a "Press any key to continue" screen still hides the map (`skip-intro` closes it).
 - `start` does not change the mod list or copy the pack. If `@rome2_bridge.pack` is missing from the mod list or
   from `data`, or the one in `data` is not the current build in `pack\build`, it says so at once (`warning`, and
   `why` when the wait runs out). `install` / `enable` fix it.
