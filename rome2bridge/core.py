@@ -708,6 +708,10 @@ class Bridge:
                     panels = str(e)
                 r = {"ended": False, "stalled": True, "seconds": round(time.time() - t0), "heartbeat": hb,
                      "panels": panels, "evidence": self.stall_evidence(hb)}
+                etb = r["evidence"].get("end_turn_button")
+                if isinstance(etb, dict) and hb.get("want_end") and etb.get("state") not in (None, "active"):
+                    # the game refuses the end turn while something waits for the player (IA 2026-11-17)
+                    r["end_turn_disabled"] = "End Turn is %s: %s" % (etb.get("state"), etb.get("tooltip") or "no tooltip")
                 if not self.auto_click_rules():
                     # IA 2026-11-16: AI offers and dilemmas stopped every turn; no rules were set (start clears them)
                     r["hint"] = ("no auto-click rules are set (start and quit clear them): `autoclick test` answers "
@@ -760,6 +764,20 @@ class Bridge:
                 r["panels"] = self.panels()
             except BridgeError as e:
                 r["panels"] = str(e)
+            try:
+                # End Turn's state and tooltip (a disabled button's tooltip may say why), and the Event Messages list
+                # (msgN entries, title text and state) (IA 2026-11-17: End Turn greyed out, no panel open)
+                r["end_turn_button"] = self.lua(
+                    "local B = ROME2_BRIDGE; local c = B.find('button_end_turn'); if not c then return nil end; "
+                    "local ok, tt = pcall(function() return c:GetTooltipText() end); "
+                    "return {state = c:CurrentState(), shown = B.shown(c), tooltip = ok and tt or nil}", 10)
+                r["event_messages"] = self.lua(
+                    "local B = ROME2_BRIDGE; local box = B.find('list_box', 'events_dropdown'); if not box then return nil end; "
+                    "local out = {}; for k = 0, box:ChildCount() - 1 do local m = B.U(box:Find(k)); "
+                    "local t = m:Find('dy_title'); t = t and B.U(t); out[#out + 1] = m:Id() .. ' [' .. tostring(m:CurrentState()) .. '] ' .. "
+                    "(t and (tostring(t:GetStateText()) .. ' [' .. tostring(t:CurrentState()) .. ']') or '') end; return out", 10)
+            except BridgeError as e:
+                r["end_turn_button"] = str(e)
         json.dump(dict(r, heartbeat=hb), open(os.path.join(d, "stall.json"), "w", encoding="utf-8"), indent=1,
                   ensure_ascii=False)
         return r

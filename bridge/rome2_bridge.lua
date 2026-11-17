@@ -409,7 +409,9 @@ B.on_timer = function(ctx)
 	local clicked = false
 	local okc, c = pcall(click_rules); clicked = okc and c
 	-- an end_turn sent while a dialog is open (e.g. a dilemma at turn start) is dropped: retry every 15 s until an AI turn starts
-	if B.want_end and not clicked and now() - (B.end_time or 0) >= 15 then B.log("turn did not end, retry"); B.end_turn() end
+	-- force: the first end_turn already set human_turn false, so without it every retry was refused and logged each
+	-- second, and the end turn was never sent again (IA 2026-11-17)
+	if B.want_end and not clicked and now() - (B.end_time or 0) >= 15 then B.log("turn did not end, retry"); B.end_turn(true) end
 	local okh, eh = pcall(heartbeat); if not okh then B.log("heartbeat error: " .. tostring(eh)) end
 	if not B.fe_armed then pcall(function() B.game():add_time_trigger(B.tname, 1) end) end
 end
