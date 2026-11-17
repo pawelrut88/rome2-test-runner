@@ -105,7 +105,10 @@ python -m rome2bridge screenshot shot.png --full
   your `preferences.script.txt` is backed up first and `quit` puts it back (unless you changed the display settings
   in between). `--keep-display` launches with your own settings. `start` also copies your `save_games\auto_save.save`
   aside (the game rewrites it at every end turn) and `quit` puts it back. Close the game with `quit`, not by hand, or
-  the copy stays as `auto_save.save.rome2bridge_backup` (the next `start` keeps it under a dated name).
+  the copy stays as `auto_save.save.rome2bridge_backup` (the next `start` keeps it under a dated name). If the game
+  is gone without `quit` (closed by hand, crashed), `status` says `not_put_back` and `quit` still puts your files
+  back. Stopping the program that ran `start` does not close the game.
+- `post-click --id ID` clicks a component that ignores `click` (posted mouse click at its centre), once it is shown.
 - `start --difficulty N` sets the campaign difficulty of a new campaign (1 easy, 0 normal, -1 hard, -2 very hard,
   -3 legendary) as `campaign_difficulty` in `preferences.script.txt`; `quit` puts yours back. A start from the main
   menu uses it too. `wait` and `status` report the difficulty the loaded campaign really uses (`difficulty`), and

@@ -76,7 +76,10 @@ def main(argv=None):
                     help="a part of the window at full size, window pixels (title bar included)")
     k = sub.add_parser("key", help="post a key to the game window"); k.add_argument("vk", nargs="?", default="0x1B",
                                                                                    help="virtual key code, default Esc (on the map with no popup open, Esc opens the game menu)")
-    pc = sub.add_parser("post-click", help="posted click at client pixel x y"); pc.add_argument("x", type=int); pc.add_argument("y", type=int)
+    pc = sub.add_parser("post-click", help="posted click at client pixel x y, or (--id) at a component once it is shown")
+    pc.add_argument("x", type=int, nargs="?"); pc.add_argument("y", type=int, nargs="?")
+    pc.add_argument("--id", help="component id: waits until shown, clicks its centre"); pc.add_argument("--ctx")
+    pc.add_argument("--timeout", type=float, default=30)
     hv = sub.add_parser("hover", help="move the real mouse over a UI component and wait (tooltips for a screenshot)")
     hv.add_argument("id"); hv.add_argument("--ctx"); hv.add_argument("--wait", type=float, default=2.5)
     si = sub.add_parser("skip-intro", help="press Esc while the campaign intro shows")
@@ -168,6 +171,10 @@ def main(argv=None):
     if cmd == "key":
         return out(b.post_key(int(args.vk, 0)))
     if cmd == "post-click":
+        if args.id:
+            return out(b.post_click_id(args.id, args.ctx, args.timeout))
+        if args.x is None or args.y is None:
+            raise BridgeError("give x y, or --id")
         return out(b.post_click(args.x, args.y))
     if cmd == "hover":
         return out(b.hover(args.id, args.ctx, args.wait))

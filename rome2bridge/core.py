@@ -205,10 +205,17 @@ class Bridge:
 
     def status(self):
         c = self.new_crashes()
-        return {"running": self.running(), "steam": self.steam_running(), "heartbeat": self.heartbeat(),
-                "launched": time.strftime("%H:%M:%S", time.localtime(self.launched)) if self.launched else None,
-                "launch": self.launch_line, "new_crash_dumps": c, "registry_mod_version_ok": self.mod_version_ok(),
-                "auto_click_rules": len(self.auto_click_rules())}
+        running = self.running()
+        r = {"running": running, "steam": self.steam_running(), "heartbeat": self.heartbeat(),
+             "launched": time.strftime("%H:%M:%S", time.localtime(self.launched)) if self.launched else None,
+             "launch": self.launch_line, "new_crash_dumps": c, "registry_mod_version_ok": self.mod_version_ok(),
+             "auto_click_rules": len(self.auto_click_rules())}
+        left = [n for n, p in (("preferences", self.prefs_backup), ("auto_save.save", self.autosave_backup))
+                if os.path.exists(p)]
+        if left and not running:
+            # the game is gone but quit never ran (closed by hand, crashed, or the driving process was stopped)
+            r["not_put_back"] = "%s still from start: run quit to put yours back" % " and ".join(left)
+        return r
 
     # ---- user.script.txt (UTF-16 LE as the game/launcher writes it) ---------------------------------------------------
     def _read_us(self):
@@ -380,7 +387,7 @@ class Bridge:
         self.save_note = self.backup_autosave() if backup_save else "autosave not backed up (caller does it)"
         self.launched = time.time(); self.launch_line = line
         self.run_start()  # remembered for later processes (status/end-turn after a crash)
-        subprocess.Popen([self.cfg.game(self.cfg.exe)], cwd=self.cfg.game_dir)
+        self._launch_detached()
 
         def restore():
             time.sleep(self.cfg.startup_restore_s)
@@ -388,6 +395,19 @@ class Bridge:
         self._restore_thread = threading.Thread(target=restore, daemon=True)
         self._restore_thread.start()
         return line
+
+    def _launch_detached(self):
+        """Launch the game so that stopping the process that called start does not kill it (IA 2026-11-17: stopping
+        a background Python job killed Rome2.exe and skipped quit's put-back). Through `cmd /c start`, so the game's
+        parent is gone at once (a process-tree kill doesn't reach it), and out of the caller's job object where the
+        job allows that. `quit` (also with no game running) puts the files back."""
+        exe = self.cfg.game(self.cfg.exe)
+        cmd = ["cmd", "/c", "start", "", exe]
+        flags = subprocess.CREATE_NEW_PROCESS_GROUP | NO_WINDOW
+        try:
+            subprocess.Popen(cmd, cwd=self.cfg.game_dir, creationflags=flags | 0x01000000)  # CREATE_BREAKAWAY_FROM_JOB
+        except OSError:  # the job doesn't allow breakaway
+            subprocess.Popen(cmd, cwd=self.cfg.game_dir, creationflags=flags)
 
     # ---- windowed 1920x1080 for start, the player's own display settings back on quit -------------------------------
     @property
@@ -853,6 +873,39 @@ class Bridge:
         time.sleep(wait)
         return "hover %s: ui %d,%d %dx%d (ui %dx%d, client %dx%d) -> client %d,%d, screen %d,%d" % (
             id, x, y, w, h, rw, rh, rc.right, rc.bottom, cx, cy, pt.x, pt.y)
+
+    def client_pos(self, id, ctx=None):
+        """Centre of a SHOWN component in the window's client pixels (the UI's coordinates scaled to the client area),
+        or None while it isn't shown: a hidden component's position is not where it will be drawn (IA 2026-11-17: a
+        menu campaign button read (221,836) before its list opened)."""
+        r = self.lua("local B = ROME2_BRIDGE; local c = B.find_shown(%s, %s); if not c then return nil end; "
+                     "local x, y = c:Position(); local w, h = c:Dimensions(); local rw, rh = B.root():Dimensions(); "
+                     "return {x, y, w, h, rw, rh}" % (lua_str(id), lua_str(ctx)))
+        if not r:
+            return None
+        import ctypes
+        from ctypes import wintypes as wt
+        x, y, w, h, rw, rh = r
+        hwnd = self.game_hwnd()
+        if not hwnd:
+            raise BridgeError("game window not found")
+        rc = wt.RECT()
+        ctypes.windll.user32.GetClientRect(hwnd, ctypes.byref(rc))
+        return int((x + w / 2.0) * rc.right / float(rw or rc.right)), int((y + h / 2.0) * rc.bottom / float(rh or rc.bottom))
+
+    def post_click_id(self, id, ctx=None, timeout=30, wait=1):
+        """Posted click (post_click) at a component's centre, once it is shown (waits up to `timeout` s). For buttons
+        that ignore SimulateClick. Returns where it clicked."""
+        t0 = time.time()
+        while True:
+            p = self.client_pos(id, ctx)
+            if p:
+                break
+            if time.time() - t0 > timeout:
+                raise BridgeError("%s not shown after %d s" % (id, timeout))
+            time.sleep(1)
+        self.post_click(p[0], p[1], wait)
+        return "posted click on %s at client %d,%d" % (id, p[0], p[1])
 
     def post_click(self, x, y, wait=1):
         return self._ps("post_click.ps1", "-X", int(x), "-Y", int(y), "-Wait", wait, "-Process", self.cfg.process,
