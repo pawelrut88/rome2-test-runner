@@ -1047,7 +1047,18 @@ class Bridge:
             args += ["-Left", left, "-Top", top, "-Width", width, "-Height", height]
         elif full:
             args.append("-Full")
-        return self._ps("game_shot.ps1", *args, "-Process", self.cfg.process)
+        msg = self._ps("game_shot.ps1", *args, "-Process", self.cfg.process)
+        if "ALL_BLACK" in (msg or ""):
+            # saved anyway, but a test must not take a black picture as proof (IA 2026-11-17)
+            import ctypes
+            hwnd = self.game_hwnd()
+            u32 = ctypes.windll.user32
+            state = "minimized" if hwnd and u32.IsIconic(hwnd) else "not minimized"
+            fg = "in front" if hwnd and u32.GetForegroundWindow() == hwnd else "not in front"
+            raise BridgeError("screenshot is all black (window capture and screen copy both): %s; saved anyway to %s; "
+                              "game window %s, %s. A locked or disconnected desktop (e.g. a minimized remote session) "
+                              "or the display turned off can do this" % (msg, out, state, fg))
+        return msg
 
     def intro_shown(self):
         return bool(self.lua('return ROME2_BRIDGE.find_shown("cinematic_bars") ~= nil'))

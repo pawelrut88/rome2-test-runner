@@ -28,12 +28,16 @@ $bmp = New-Object System.Drawing.Bitmap $ww, $wh
 $g = [System.Drawing.Graphics]::FromImage($bmp); $dc = $g.GetHdc()
 $ok = [IA.W]::PrintWindow($h, $dc, 2); $g.ReleaseHdc($dc)
 # Exclusive fullscreen: PrintWindow gives an all-black image, but a screen copy works (2026-11-08, 2560x1440).
-$black = $true
-for ($i = 1; $i -lt 8 -and $black; $i++) { for ($j = 1; $j -lt 8; $j++) {
-	$p = $bmp.GetPixel([int]($ww * $i / 8), [int]($wh * $j / 8)); if ($p.R + $p.G + $p.B -gt 30) { $black = $false; break } } }
+function IsBlack {
+	for ($i = 1; $i -lt 8; $i++) { for ($j = 1; $j -lt 8; $j++) {
+		$p = $bmp.GetPixel([int]($ww * $i / 8), [int]($wh * $j / 8)); if ($p.R + $p.G + $p.B -gt 30) { return $false } } }
+	return $true
+}
 $how = "printwindow=$ok"
-if ($black) {
+if (IsBlack) {
 	$g.CopyFromScreen($r.L, $r.T, 0, 0, $bmp.Size); $how = "screen_copy (printwindow black)"
+	# both black (IA 2026-11-17: 17 black shots in one run, nothing said so): the caller raises on "ALL_BLACK"
+	if (IsBlack) { $how += " ALL_BLACK" }
 }
 $g.Dispose()
 if ($crop) {
