@@ -249,11 +249,13 @@ function B.tree(opts)
 end
 
 -- game -------------------------------------------------------------------------------------------------------------
-function B.end_turn(force)
+function B.end_turn(force, retry)
 	-- sent during an AI turn it would end the player's next turn too (retries): refuse
 	if not B.human_turn and not force then return "not the player's turn (current: " .. tostring(B.current_faction) .. ")" end
 	B.want_end = true; B.end_time = now(); B.human_turn = false
-	if not B.current_since or B.current_since < B.end_time - 20 then B.current_since = B.end_time end
+	-- a retry keeps the clock: resetting it every 15 s kept current_for_s under end_turn's stall limit, so a refused
+	-- end turn waited out the whole timeout without a stall report (IA 2026-11-17)
+	if not retry and (not B.current_since or B.current_since < B.end_time - 20) then B.current_since = B.end_time end
 	local ok, err = pcall(function() B.game():end_turn(true) end)
 	B.log("end_turn " .. B.turn() .. (ok and "" or (" ERROR " .. tostring(err))))
 	return ok and "end turn sent" or ("error: " .. tostring(err))
@@ -411,7 +413,7 @@ B.on_timer = function(ctx)
 	-- an end_turn sent while a dialog is open (e.g. a dilemma at turn start) is dropped: retry every 15 s until an AI turn starts
 	-- force: the first end_turn already set human_turn false, so without it every retry was refused and logged each
 	-- second, and the end turn was never sent again (IA 2026-11-17)
-	if B.want_end and not clicked and now() - (B.end_time or 0) >= 15 then B.log("turn did not end, retry"); B.end_turn(true) end
+	if B.want_end and not clicked and now() - (B.end_time or 0) >= 15 then B.log("turn did not end, retry"); B.end_turn(true, true) end
 	local okh, eh = pcall(heartbeat); if not okh then B.log("heartbeat error: " .. tostring(eh)) end
 	if not B.fe_armed then pcall(function() B.game():add_time_trigger(B.tname, 1) end) end
 end
