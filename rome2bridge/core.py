@@ -531,7 +531,8 @@ class Bridge:
                     r["difficulty"] = hb.get("difficulty")
                     want = getattr(self, "requested_difficulty", None)
                     if want is not None and hb.get("difficulty") is not None and hb["difficulty"] != want:
-                        # IA 2026-11-17: DeI prologue_03 loads at 0 whatever the setting (main_emperor follows it)
+                        # IA 2026-11-17: DeI's prologue_0N campaigns load at 0 from the menu whatever the setting
+                        # (a direct start follows it)
                         r["difficulty_warning"] = "asked for %d, the campaign uses %d (it overrides the setting)" % (
                             want, hb["difficulty"])
                     # "campaign" also shows behind a "Press any key" story screen (DeI: a campaign, or a loading-screen
