@@ -61,7 +61,8 @@ def t_lua(a): return as_text(B().lua(a["code"], float(a.get("timeout", 30))))
 def t_ui_tree(a): return as_text(B().ui_tree(a.get("root"), a.get("ctx"), int(a.get("maxd", 16)), bool(a.get("interactive")),
                                              bool(a.get("all")), int(a.get("max", 1500))))
 def t_ui_info(a): return as_text(B().ui_info(a["id"], a.get("ctx")))
-def t_click(a): return as_text(B().click(a["id"], a.get("ctx"), bool(a.get("force"))))
+def t_click(a): return as_text(B().click(a["id"], a.get("ctx"), bool(a.get("force")), bool(a.get("press"))))
+def t_recruitment(a): return as_text(B().recruitment(a.get("cqi")))
 def t_factions(a): return as_text(B().factions(a.get("name")))
 def t_panels(a): return as_text(B().panels())
 
@@ -121,8 +122,10 @@ TOOLS = [
      S(root=STR, ctx=STR, maxd=NUM, interactive=BOOL, all=BOOL, max=NUM), t_ui_tree),
     ("ui_info", "Details of one component: visible, shown (all parents visible), interactive, text, state, position, size.",
      {"type": "object", "properties": {"id": STR, "ctx": STR}, "required": ["id"]}, t_ui_info),
-    ("click", "SimulateClick a UI component by id (first shown one), searched inside ctx if given. Only if shown, unless force.",
-     {"type": "object", "properties": {"id": STR, "ctx": STR, "force": BOOL}, "required": ["id"]}, t_click),
+    ("click", "SimulateClick a UI component by id (first shown one), searched inside ctx if given. Only if shown, unless force. press=true sets the state 'down' first like a real mouse press: needed by buttons that ignore a plain click (button_recruitment).",
+     {"type": "object", "properties": {"id": STR, "ctx": STR, "force": BOOL, "press": BOOL}, "required": ["id"]}, t_click),
+    ("recruitment", "Open the recruitment panel for the army whose general has this character cqi (the N of character_row_N), or the selected army, and return the unit keys recruitable there.",
+     S(cqi=NUM), t_recruitment),
     ("panels", "Shown top-level panels and their buttons (what is on screen).", S(), t_panels),
     ("end_turn", "End the turn (retried every 15 s while a dialog blocks it) and by default wait for the next player turn. Returns stalled + panels if a dialog waits, with evidence (a folder with a screenshot, window hung?, the game's CPU use, the bridge log's last lines); reports crashes.",
      S(wait=BOOL, timeout=NUM, stall=NUM), t_end_turn),

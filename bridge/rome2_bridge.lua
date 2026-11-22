@@ -209,13 +209,21 @@ function B.find_shown(id, ctx)
 	return nil
 end
 
-function B.click(id, ctx, force)
+-- press: set the state "down" first, as a real mouse press does. Some buttons do nothing on SimulateClick alone:
+-- button_recruitment stayed "active" with no panel, every time; with press it opened every time (IA/bridge 2026-11-22)
+function B.click(id, ctx, force, press)
 	local c = B.find(id, ctx)
 	if not c then return "not found: " .. tostring(id) end
 	if not force and not B.shown(c) then c = B.find_shown(id, ctx) or c end
 	if not force and not B.shown(c) then return "hidden: " .. tostring(id) end
+	if press then
+		local st = ""; pcall(function() st = tostring(c:CurrentState()) end)
+		-- a disabled button: SetState would draw it pressed though nothing happens
+		if st:find("inactive") then return "inactive: " .. tostring(id) .. " (state " .. st .. ")" end
+		pcall(function() c:SetState("down") end)
+	end
 	local ok, err = pcall(function() c:SimulateClick() end)
-	B.log("click " .. tostring(id) .. " in " .. tostring(ctx or "-") .. (ok and "" or (" ERROR " .. tostring(err))))
+	B.log("click " .. tostring(id) .. " in " .. tostring(ctx or "-") .. (press and " (press)" or "") .. (ok and "" or (" ERROR " .. tostring(err))))
 	return ok and "clicked" or ("error: " .. tostring(err))
 end
 
@@ -226,7 +234,11 @@ function B.tree(opts)
 	local maxd, cap = opts.maxd or 16, opts.max or 3000
 	local lines = {}
 	local start = B.root()
-	if opts.root then start = B.find(opts.root, opts.ctx); if not start then return "not found: " .. opts.root end end
+	-- a shown match first: ids repeat (8 list_box, the first one Find gives is the hidden regions list; IA 2026-11-22)
+	if opts.root then
+		start = B.find_shown(opts.root, opts.ctx) or B.find(opts.root, opts.ctx)
+		if not start then return "not found: " .. opts.root end
+	end
 	local function walk(c, d)
 		if #lines >= cap or d > maxd then return end
 		local okv, vis = pcall(function() return c:Visible() end)

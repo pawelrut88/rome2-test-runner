@@ -111,7 +111,12 @@ python -m rome2bridge screenshot shot.png --full
   the copy stays as `auto_save.save.rome2bridge_backup` (the next `start` keeps it under a dated name). If the game
   is gone without `quit` (closed by hand, crashed), `status` says `not_put_back` and `quit` still puts your files
   back. Stopping the program that ran `start` does not close the game.
+- `click --press ID` sets the button's state to "down" before the click, as a real mouse press does. Some buttons
+  do nothing on a plain `click`: `button_recruitment` is one. It refuses an inactive button.
+- `recruitment [--cqi N]` opens the recruitment panel of the army whose general has character cqi N (the N of
+  `character_row_N` in the units list), or of the selected army, and lists the unit keys recruitable there.
 - `post-click --id ID` clicks a component that ignores `click` (posted mouse click at its centre), once it is shown.
+- `tree --root ID` starts at the first shown component with that id (ids repeat: there are several `list_box`).
 - `start --difficulty N` sets the campaign difficulty of a new campaign (1 easy, 0 normal, -1 hard, -2 very hard,
   -3 legendary) as `campaign_difficulty` in `preferences.script.txt`; `quit` puts yours back. A start from the main
   menu uses it too. `wait` and `status` report the difficulty the loaded campaign really uses (`difficulty`), and

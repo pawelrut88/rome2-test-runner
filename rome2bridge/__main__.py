@@ -64,6 +64,11 @@ def main(argv=None):
     i = sub.add_parser("info", help="one UI component"); i.add_argument("id"); i.add_argument("--ctx")
     c = sub.add_parser("click", help="click a UI component by id"); c.add_argument("id"); c.add_argument("--ctx")
     c.add_argument("--force", action="store_true")
+    c.add_argument("--press", action="store_true", help="set the state 'down' first, like a real mouse press (for "
+                                                        "buttons that ignore a plain click, e.g. button_recruitment)")
+    rc = sub.add_parser("recruitment", help="open the recruitment panel (of the army led by --cqi, else the selected "
+                                            "one) and list the unit keys recruitable there")
+    rc.add_argument("--cqi", type=int, help="the general's character cqi (= the N of character_row_N)")
     f = sub.add_parser("factions", help="factions with land, or one"); f.add_argument("name", nargs="?")
     sub.add_parser("panels", help="shown top-level panels and their buttons")
     a = sub.add_parser("autoclick", help="set auto-click rules: a preset name (%s), rules text, or --clear" % ", ".join(PRESETS))
@@ -163,7 +168,9 @@ def main(argv=None):
     if cmd == "info":
         return out(b.ui_info(args.id, args.ctx))
     if cmd == "click":
-        return out(b.click(args.id, args.ctx, args.force))
+        return out(b.click(args.id, args.ctx, args.force, args.press))
+    if cmd == "recruitment":
+        return out(b.recruitment(args.cqi))
     if cmd == "factions":
         return out(b.factions(args.name))
     if cmd == "panels":

@@ -740,8 +740,38 @@ class Bridge:
         return self.lua("local c = ROME2_BRIDGE.find(%s, %s); if not c then return 'not found' end; return ROME2_BRIDGE.info(c)"
                         % (lua_str(id), lua_str(ctx)))
 
-    def click(self, id, ctx=None, force=False):
-        return self.lua("return ROME2_BRIDGE.click(%s, %s, %s)" % (lua_str(id), lua_str(ctx), str(bool(force)).lower()))
+    def click(self, id, ctx=None, force=False, press=False):
+        """SimulateClick a component by id. press=True sets its state "down" first, as a real mouse press does: some
+        buttons (button_recruitment) do nothing on SimulateClick alone."""
+        return self.lua("return ROME2_BRIDGE.click(%s, %s, %s, %s)" % (lua_str(id), lua_str(ctx), str(bool(force)).lower(),
+                                                                     str(bool(press)).lower()))
+
+    def recruitment(self, cqi=None, timeout=10):
+        """Open the recruitment panel (for the army with this character cqi, else the selected one) and return
+        {"opened": bool, "units": [unit keys recruitable there]}; the cards are <unit key>_recruitable."""
+        if cqi is not None:
+            if not self.lua("return ROME2_BRIDGE.find_shown('character_row_%d', 'units_dropdown') ~= nil" % int(cqi)):
+                self.click("tab_units")
+                time.sleep(1)
+            r = self.click("character_row_%d" % int(cqi), "units_dropdown")
+            if r != "clicked":
+                raise BridgeError("army %s: %s (character_row_%d in the units list)" % (cqi, r, int(cqi)))
+            time.sleep(1.5)
+        read = ("local B = ROME2_BRIDGE; local p = B.find_shown('recruitment_options'); if not p then return nil end; "
+                "local r = {}; local function w(c, d) if d > 8 then return end; local id = ''; "
+                "pcall(function() id = tostring(c:Id()) end); local k = id:match('^(.+)_recruitable$'); "
+                "if k then r[#r + 1] = k; return end; local n = 0; pcall(function() n = c:ChildCount() end); "
+                "for i = 0, n - 1 do pcall(function() w(B.U(c:Find(i)), d + 1) end) end end; w(p, 0); return r")
+        units = self.lua(read)
+        if units is None:
+            r = self.click("button_recruitment", press=True)
+            if r != "clicked":
+                raise BridgeError("button_recruitment: %s (no army selected, or it can't recruit here?)" % r)
+            t0 = time.time()
+            while units is None and time.time() - t0 < timeout:
+                time.sleep(0.5)
+                units = self.lua(read)
+        return {"opened": units is not None, "units": units or []}
 
     def factions(self, name=None):
         return self.lua("return ROME2_BRIDGE.factions(%s)" % lua_str(name), 60)
