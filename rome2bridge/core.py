@@ -50,6 +50,33 @@ PRESETS = {
 }
 
 
+def missing_preset_rules(panels, rules):
+    """`test` preset rules that are not in `rules` but whose button shows in `panels` (B.panels(): [{id, buttons}]),
+    under its context when the context is a top-level panel. Lines like "diplomacy_dropdown button_ok_war_declared"."""
+    if not isinstance(panels, list):
+        return []
+    have = {" ".join(l.split()) for l in rules}
+    tops = {p.get("id") for p in panels if isinstance(p, dict)}
+    out = []
+    for line in PRESETS["test"].splitlines():
+        parts = line.split()
+        if len(parts) != 2 or " ".join(parts) in have:
+            continue
+        ctx, btn = parts
+        for p in panels:
+            if not isinstance(p, dict) or not isinstance(p.get("buttons"), list) or btn not in p["buttons"]:
+                continue
+            # events and diplomacy_dropdown are top-level panels (seen in panels output): they must match exactly;
+            # other contexts (button_set3, dilemma1_window, ...) sit inside a panel
+            # a nested context can't be checked from panels: skip the generic button_accept there (the offer screen
+            # button_set2 has one too, and the preset never accepts an offer)
+            nested_ok = ctx not in tops and ctx not in ("events", "diplomacy_dropdown") and btn != "button_accept"
+            if ctx == p.get("id") or ctx == "-" or nested_ok:
+                out.append(line)
+                break
+    return out
+
+
 class BridgeError(RuntimeError):
     pass
 
@@ -840,10 +867,17 @@ class Bridge:
                 if isinstance(etb, dict) and hb.get("want_end") and etb.get("state") not in (None, "active"):
                     # the game refuses the end turn while something waits for the player (IA 2026-11-17)
                     r["end_turn_disabled"] = "End Turn is %s: %s" % (etb.get("state"), etb.get("tooltip") or "no tooltip")
-                if not self.auto_click_rules():
+                rules = self.auto_click_rules()
+                if not rules:
                     # IA 2026-11-16: AI offers and dilemmas stopped every turn; no rules were set (start clears them)
                     r["hint"] = ("no auto-click rules are set (start and quit clear them): `autoclick test` answers "
                                  "AI offers, war declarations, dilemmas and battles")
+                else:
+                    # IA 2026-11-22: its own rule list lacked the war declaration's OK, and the run stalled on it
+                    missing = missing_preset_rules(panels, rules)
+                    if missing:
+                        r["hint"] = ("the open dialog has a button the `test` preset clicks, but your rules don't: "
+                                     "add %s (or use `autoclick test`)" % " / ".join(missing))
                 return r
         return {"ended": False, "waited_s": timeout, "heartbeat": self.heartbeat()}
 
