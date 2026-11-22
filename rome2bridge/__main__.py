@@ -69,6 +69,12 @@ def main(argv=None):
     rc = sub.add_parser("recruitment", help="open the recruitment panel (of the army led by --cqi, else the selected "
                                             "one) and list the unit keys recruitable there")
     rc.add_argument("--cqi", type=int, help="the general's character cqi (= the N of character_row_N)")
+    rs = sub.add_parser("research", help="queue a technology by its key (tries each tab of the technology panel)")
+    rs.add_argument("tech"); rs.add_argument("--keep-open", action="store_true", help="leave the panel open")
+    ra = sub.add_parser("raise-army", help="raise a new army in a province you own; prints the new general's cqi and units")
+    ra.add_argument("province", help="province key, e.g. emp_narbonensis (row_entry_<key> in the Provinces list)")
+    ra.add_argument("--candidate", type=int, default=0, help="which general candidate, from 0")
+    ra.add_argument("--bodyguard", type=int, default=1, help="which bodyguard card, from 1 (DeI asks for one)")
     f = sub.add_parser("factions", help="factions with land, or one"); f.add_argument("name", nargs="?")
     sub.add_parser("panels", help="shown top-level panels and their buttons")
     a = sub.add_parser("autoclick", help="set auto-click rules: a preset name (%s), rules text, or --clear" % ", ".join(PRESETS))
@@ -171,6 +177,10 @@ def main(argv=None):
         return out(b.click(args.id, args.ctx, args.force, args.press))
     if cmd == "recruitment":
         return out(b.recruitment(args.cqi))
+    if cmd == "research":
+        return out(b.research(args.tech, close=not args.keep_open))
+    if cmd == "raise-army":
+        return out(b.raise_army(args.province, args.candidate, args.bodyguard))
     if cmd == "factions":
         return out(b.factions(args.name))
     if cmd == "panels":

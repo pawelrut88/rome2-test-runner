@@ -63,6 +63,8 @@ def t_ui_tree(a): return as_text(B().ui_tree(a.get("root"), a.get("ctx"), int(a.
 def t_ui_info(a): return as_text(B().ui_info(a["id"], a.get("ctx")))
 def t_click(a): return as_text(B().click(a["id"], a.get("ctx"), bool(a.get("force")), bool(a.get("press"))))
 def t_recruitment(a): return as_text(B().recruitment(a.get("cqi")))
+def t_research(a): return as_text(B().research(a["tech"], not a.get("keep_open")))
+def t_raise_army(a): return as_text(B().raise_army(a["province"], int(a.get("candidate", 0)), int(a.get("bodyguard", 1))))
 def t_factions(a): return as_text(B().factions(a.get("name")))
 def t_panels(a): return as_text(B().panels())
 
@@ -126,6 +128,10 @@ TOOLS = [
      {"type": "object", "properties": {"id": STR, "ctx": STR, "force": BOOL, "press": BOOL}, "required": ["id"]}, t_click),
     ("recruitment", "Open the recruitment panel for the army whose general has this character cqi (the N of character_row_N), or the selected army, and return the unit keys recruitable there.",
      S(cqi=NUM), t_recruitment),
+    ("research", "Queue a technology by its key through the technology panel (tries each category tab); returns the tab, its state before/after (active, not_available, researching) and queued. Closes the panel unless keep_open.",
+     {"type": "object", "properties": {"tech": STR, "keep_open": BOOL}, "required": ["tech"]}, t_research),
+    ("raise_army", "Raise a new army in a province you own (province key, e.g. emp_narbonensis) with general candidate N (from 0) and, where the game asks (DeI), bodyguard card K (from 1); returns the new general's cqi and its units (units[0] = bodyguard).",
+     {"type": "object", "properties": {"province": STR, "candidate": NUM, "bodyguard": NUM}, "required": ["province"]}, t_raise_army),
     ("panels", "Shown top-level panels and their buttons (what is on screen).", S(), t_panels),
     ("end_turn", "End the turn (retried every 15 s while a dialog blocks it) and by default wait for the next player turn. Returns stalled + panels if a dialog waits, with evidence (a folder with a screenshot, window hung?, the game's CPU use, the bridge log's last lines); reports crashes.",
      S(wait=BOOL, timeout=NUM, stall=NUM), t_end_turn),

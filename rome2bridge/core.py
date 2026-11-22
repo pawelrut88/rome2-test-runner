@@ -802,6 +802,156 @@ class Bridge:
                 units = self.lua(read)
         return {"opened": units is not None, "units": units or []}
 
+    def _shown(self, id, ctx=None):
+        return bool(self.lua("return ROME2_BRIDGE.find_shown(%s, %s) ~= nil" % (lua_str(id), lua_str(ctx))))
+
+    def _wait_shown(self, id, ctx=None, timeout=6):
+        t0 = time.time()
+        while not self._shown(id, ctx):
+            if time.time() - t0 > timeout:
+                return False
+            time.sleep(0.5)
+        return True
+
+    def _state(self, id, ctx=None):
+        return self.lua("local c = ROME2_BRIDGE.find_shown(%s, %s); if not c then return nil end; "
+                        "return tostring(c:CurrentState())" % (lua_str(id), lua_str(ctx)))
+
+    TECH_TABS = ("military_button", "infantry_button", "cavalry_button", "siege_button", "civil_button")
+
+    def research(self, tech, close=True):
+        """Queue a technology through the technology panel (IA 2026-11-22: the nodes, whose ids are the tech keys,
+        show only after a category tab is picked; DeI's Roman reforms are under infantry_button). Tries each tab.
+        Returns {"tab", "state_before", "state_after", "queued"}; state is active, not_available (a prerequisite is
+        missing) or researching. Closes the panel unless close=False (a second click on button_technology: a posted
+        Esc did not close it in vanilla, 2026-11-22). Vanilla has only military_button and civil_button. One tech at a
+        time: a later pick replaces the one being researched (vanilla and DeI, 2026-11-22)."""
+        if not self._shown("technology_panel"):
+            # vanilla 2026-11-22: the first click right after the campaign loaded did not open it, the second did
+            for _ in range(2):
+                r = self.click("button_technology", force=True)
+                if r != "clicked":
+                    raise BridgeError("button_technology: %s" % r)
+                if self._wait_shown("technology_panel", timeout=5):
+                    break
+            else:
+                raise BridgeError("the technology panel did not open (2 clicks)")
+            time.sleep(1)
+        found = None
+        for tab in self.TECH_TABS:
+            if not self._shown(tab):
+                continue
+            # press: a plain click shows the tab's nodes but leaves the tab states alone, so a later click on the tab
+            # still marked "selected" does nothing (DeI 2026-11-22: the panel reopened on infantry, military clicked,
+            # then infantry showed nothing); pressed, the states follow
+            self.click(tab, force=True, press=True)
+            if self._wait_shown(tech, timeout=3):
+                found = tab
+                break
+        if not found:
+            res = {"queued": False, "error": "%s not found under any tab (%s)" % (tech, ", ".join(self.TECH_TABS))}
+        else:
+            before = self._state(tech)
+            res = {"tab": found, "state_before": before}
+            if before == "researching":
+                res["queued"] = True
+                res["note"] = "already being researched"
+            elif before == "researched":
+                res["queued"] = False
+                res["note"] = "already researched"
+            elif before and "not_available" in before:
+                res["queued"] = False
+                res["note"] = "a prerequisite is missing"
+            else:
+                self.click(tech, force=True)
+                time.sleep(1.5)
+                res["state_after"] = self._state(tech)
+                res["queued"] = res["state_after"] == "researching"
+        if close and self._shown("technology_panel"):
+            self.click("button_technology", force=True)
+            time.sleep(1)
+            res["closed"] = not self._shown("technology_panel")
+        return res
+
+    def _forces(self):
+        """{general cqi: [unit keys]} of the human faction's military forces."""
+        r = self.lua("local B = ROME2_BRIDGE; local f = B.game():model():world():faction_by_key(B.human_key); "
+                     "local out = {}; for _, m in ipairs(B.items(f:military_force_list())) do "
+                     "local ok, cqi = pcall(function() return m:general_character():cqi() end); "
+                     "if ok then local u = {}; for _, x in ipairs(B.items(m:unit_list())) do u[#u + 1] = x:unit_key() end; "
+                     "out[tostring(cqi)] = u end end; return out")
+        return r if isinstance(r, dict) else {}
+
+    def raise_army(self, province, candidate=0, bodyguard=1, timeout=10):
+        """Raise a new army in a province you own (IA 2026-11-22): lists panel Provinces tab, row_entry_<province>
+        clicked twice (selects its main settlement), button_create_army, general_candidate_<n> in
+        general_selection_panel, button_raise_army (all three need a press); in DeI then bodyguard_candidate_<bodyguard>
+        (1-based) and button_confirm. Returns {"raised", "general_cqi", "units", "candidates", "bodyguards"}: the
+        new force found by comparing the forces before and after; units[0] is the bodyguard."""
+        row = "row_entry_%s" % province
+        if not self._shown(row):
+            self.click("tab_regions")
+            if not self._wait_shown(row, timeout=4):
+                raise BridgeError("%s not shown in the Provinces list (a province key you own? a dialog open?)" % row)
+        before = self._forces()
+        for _ in range(2):
+            r = self.click(row)
+            if r != "clicked":
+                raise BridgeError("%s: %s" % (row, r))
+            time.sleep(1)
+        if not self._wait_shown("button_create_army", timeout=4):
+            raise BridgeError("button_create_army not shown after selecting %s (not your province?)" % province)
+        r = self.click("button_create_army", press=True)
+        if r != "clicked":
+            raise BridgeError("button_create_army: %s (army limit or money?)" % r)
+        if not self._wait_shown("general_candidate_0", "general_selection_panel", timeout):
+            raise BridgeError("no general candidates shown after %d s" % timeout)
+        n = self.lua("local B = ROME2_BRIDGE; local n = 0; while B.find_shown('general_candidate_' .. n, "
+                     "'general_selection_panel') do n = n + 1 end; return n")
+        if not (0 <= int(candidate) < (n or 0)):
+            raise BridgeError("candidate %s: there are %s (0..%s)" % (candidate, n, (n or 1) - 1))
+        r = self.click("general_candidate_%d" % int(candidate), "general_selection_panel", press=True)
+        if r != "clicked":
+            raise BridgeError("general_candidate_%d: %s" % (int(candidate), r))
+        time.sleep(1)
+        r = self.click("button_raise_army", press=True)
+        if r != "clicked":
+            # vanilla 2026-11-22: inactive at the army limit (the panel showed 4/4 in red); the Raise Forces panel stays
+            # open (no close button; a posted Esc did not close it)
+            raise BridgeError("button_raise_army: %s (army limit reached, or not enough money?); the Raise Forces "
+                              "panel is left open" % r)
+        res = {"candidates": n}
+        t0 = time.time()
+        new = {}
+        bg_done = False
+        while not new and time.time() - t0 < timeout:
+            time.sleep(0.5)
+            new = {k: v for k, v in self._forces().items() if k not in before}
+            if new or bg_done or not self._shown("bodyguard_candidate_1"):
+                continue
+            # DeI (IA 2026-11-22): "Select bodyguard unit" follows: bodyguard_candidate_1..N (1-based, no unit key
+            # in ids or text) and button_confirm ("Recruit"); no army until one is picked and confirmed
+            nb = self.lua("local B = ROME2_BRIDGE; local n = 0; while B.find_shown('bodyguard_candidate_' .. (n + 1)) "
+                          "do n = n + 1 end; return n") or 0
+            res["bodyguards"] = nb
+            if not (1 <= int(bodyguard) <= nb):
+                raise BridgeError("bodyguard %s: there are %s (1..%s); the panel is left open" % (bodyguard, nb, nb))
+            r = self.click("bodyguard_candidate_%d" % int(bodyguard), press=True)
+            if r != "clicked":
+                raise BridgeError("bodyguard_candidate_%d: %s" % (int(bodyguard), r))
+            time.sleep(1)
+            r = self.click("button_confirm", press=True)
+            if r != "clicked":
+                raise BridgeError("button_confirm (Recruit): %s" % r)
+            bg_done = True
+            t0 = time.time()  # the army appears a few seconds after Recruit
+        if not new:
+            res.update(raised=False, error="no new force after %d s" % timeout)
+            return res
+        cqi, units = next(iter(new.items()))
+        res.update(raised=True, general_cqi=int(cqi), units=units)
+        return res
+
     def factions(self, name=None):
         return self.lua("return ROME2_BRIDGE.factions(%s)" % lua_str(name), 60)
 

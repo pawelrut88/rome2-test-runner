@@ -115,6 +115,12 @@ python -m rome2bridge screenshot shot.png --full
   do nothing on a plain `click`: `button_recruitment` is one. It refuses an inactive button.
 - `recruitment [--cqi N]` opens the recruitment panel of the army whose general has character cqi N (the N of
   `character_row_N` in the units list), or of the selected army, and lists the unit keys recruitable there.
+- `research TECH_KEY [--keep-open]` opens the technology panel, finds the tech on its category tabs, picks it and
+  closes the panel. It reports the state before and after: `active`, `not_available` (a prerequisite is missing),
+  `researching` or `researched`. The game researches one tech at a time; a later pick replaces the earlier one.
+- `raise-army PROVINCE [--candidate N] [--bodyguard K]` raises a new army in a province you own (province key, e.g.
+  `emp_latium`): general candidate N (from 0), then bodyguard card K (from 1). It prints the new general's cqi and
+  its units; `units[0]` is the bodyguard. At the army limit it stops with an error and leaves Raise Forces open.
 - `post-click --id ID` clicks a component that ignores `click` (posted mouse click at its centre), once it is shown.
 - `tree --root ID` starts at the first shown component with that id (ids repeat: there are several `list_box`).
 - `start --difficulty N` sets the campaign difficulty of a new campaign (1 easy, 0 normal, -1 hard, -2 very hard,
