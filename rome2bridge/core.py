@@ -68,9 +68,11 @@ def missing_preset_rules(panels, rules):
                 continue
             # events and diplomacy_dropdown are top-level panels (seen in panels output): they must match exactly;
             # other contexts (button_set3, dilemma1_window, ...) sit inside a panel
-            # a nested context can't be checked from panels: skip the generic button_accept there (the offer screen
-            # button_set2 has one too, and the preset never accepts an offer)
-            nested_ok = ctx not in tops and ctx not in ("events", "diplomacy_dropdown") and btn != "button_accept"
+            # a nested context: the generic button_accept only when the context itself is listed in that panel (panels
+            # lists ids with "button" in them: button_set3 shows, as in game 2026-11-22); the offer screen button_set2
+            # has a button_accept too, and the preset never accepts an offer
+            nested_ok = (ctx not in tops and ctx not in ("events", "diplomacy_dropdown")
+                         and (btn != "button_accept" or ctx in p["buttons"]))
             if ctx == p.get("id") or ctx == "-" or nested_ok:
                 out.append(line)
                 break
