@@ -42,6 +42,10 @@ def main(argv=None):
     s.add_argument("--timeout", type=float, default=300)
     s.add_argument("--skip-intro", action="store_true", help="press Esc while the campaign intro shows")
     s.add_argument("--no-steam-check", action="store_true")
+    s.add_argument("--mod-list", metavar="FILE",
+                   help="run with this mod list instead of yours: a UTF-8 text file, one user.script.txt line per line "
+                        "(mod \"x.pack\";, add_working_directory \"...\";, DISABLE_BINK true; ...) or a bare pack name; "
+                        "quit puts your list back (also after a crash)")
     s.add_argument("--difficulty", type=int, choices=range(-3, 2), metavar="{1,0,-1,-2,-3}",
                    help="campaign difficulty of a new campaign: 1 easy, 0 normal, -1 hard, -2 very hard, -3 legendary "
                         "(in preferences.script.txt; yours back on quit). The game reports it as \"difficulty\" in wait/status")
@@ -119,11 +123,19 @@ def main(argv=None):
         return out(b.status())
     if cmd == "start":
         line = b.start(campaign=args.campaign, save=args.save, check_steam=not args.no_steam_check, menu=args.menu,
-                       windowed=not args.keep_display, difficulty=args.difficulty)
+                       windowed=not args.keep_display, difficulty=args.difficulty,
+                       mod_list=open(args.mod_list, encoding="utf-8-sig").read().splitlines() if args.mod_list else None)
         r = {"launched": line, "display": b.display, "autosave": b.save_note,
              "auto_click": "cleared; for unattended end turns set them now: autoclick test"}
         if b.difficulty_note:
             r["difficulty_set"] = b.difficulty_note
+        r["mods"] = b.mods() if b.mod_list_used is None else b.mod_list_used
+        if b.mod_list_used is not None:
+            r["mod_list"] = "this run's list; quit puts yours back"
+        if b.mod_list_problems:
+            r["mod_warning"] = b.mod_list_problems
+            for p in b.mod_list_problems:
+                print("WARNING: " + p, file=sys.stderr, flush=True)
         if b.pack_problems:
             r["warning"] = "the bridge will not run: " + "; ".join(b.pack_problems)
             print("WARNING: " + r["warning"], file=sys.stderr, flush=True)  # at once, not after the whole wait
@@ -198,6 +210,8 @@ def main(argv=None):
             raise BridgeError("nothing matches --campaign/--faction")
         return out(r.run(args.mods, t, args.turns, args.save_every, args.map_every, super_soldiers=args.legio))
     if cmd == "mods":
+        for p in b.mod_problems():
+            print("WARNING: " + p, file=sys.stderr, flush=True)
         return out(b.mods())
     if cmd == "enable":
         return out(b.set_pack_enabled(args.pack, True))

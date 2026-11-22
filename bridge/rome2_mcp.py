@@ -38,9 +38,13 @@ def t_start(a):
     b = B()
     d = a.get("difficulty")
     line = b.start(campaign=a.get("campaign") or (None if a.get("save") else "main_rome"), save=a.get("save") or None,
-                   difficulty=None if d is None or d == "" else int(d))
+                   difficulty=None if d is None or d == "" else int(d), mod_list=a.get("mod_list") or None)
+    if b.mod_list_problems:
+        warn_mods = "WARNING, mod lines the game skips: %s. " % "; ".join(b.mod_list_problems)
+    else:
+        warn_mods = ""
     warn = ("WARNING, the bridge will not run: %s. " % "; ".join(b.pack_problems)) if b.pack_problems else ""
-    return warn + ("launched with %s (%s%s); user.script.txt goes back to normal in %d s. A new campaign plays its first "
+    return warn + warn_mods + ("launched with %s (%s%s); user.script.txt goes back to normal in %d s. A new campaign plays its first "
             "faction. Loading takes ~1-3 min: then call wait_bridge. %s; quit_game puts it back."
             % (line, b.display, ("; " + b.difficulty_note) if b.difficulty_note else "", b.cfg.startup_restore_s,
                b.save_note))
@@ -108,6 +112,7 @@ TOOLS = [
     ("start_game", "Kill the game and start it straight into a new campaign (its first faction) or a save, no menus. Steam must be running. Does not change the mod list (the rome2-bridge pack must be in it).",
      S(campaign={"type": "string", "description": "campaign key, e.g. main_rome, main_emperor, main_punic"},
        save={"type": "string", "description": "save name as in save_games; loads it instead"},
+       mod_list={"type": "array", "items": {"type": "string"}, "description": "run with this mod list instead of the player's: user.script.txt lines or bare pack names, in load order; quit_game puts the player's back"},
        difficulty={"type": "integer", "description": "campaign difficulty of a new campaign: 1 easy, 0 normal, -1 hard, -2 very hard, -3 legendary (default: the player's setting)"}), t_start),
     ("wait_bridge", "Wait until the bridge ticks after start_game (heartbeat fresh); reports crashes, the campaign's difficulty (as the game uses it) and a 'Press any key' story screen still shown (skip_intro closes it).", S(timeout=NUM), t_wait_bridge),
     ("lua", "Run Lua in the game's campaign state (global scope; helpers in ROME2_BRIDGE / B: B.game(), B.find(id,ctx), B.find_shown, B.info(c), B.U(address) = UI component, B.click, B.tree, B.factions, B.items(list), B.turn()). 'return x' sends x back as JSON.",

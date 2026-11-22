@@ -86,6 +86,7 @@ class Bridge:
         self.pack_problems = []  # bridge_pack_problems() at the last start
         self.story = None  # story screen closed by the last skip_intro
         self.difficulty_note = ""  # what start's difficulty= did
+        self.mod_list_used, self.mod_list_problems = None, []  # start's mod_list= / mod_problems()
         # command ids must differ across processes too (two CLI calls in the same second got the same id and the
         # second read the first one's answer, seen 2026-11-08): pid + counter
         self.seq = 0
@@ -211,7 +212,8 @@ class Bridge:
              "launched": time.strftime("%H:%M:%S", time.localtime(self.launched)) if self.launched else None,
              "launch": self.launch_line, "new_crash_dumps": c, "registry_mod_version_ok": self.mod_version_ok(),
              "auto_click_rules": len(self.auto_click_rules())}
-        left = [n for n, p in (("preferences", self.prefs_backup), ("auto_save.save", self.autosave_backup))
+        left = [n for n, p in (("mod list", self.us_backup), ("preferences", self.prefs_backup),
+                               ("auto_save.save", self.autosave_backup))
                 if os.path.exists(p)]
         if left and not running:
             # the game is gone but quit never ran (closed by hand, crashed, or the driving process was stopped)
@@ -247,6 +249,83 @@ class Bridge:
     def mods(self):
         text, _ = self._read_us()
         return [l.strip()[5:].strip().rstrip(";").strip().strip('"') for l in text.splitlines() if l.strip().startswith("mod ")]
+
+    def working_dirs(self):
+        text, _ = self._read_us()
+        return [m.group(1) for m in re.finditer(r'(?m)^\s*add_working_directory\s+"([^"]+)"', text)]
+
+    def mod_problems(self):
+        """Mod lines the game would skip (IA 2026-11-22): a name without ".pack" (the game ignored
+        `mod "@@@@@PAW_First_Triumvirate";` silently), or a pack in neither data nor an add_working_directory folder."""
+        out = []
+        dirs = [self.cfg.game("data")] + self.working_dirs()
+        for m in self.mods():
+            if not m.lower().endswith(".pack"):
+                out.append('mod "%s" has no ".pack": the game skips it' % m)
+            elif not any(os.path.exists(os.path.join(d, m)) for d in dirs):
+                out.append("%s is in neither data nor an add_working_directory folder" % m)
+        return out
+
+    @property
+    def us_backup(self):
+        return self.cfg.user_script + ".rome2bridge_backup"
+
+    @property
+    def us_written(self):
+        return self.cfg.user_script + ".rome2bridge_written"
+
+    def use_mod_list(self, entries):
+        """Write a mod list of our own into user.script.txt for one run (IA 2026-11-22: the player's list held only
+        Consul, so a test ran without DeI). `entries`: user.script lines (mod "x.pack";, add_working_directory "...";,
+        DISABLE_BINK true; ...) or bare pack names (x.pack -> mod "x.pack";). The player's file is backed up once (a
+        backup left by a run without quit is still theirs) and quit puts it back. Returns the mod names written."""
+        lines = []
+        for e in entries:
+            e = e.strip()
+            if not e or e.startswith("#"):
+                continue
+            if re.match(r"^[^\s\";]+$", e):  # a bare name
+                e = 'mod "%s";' % e
+            lines.append(e)
+        if not any(l.startswith("mod ") for l in lines):
+            raise BridgeError("the mod list has no mod lines")
+        if not os.path.exists(self.us_backup):
+            if os.path.exists(self.cfg.user_script):
+                shutil.copy2(self.cfg.user_script, self.us_backup)
+            else:
+                open(self.us_backup, "wb").close()  # empty backup = there was no file
+        text = "\r\n".join(lines) + "\r\n"
+        self._write_us(text, "utf-16")
+        open(self.us_written, "w", encoding="utf-8", newline="").write(text)
+        return self.mods()
+
+    def restore_user_script(self):
+        """Put the player's user.script.txt back after a run with use_mod_list, unless it was changed since (then
+        keep it and keep the backup under a dated name)."""
+        if not os.path.exists(self.us_backup):
+            return ""
+        text, _ = self._read_us()
+        now = "".join(l for l in text.splitlines(keepends=True) if not l.strip().startswith("game_startup_mode"))
+        try:
+            written = open(self.us_written, encoding="utf-8", newline="").read()
+        except OSError:
+            written = None
+        norm = lambda s: [l.strip() for l in s.splitlines() if l.strip()]
+        if written is not None and norm(now) != norm(written):
+            kept = self.us_backup + time.strftime("_%Y%m%d_%H%M%S")
+            os.replace(self.us_backup, kept)
+            msg = "mod list changed since start: kept as it is; yours is in %s" % kept
+        elif os.path.getsize(self.us_backup) == 0:
+            if os.path.exists(self.cfg.user_script):
+                os.remove(self.cfg.user_script)
+            os.remove(self.us_backup)
+            msg = "mod list removed again (there was none before start)"
+        else:
+            os.replace(self.us_backup, self.cfg.user_script)
+            msg = "your mod list put back"
+        if os.path.exists(self.us_written):
+            os.remove(self.us_written)
+        return msg
 
     def set_pack_enabled(self, pack, enabled=True):
         """Add (as the first mod line) or remove `mod "<pack>";` in user.script.txt. Backs the file up first.
@@ -350,12 +429,13 @@ class Bridge:
         return "registry set"
 
     def start(self, campaign=None, save=None, check_steam=True, menu=False, windowed=True, backup_save=True,
-              difficulty=None):
+              difficulty=None, mod_list=None):
         """Kill the game and start it straight into a new campaign (the campaign's first faction) or a save, or
         (menu=True) into the main menu.
 
         Writes `game_startup_mode ...;` into user.script.txt, launches the game's exe, and removes the line again after
-        cfg.startup_restore_s seconds (the game reads the file at startup only). Does not touch the mod list.
+        cfg.startup_restore_s seconds (the game reads the file at startup only). Does not touch the mod list, unless
+        mod_list (see use_mod_list) is given: then that list is used for this run and quit() puts the player's back.
         windowed: launch windowed 1920x1080 (preferences.script.txt backed up first; quit() puts it back).
         difficulty: campaign difficulty for a new campaign (1 easy, 0 normal, -1 hard, -2 very hard, -3 legendary),
         written as campaign_difficulty into preferences.script.txt (backed up; quit() puts it back). A direct start
@@ -374,6 +454,8 @@ class Bridge:
             if os.path.exists(p):
                 os.remove(p)
         self.strip_startup_lines()
+        self.mod_list_used = self.use_mod_list(mod_list) if mod_list is not None else None
+        self.mod_list_problems = self.mod_problems()
         if menu:
             line = "(main menu)"
         else:
@@ -536,7 +618,8 @@ class Bridge:
             return self.strip_startup_lines() + "; game still running, preferences and autosave not put back"
         rules = "auto-click rules cleared" if self.auto_click_rules() else ""
         self.auto_click("")
-        return "; ".join(x for x in (self.strip_startup_lines(), self.restore_prefs(), self.restore_autosave(), rules) if x)
+        return "; ".join(x for x in (self.strip_startup_lines(), self.restore_user_script(), self.restore_prefs(),
+                                     self.restore_autosave(), rules) if x)
 
     def wait_bridge(self, timeout=300, min_ticks=1, screen=None, since=None):
         """Wait until the bridge ticks (heartbeat fresh and tick >= min_ticks) after the last start (or `since`), on
