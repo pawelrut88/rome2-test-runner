@@ -1269,6 +1269,11 @@ class Bridge:
         import ctypes
         from ctypes import wintypes as wt
         x, y, w, h, rw, rh = r
+        if w < 1 or h < 1:
+            # faction-switch 2026-11-23: a row in its own copy of the Load Game list (shown) gave 0,0 with no size, and
+            # post-click hit client 0,0 = the Menu button. Vanilla list rows report real positions (tested).
+            raise BridgeError("%s reports position %s,%s and size %sx%s (not laid out?): no place to click; try "
+                              "`click %s`" % (id, x, y, w, h, id))
         hwnd = self.game_hwnd()
         if not hwnd:
             raise BridgeError("game window not found")
