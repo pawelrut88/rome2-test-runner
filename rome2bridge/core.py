@@ -1286,11 +1286,19 @@ class Bridge:
         that ignore SimulateClick. Returns where it clicked."""
         t0 = time.time()
         while True:
-            p = self.client_pos(id, ctx)
+            try:
+                p = self.client_pos(id, ctx)
+                empty = None
+            except BridgeError as e:
+                # no size yet: maybe not laid out yet (faction-switch 2026-11-23: rows made visible and laid out while
+                # their panel was still hidden; the first poll may come before the game placed them). Keep waiting.
+                if "size" not in str(e):
+                    raise
+                p, empty = None, e
             if p:
                 break
             if time.time() - t0 > timeout:
-                raise BridgeError("%s not shown after %d s" % (id, timeout))
+                raise empty or BridgeError("%s not shown after %d s" % (id, timeout))
             time.sleep(1)
         self.post_click(p[0], p[1], wait)
         return "posted click on %s at client %d,%d" % (id, p[0], p[1])
